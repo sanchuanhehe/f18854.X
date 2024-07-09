@@ -59,7 +59,8 @@ global _main
 /**
  * @brief 主函数
  *
- * 该函数初始化微控制器，设置I/O端口，并进入主循环以控制连接到RB0的LED。
+ * 该函数初始化微控制器，设置I/O端口
+ * 初始化定时器0，设置定时器0实现0.5s延时
  */
 _main:
     /** 初始化PORTB和LATB为0 */
@@ -76,40 +77,23 @@ _main:
     BANKSEL TRISB
     BCF     TRISB, 0
 
-/** @brief 主循环，切换LED状态 */
-loop:
-    /** 点亮连接到RB0的LED（阳极连接到RB0） */
-    BANKSEL LATB
-    BSF     LATB, 0
+    /** 设置端脚复用*/
+    BANKSEL RB0PPS
+    MOVLW   0x18//TMR0=0x18
+    MOVWF   RB0PPS
 
-    /** 延时循环 */
-    MOVLW   250    
-    MOVWF   delay_value_1
-loop1:
-    MOVLW   250    
-    MOVWF   delay_value_2
-loop2:
-    DECFSZ  delay_value_2, f
-    goto    loop2  /**< @brief 如果delay_value_2不为0，继续减1 */
-    DECFSZ  delay_value_1, f
-    goto    loop1  /**< @brief 如果delay_value_1不为0，跳回到loop2 */
+    /** 初始化time 0*/
+    //T0CON0=1xx10001
+    //T0CON1=01010010
+    BANKSEL T0CON0
+    MOVLW   0b10010001 // T0CON0配置
+    MOVWF   T0CON0
+    BANKSEL T0CON1
+    MOVLW   0b01010000 // T0CON1配置
+    MOVWF   T0CON1
 
-    /** 熄灭LED */
-    BANKSEL LATB
-    BCF     LATB, 0
+    //死循环
+    LOOP:
+        GOTO    LOOP
 
-    /** 延时循环 */
-    MOVLW   250
-    MOVWF   delay_value_1
-loop3:
-    MOVLW   250
-    MOVWF   delay_value_2
-loop4:
-    DECFSZ  delay_value_2, f
-    goto    loop4  /**< @brief 如果delay_value_2不为0，继续减1 */
-    DECFSZ  delay_value_1, f
-    goto    loop3  /**< @brief 如果delay_value_1不为0，跳回到loop4 */
-
-    goto loop  /**< @brief 返回主循环 */
-
-    end
+    END

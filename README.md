@@ -402,7 +402,64 @@ Subroutine2:
 
 通过对上述内容的理解，可以更好地在PIC16(L)F18854微控制器中使用栈结构进行子程序调用和中断处理。有关栈的更多详细信息，请参考PIC16(L)F18854的数据手册中的相关章节。
 
-## 点灯实验思路
+### 27.0 TIMER0 模块
+
+Timer0 模块是一个 8/16 位定时器/计数器，具有以下特性：
+- 16 位定时器/计数器
+- 具有可编程周期的 8 位定时器/计数器
+- 同步或异步操作
+- 可选时钟源
+- 可编程预分频器（独立于看门狗定时器）
+- 可编程后分频器
+- 睡眠模式下操作
+- 比较或溢出中断
+- 可通过 PPS 输出到 I/O 引脚或其他外设
+
+## Timer0 操作
+
+Timer0 可以作为 8 位定时器/计数器或 16 位定时器/计数器操作。模式由 T0CON 寄存器的 T016BIT 位选择。
+
+当使用内部时钟源时，模块作为定时器使用，每个指令周期递增。当使用外部时钟源时，模块可以作为定时器或计数器使用，在外部源的每个上升沿递增。
+
+##### 16 位模式
+
+在正常操作中，TMR0 在时钟源的上升沿递增。时钟输入上的 15 位预分频器提供多种预分频选项。
+
+### 时钟源选择
+
+Timer0 的时钟源由 T0CON1 寄存器的 T0CS<2:0> 位选择。选项包括：
+- FOSC/4（内部指令周期时钟）
+- T0CKI 引脚的上升沿或下降沿
+- 内部低功耗振荡器
+- Timer1 溢出
+
+### 可编程预分频器
+
+一个软件可编程预分频器可用于 Timer0。有 16 个预分频选项，范围从 1:1 到 1:32768。预分频值通过 T0CON1 寄存器的 T0CKPS<3:0> 位选择。
+
+### 可编程后分频器
+
+一个软件可编程后分频器（输出分频器）可用于 Timer0。有 16 个后分频选项，范围从 1:1 到 1:16。后分频值通过 T0CON0 寄存器的 T0OUTPS<3:0> 位选择。
+
+### 睡眠模式下操作
+
+当同步操作时，Timer0 会停止。当异步操作时，Timer0 会继续递增，并且在 Timer0 中断使能的情况下，可以唤醒设备。
+
+### Timer0 中断
+
+当以下任一条件发生时，Timer0 中断标志位（TMR0IF）会被置位：
+- 8 位 TMR0L 与 TMR0H 值匹配
+- 16 位 TMR0 从 ‘FFFFh’ 溢出
+
+如果 Timer0 中断使能（PIE0 寄存器的 TMR0IE 位 = 1），CPU 将被中断，设备可能从睡眠状态唤醒。
+
+### Timer0 输出
+
+Timer0 输出可以通过 RxyPPS 输出选择寄存器路由到任意 I/O 引脚。Timer0 输出还可以被其他外设使用，如模数转换器的自动转换触发器。最后，Timer0 输出可以通过 T0CON0 寄存器的 Timer0 输出位（T0OUT）通过软件监控。
+
+TMR0_out 在 8 位模式下，当 TMR0L 与 TMR0H 匹配时，或在 16 位模式下，当 TMR0 溢出时，将是一个分频后的时钟周期。
+
+## 闪灯实验思路
 
 为了在PIC16(L)F18854上实现点亮LED的实验，可以按照以下步骤进行设计和编程：
 
@@ -513,75 +570,130 @@ loop4:
 
 ```
 
-### 代码详解
-
-1. **包含头文件**：
-   ```asm
-   #include <xc.inc>
-   ```
-   包含头文件以使用XC编译器的预定义宏和寄存器定义。
-
-2. **定义程序段**：
-   ```asm
-   psect   init, class=CODE, delta=2
-   ...
-   psect   reset_vec, class=CODE, delta=2
-   ```
-   定义了不同的程序段，用于代码组织和存储。
-
-3. **声明全局变量和复位向量**：
-   ```asm
-   global _main, reset_vec, start_initialization
-   ```
-   声明全局符号，使它们在其他文件中可见。
-
-4. **配置位定义**：
-   ```asm
-   psect config, class=CONFIG, delta=2
-   dw  0xDFEC
-   ...
-   dw  0xFFFF
-   ```
-   定义配置位，具体配置根据芯片的需求和应用而定。
-
-5. **复位向量**：
-   ```asm
-   psect reset_vec
-   reset_vec:
-       ljmp    _main
-   ```
-   定义复位向量，在复位时跳转到`_main`函数。
-
-6. **宏定义**
-
-   ```asm
-   #define RP0 5
-   #define RP0 6
-   ```
-
-7. **配置GPIO引脚为输出**：
-   ```asm
-   bcf STATUS, RP0         ; 选择BANK 0
-   clrf PORTB              ; 清空PORTB寄存器
-   bsf STATUS, RP0         ; 选择BANK 1
-   bcf TRISB, 0            ; 设置RB0为输出
-   bcf STATUS, RP0         ; 回到BANK 0
-   ```
-   选择合适的BANK来访问TRISB和PORTB寄存器，设置RB0为输出。
-
-8. **点亮LED**：
-   ```asm
-   bsf PORTB, 0            ; 设置RB0为高电平，点亮LED
-   ```
-   将RB0设置为高电平，点亮连接到该引脚的LED。
-
-9. **死循环保持LED亮**：
-   ```asm
-   loop:
-       goto loop
-   ```
-   进入死循环，保持LED亮。
-
 ### 总结
 
 这个实验通过配置GPIO引脚为输出并设置其电平，实现了控制LED的亮灭。汇编语言代码详细展示了如何使用指令配置和控制PIC16(L)F18854的引脚，从而实现对硬件的直接控制。通过这个实验，你可以更好地理解微控制器的基本操作和汇编语言的应用。
+
+## 定时器闪灯思路
+
+### 数学计算
+$$
+\log_2(0.5*10^6)=18.931
+\\
+\log_2(0.5*10^6) - 2 =16.931
+\\
+故选择预分频1:1,因为内频率比4:FOSC/4
+\\
+后分频选择1:2
+\\
+根据计算,输出周期为0.953s\\
+完全可用\\
+根据以上\\
+T0CON0=0b10010001\\
+T0CON1=0b01010000\\
+$$
+
+![image-20240709175714975](./assets/image-20240709175714975.png)
+
+```asm
+#include <xc.inc>
+
+/** @brief 配置和初始化段 */
+psect   init, class=CODE, delta=2
+psect   end_init, class=CODE, delta=2
+psect   powerup, class=CODE, delta=2
+psect   cinit, class=CODE, delta=2
+psect   functab, class=ENTRY, delta=2
+psect   idloc, class=IDLOC, delta=2, noexec
+psect   eeprom_data, class=EEDATA, delta=2, space=3, noexec
+psect   intentry, class=CODE, delta=2
+psect   reset_vec, class=CODE, delta=2
+
+/** @brief 全局定义 */
+global _main, reset_vec, start_initialization
+
+/** @brief 配置设置 */
+psect config, class=CONFIG, delta=2
+    dw    0xDFEC
+    dw    0xF7FF
+    dw    0xFFBF
+    dw    0xEFFE
+    dw    0xFFFF
+    
+/** @brief 复位向量，跳转到主函数 */
+psect reset_vec
+reset_vec:
+    ljmp    _main
+
+/** @brief 初始化段 */
+psect cinit
+start_initialization:
+
+/** @brief 公共变量 */
+psect CommonVar, class=COMMON, space=1, delta=1
+char_case: ds 1  /**< @brief 字符变量 */
+delay_value_1:  ds  1  /**< @brief 延时变量1 */
+delay_value_2:  ds  1  /**< @brief 延时变量2 */
+
+/** @brief 中断服务程序向量 */
+psect intentry
+intentry:
+    retfie
+
+/** @brief 主代码段 */
+psect main, class=CODE, delta=2
+
+global _main
+
+/** @def RP0
+ *  @brief 寄存器页0
+ */
+#define RP0 5
+/** @def RP1
+ *  @brief 寄存器页1
+ */
+#define RP1 6
+
+/**
+ * @brief 主函数
+ *
+ * 该函数初始化微控制器，设置I/O端口
+ * 初始化定时器0，设置定时器0实现0.5s延时
+ */
+_main:
+    /** 初始化PORTB和LATB为0 */
+    BANKSEL PORTB
+    CLRF    PORTB
+    BANKSEL LATB
+    CLRF    LATB
+
+    /** 将ANSELB设置为数字I/O（默认是模拟） */
+    BANKSEL ANSELB
+    CLRF    ANSELB
+
+    /** 设置RB0为输出 */
+    BANKSEL TRISB
+    BCF     TRISB, 0
+
+    /** 设置端脚复用*/
+    BANKSEL RB0PPS
+    MOVLW   0x18//TMR0=0x18
+    MOVWF   RB0PPS
+
+    /** 初始化time 0*/
+    //T0CON0=1xx10001
+    //T0CON1=01010010
+    BANKSEL T0CON0
+    MOVLW   0b10010001 // T0CON0配置
+    MOVWF   T0CON0
+    BANKSEL T0CON1
+    MOVLW   0b01010000 // T0CON1配置
+    MOVWF   T0CON1
+
+    //死循环
+    LOOP:
+        GOTO    LOOP
+
+    END
+```
+
