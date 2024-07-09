@@ -402,7 +402,7 @@ Subroutine2:
 
 通过对上述内容的理解，可以更好地在PIC16(L)F18854微控制器中使用栈结构进行子程序调用和中断处理。有关栈的更多详细信息，请参考PIC16(L)F18854的数据手册中的相关章节。
 
-## 点灯实验思路
+## 闪灯实验思路
 
 为了在PIC16(L)F18854上实现点亮LED的实验，可以按照以下步骤进行设计和编程：
 
@@ -515,72 +515,21 @@ loop4:
 
 ### 代码详解
 
-1. **包含头文件**：
-   ```asm
-   #include <xc.inc>
-   ```
-   包含头文件以使用XC编译器的预定义宏和寄存器定义。
+1. **配置部分**
+    - 配置文件区域(`config` section)设置了微控制器的各项配置参数。
+    - `reset_vec`部分设置了复位向量，指向`_main`主程序入口。
 
-2. **定义程序段**：
-   ```asm
-   psect   init, class=CODE, delta=2
-   ...
-   psect   reset_vec, class=CODE, delta=2
-   ```
-   定义了不同的程序段，用于代码组织和存储。
+2. **初始化部分**
+    - 通过`BANKSEL`指令选择不同的寄存器组。
+    - 使用`CLRF`指令清除PORTB、LATB和ANSELB寄存器，确保所有引脚初始化为数字模式并且输出低电平。
+    - 使用`BCF`指令将TRISB的第0位清零，将RB0配置为输出模式。
 
-3. **声明全局变量和复位向量**：
-   ```asm
-   global _main, reset_vec, start_initialization
-   ```
-   声明全局符号，使它们在其他文件中可见。
-
-4. **配置位定义**：
-   ```asm
-   psect config, class=CONFIG, delta=2
-   dw  0xDFEC
-   ...
-   dw  0xFFFF
-   ```
-   定义配置位，具体配置根据芯片的需求和应用而定。
-
-5. **复位向量**：
-   ```asm
-   psect reset_vec
-   reset_vec:
-       ljmp    _main
-   ```
-   定义复位向量，在复位时跳转到`_main`函数。
-
-6. **宏定义**
-
-   ```asm
-   #define RP0 5
-   #define RP0 6
-   ```
-
-7. **配置GPIO引脚为输出**：
-   ```asm
-   bcf STATUS, RP0         ; 选择BANK 0
-   clrf PORTB              ; 清空PORTB寄存器
-   bsf STATUS, RP0         ; 选择BANK 1
-   bcf TRISB, 0            ; 设置RB0为输出
-   bcf STATUS, RP0         ; 回到BANK 0
-   ```
-   选择合适的BANK来访问TRISB和PORTB寄存器，设置RB0为输出。
-
-8. **点亮LED**：
-   ```asm
-   bsf PORTB, 0            ; 设置RB0为高电平，点亮LED
-   ```
-   将RB0设置为高电平，点亮连接到该引脚的LED。
-
-9. **死循环保持LED亮**：
-   ```asm
-   loop:
-       goto loop
-   ```
-   进入死循环，保持LED亮。
+3. **主程序部分**
+    - 在`loop`中，首先点亮LED，设置RB0为高电平(`BSF LATB, 0`)。
+    - 通过两个延时循环实现延时。
+    - 熄灭LED，将RB0设置为低电平(`BCF LATB, 0`)。
+    - 通过另外两个延时循环实现延时。
+    - 返回循环，重复上述过程。
 
 ### 总结
 
