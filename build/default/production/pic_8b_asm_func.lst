@@ -1,0 +1,131 @@
+
+
+Microchip MPLAB XC8 Assembler V2.46 build 20240104201356 
+                                                                                                           Tue Jul 09 15:07:59 2024
+
+
+     1                           	processor	16F18854
+     2                           	pagewidth 132
+     3                           	psect	udata_shr,global,class=COMMON,space=1,delta=1,noexec
+     4                           	psect	udata,global,class=RAM,space=1,delta=1,noexec
+     5                           	psect	udata_bank0,global,class=BANK0,space=1,delta=1,noexec
+     6                           	psect	udata_bank1,global,class=BANK1,space=1,delta=1,noexec
+     7                           	psect	udata_bank2,global,class=BANK2,space=1,delta=1,noexec
+     8                           	psect	udata_bank3,global,class=BANK3,space=1,delta=1,noexec
+     9                           	psect	udata_bank4,global,class=BANK4,space=1,delta=1,noexec
+    10                           	psect	udata_bank5,global,class=BANK5,space=1,delta=1,noexec
+    11                           	psect	udata_bank6,global,class=BANK6,space=1,delta=1,noexec
+    12                           	psect	code,global,class=CODE,delta=2
+    13                           	psect	data,global,class=STRCODE,delta=2,noexec
+    14                           	psect	edata,global,class=EEDATA,space=3,delta=2,noexec
+    15                           	psect	init,global,class=CODE,delta=2
+    16                           	psect	end_init,global,class=CODE,delta=2
+    17                           	psect	powerup,global,class=CODE,delta=2
+    18                           	psect	cinit,global,class=CODE,delta=2
+    19                           	psect	functab,global,class=ENTRY,delta=2
+    20                           	psect	idloc,global,class=IDLOC,delta=2,noexec
+    21                           	psect	eeprom_data,global,class=EEDATA,space=3,delta=2,noexec
+    22                           	psect	intentry,global,class=CODE,delta=2
+    23                           	psect	reset_vec,global,class=CODE,delta=2
+    24                           	psect	config,global,class=CONFIG,delta=2
+    25                           	psect	CommonVar,global,class=COMMON,space=1,delta=1
+    26                           	psect	main,global,class=CODE,delta=2
+    27                           	psect	pa_nodes0,global,class=CODE,delta=2
+    28     007F                     
+    29                           	psect	edata
+    30     0000                     stk_offset	set	0
+    31     0000                     auto_size	set	0
+    32                           
+    33                           ; stack_auto defines a symbol /name/_offset which equates to the
+    34                           ; stack offset of the auto object in question
+    35     0000                     
+    36                           ; stack_param defines a symbol /name/_offset which equates to the
+    37                           ; stack offset of the parameter object in question
+    38     0000                     
+    39                           ; alloc_stack adjusts the SP to allocate space for auto objects
+    40                           ; it also links in to the btemp symbol so that can be used
+    41     0000                     
+    42                           ; restore_stack adjusts the SP to remove all auto and parameter
+    43                           ; objects from the stack prior to returning from a function
+    44     0000                     
+    45                           	psect	cinit
+    46     0000                     start_initialization:
+    47                           
+    48                           	psect	intentry
+    49     0004  0009               	retfie	; PIC10/12/16
+    50                           
+    51                           	psect	reset_vec
+    52     0000                     reset_vec:
+    53     0000  3180  2805  3180   	ljmp	_main
+    54                           
+    55                           	psect	config
+    56     8007  DFEC               	dw	57324
+    57     8008  F7FF               	dw	63487
+    58     8009  FFBF               	dw	65471
+    59     800A  EFFE               	dw	61438
+    60     800B  FFFF               	dw	65535
+    61                           
+    62                           	psect	CommonVar
+    63     0070                     charcase:
+    64     0070                     	ds	1
+    65     0071                     DelayValue1:
+    66     0071                     	ds	1
+    67     0072                     DelayValue2:
+    68     0072                     	ds	1
+    69                           
+    70                           	psect	main
+    71     0005                     _main:
+    72                           
+    73                           ; 初始化
+    74     0005  0020               	banksel	13
+    75     0006  018D               	clrf	13	; PORTB初始化为0
+    76     0007  0020               	banksel	23
+    77     0008  0197               	clrf	23	; LATB初始化为0
+    78     0009  003E               	banksel	3907
+    79     000A  01C3               	clrf	3907	; 设置为数字输入输出（默认为模拟）
+    80     000B  0020               	banksel	18
+    81     000C  1012               	bcf	18,0	; 设置((PORTB) and 07Fh), 0为输出
+    82     000D                     loop:
+    83                           
+    84                           ; 点亮((PORTB) and 07Fh), 0接的LED（阳极连接((PORTB) and 07Fh), 0）
+    85     000D  0020               	banksel	23
+    86     000E  1417               	bsf	23,0
+    87                           
+    88                           ; 延时
+    89     000F  30FA               	movlw	250
+    90     0010  00F1               	movwf	DelayValue1
+    91     0011                     loop1:
+    92     0011  30FA               	movlw	250
+    93     0012  00F2               	movwf	DelayValue2
+    94     0013                     loop2:
+    95     0013  0BF2               	decfsz	DelayValue2,f
+    96     0014  2813               	goto	loop2	; DelayValue2不为0时执行，继续进行DelayValue2--
+    97     0015  0BF1               	decfsz	DelayValue1,f
+    98     0016  2811               	goto	loop1	; DelayValue1不为0时执行，跳到DelayValue2--的循环
+    99                           
+   100                           ; 熄灭
+   101     0017  0020               	banksel	23
+   102     0018  1017               	bcf	23,0
+   103                           
+   104                           ; 延时
+   105     0019  30FA               	movlw	250
+   106     001A  00F1               	movwf	DelayValue1
+   107     001B                     loop3:
+   108     001B  30FA               	movlw	250
+   109     001C  00F2               	movwf	DelayValue2
+   110     001D                     loop4:
+   111     001D  0BF2               	decfsz	DelayValue2,f
+   112     001E  281D               	goto	loop4	; DelayValue2不为0时执行，继续进行DelayValue2--
+   113     001F  0BF1               	decfsz	DelayValue1,f
+   114     0020  281B               	goto	loop3	; DelayValue1不为0时执行，跳到DelayValue2--的循环
+   115     0021  280D               	goto	loop	; 返回点灯
+
+
+Microchip Technology PIC Macro Assembler V2.46 build 20240104201356 
+Symbol Table                                                                                               Tue Jul 09 15:07:59 2024
+
+                            LATB 0017                              loop 000D                             PORTB 000D  
+                           TRISB 0012                             _main 0005                             loop1 0011  
+                           loop2 0013                             loop3 001B                             loop4 001D  
+                          ANSELB 0F43                          charcase 0070              start_initialization 0000  
+                     DelayValue1 0071                       DelayValue2 0072                         reset_vec 0000  
