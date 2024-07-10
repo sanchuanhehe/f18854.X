@@ -1,0 +1,4 @@
+C:/Users/hehey/MPLABXProjects/f18854.X/_build_mplab/f18854/default/image_default.elf/CMakeFiles/assemble.dir
+C:/Users/hehey/MPLABXProjects/f18854.X/_build_mplab/f18854/default/image_default.elf/CMakeFiles/default.elf.dir
+C:/Users/hehey/MPLABXProjects/f18854.X/_build_mplab/f18854/default/image_default.elf/CMakeFiles/edit_cache.dir
+C:/Users/hehey/MPLABXProjects/f18854.X/_build_mplab/f18854/default/image_default.elf/CMakeFiles/rebuild_cache.dir

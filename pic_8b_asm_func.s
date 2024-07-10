@@ -88,7 +88,7 @@ _main:
     MOVLW   0b10010001 // T0CON0配置
     MOVWF   T0CON0
     BANKSEL T0CON1
-    MOVLW   0b01010000 // T0CON1配置
+    MOVLW   0b01010001 // T0CON1配置
     MOVWF   T0CON1
 
     //死循环

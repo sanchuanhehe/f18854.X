@@ -1,0 +1,8 @@
+# ninja log v6
+15	584	7422770865558316	CMakeFiles/assemble.dir/C_/Users/hehey/MPLABXProjects/f18854.X/pic_8b_asm_func.s.o	b9377e315a1eb380
+27	502	7422804360249190	build.ninja	544912fd665d6436
+584	1191	7422770871248845	default.elf	b9860e7308010612
+10	287	7422429611859809	CMakeFiles/assemble.dir/C_/Users/hehey/MPLABXProjects/f18854.X/pic_8b_asm_func.s.p1	f76217a6426c760e
+21	482	7422804360249190	build.ninja	544912fd665d6436
+21	977	7422993222796452	CMakeFiles/assemble.dir/C_/Users/hehey/MPLABXProjects/f18854.X/pic_8b_asm_func.s.o	b9377e315a1eb380
+977	1674	7422993232360857	default.elf	b9860e7308010612
