@@ -34,8 +34,7 @@ start_initialization:
 /** @brief 公共变量 */
 psect CommonVar, class=COMMON, space=1, delta=1
 char_case: ds 1  /**< @brief 字符变量 */
-delay_value_1:  ds  1  /**< @brief 延时变量1 */
-delay_value_2:  ds  1  /**< @brief 延时变量2 */
+
 
 /** @brief 中断服务程序向量 */
 psect intentry

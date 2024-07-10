@@ -1,12 +1,16 @@
 ## 定时器闪灯思路
 
+###### 王一赫
+
+###### 组员 : 史少博,王一赫
+
 ### 数学计算与逻辑推导
 
 > **27.7 Timer0 Output**
 >
 > The Timer0 output can be routed to any I/O pin via the RxyPPS output selection register (see **Section 13.0** **“Peripheral Pin Select (PPS) Module”** for additional information). The Timer0 output can also be used by other peripherals, such as the Auto-conversion Trigger of the Analog-to-Digital Converter. Finally, the Timer0output can be monitored through software via the Timer0 output bit (T0OUT) of the T0CON0 register (Register 27-1).
 >
-> TMR0_out will be one postscaled clock period when a match occurs between TMR0L and TMR0H in 8-bit mode, or when TMR0 rolls over in 16-bit mode. The Timer0 output is a 50% duty cycle that t**oggles on each TMR0_out rising clock edge.**
+> TMR0_out will be one postscaled clock period when a match occurs between TMR0L and TMR0H in 8-bit mode, or when TMR0 rolls over in 16-bit mode. The Timer0 output is a 50% duty cycle that **toggles on each TMR0_out rising clock edge.**
 
 toggles on each TMR0_out rising clock edge意味着在原时钟信号经过一系列分频之后的输出信号,在上升沿使得我们的所需信号反转,即分频使得频率增倍
 
@@ -22,7 +26,7 @@ $$
 目前仍然大于16(16位计数器分频能力),仍需降低频率,故选择预分频1:1,后分频选择1:2使得尽可能贴近2
 基于以上,计算实际的频率
 $$
-\frac{1mHz}{2^20} = 0.953673
+\frac{1MHz}{2^{20}} = 0.953673 Hz
 $$
 根据计算,输出周期为953.673mhz
 与1hz差4.6%,考虑到时钟(参考下图)和这种状态机本身的误差,这种误差完全可用
@@ -41,6 +45,17 @@ $$
 [ipynb](rel2.ipynb)
 
 ### 代码框架与流程梳理
+
+```mermaid
+graph TB
+    A[初始化PORTB和LATB为0] --> B[将ANSELB设置为数字I/O]
+    B --> C[设置RB0为输出]
+    C --> D[设置端脚复用]
+    D --> E[初始化TMR0]
+    E --> F[死循环]
+```
+
+
 
 ```mermaid
 graph TB
@@ -131,8 +146,7 @@ start_initialization:
 /** @brief 公共变量 */
 psect CommonVar, class=COMMON, space=1, delta=1
 char_case: ds 1  /**< @brief 字符变量 */
-delay_value_1:  ds  1  /**< @brief 延时变量1 */
-delay_value_2:  ds  1  /**< @brief 延时变量2 */
+
 
 /** @brief 中断服务程序向量 */
 psect intentry
