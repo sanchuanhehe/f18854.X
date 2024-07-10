@@ -6,6 +6,8 @@
 
 ### 数学计算与逻辑推导
 
+![image-20240710113309299](./assets/image-20240710113309299.png)
+
 > **27.7 Timer0 Output**
 >
 > The Timer0 output can be routed to any I/O pin via the RxyPPS output selection register (see **Section 13.0** **“Peripheral Pin Select (PPS) Module”** for additional information). The Timer0 output can also be used by other peripherals, such as the Auto-conversion Trigger of the Analog-to-Digital Converter. Finally, the Timer0output can be monitored through software via the Timer0 output bit (T0OUT) of the T0CON0 register (Register 27-1).
@@ -28,7 +30,7 @@ $$
 $$
 \frac{1MHz}{2^{20}} = 0.953673 Hz
 $$
-根据计算,输出周期为953.673mhz
+根据计算,输出频率为953.673mhz
 与1hz差4.6%,考虑到时钟(参考下图)和这种状态机本身的误差,这种误差完全可用
 
 > 至少我不想因为这一点点误差来设计复杂的程序来浪费宝贵的内存和cpu资源,还有time
@@ -51,6 +53,7 @@ graph TB
     A[初始化PORTB] --> D[设置端脚复用]
     D --> E[初始化TMR0]
     E --> F[死循环]
+    F --> F
 ```
 
 

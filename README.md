@@ -184,6 +184,8 @@ decfs count1, 1 ; 将 count1 的值递减，并将结果存储在 count1 中
 decfs count1, 0 ; 将 count1 的值递减，并将结果存储在 W 寄存器中
 ```
 
+#### `COMF`
+
 ## 常用寄存器及其用法
 
 ### 常用寄存器
