@@ -1,5 +1,16 @@
 # ninja log v6
-13	300	7423015268377216	CMakeFiles/assemble.dir/C_/Users/hehey/MPLABXProjects/f18854.X/pic_8b_asm_func.s.o	b9377e315a1eb380
-21	482	7423032107190772	build.ninja	544912fd665d6436
-301	509	7423015271250265	default.elf	b9860e7308010612
-10	287	7422429611859809	CMakeFiles/assemble.dir/C_/Users/hehey/MPLABXProjects/f18854.X/pic_8b_asm_func.s.p1	f76217a6426c760e
+16	707	7423065735014080	CMakeFiles/assemble.dir/C_/Users/hehey/MPLABXProjects/f18854.X/pic_8b_asm_func.s.o	b9377e315a1eb380
+24	481	7423069748266308	build.ninja	544912fd665d6436
+707	1272	7423065741921220	default.elf	b9860e7308010612
+19	298	7423069626568117	CMakeFiles/assemble.dir/C_/Users/hehey/MPLABXProjects/f18854.X/pic_8b_asm_func.s.p1	f76217a6426c760e
+7	499	7423069748266308	build.ninja	544912fd665d6436
+16	281	7423069748950576	CMakeFiles/assemble.dir/C_/Users/hehey/MPLABXProjects/f18854.X/pic_8b_asm_func.s.o	b9377e315a1eb380
+282	480	7423069751604404	default.elf	b9860e7308010612
+10	292	7423070331541075	CMakeFiles/assemble.dir/C_/Users/hehey/MPLABXProjects/f18854.X/pic_8b_asm_func.s.o	b9377e315a1eb380
+293	505	7423070334368906	default.elf	b9860e7308010612
+10	296	7423072679840453	CMakeFiles/assemble.dir/C_/Users/hehey/MPLABXProjects/f18854.X/pic_8b_asm_func.s.o	b9377e315a1eb380
+297	510	7423072682710079	default.elf	b9860e7308010612
+13	312	7423073430980015	CMakeFiles/assemble.dir/C_/Users/hehey/MPLABXProjects/f18854.X/pic_8b_asm_func.s.o	b9377e315a1eb380
+313	529	7423073433979587	default.elf	b9860e7308010612
+12	272	7423073995303357	CMakeFiles/assemble.dir/C_/Users/hehey/MPLABXProjects/f18854.X/pic_8b_asm_func.s.o	b9377e315a1eb380
+272	462	7423073997906016	default.elf	b9860e7308010612

@@ -5,7 +5,7 @@ Linker command line:
 -W-3 \
   --edf=C:/Users/hehey/.mchp_packs/Microchip/PIC16F1xxxx_DFP/1.24.387/xc8\pic\dat\20240111205957_en.msgs \
   -cn -h+default.sym --cmf=default.cmf -z -Q16F18854 \
-  -oC:\Users\hehey\AppData\Local\Temp\xcAs153k.\driver_tmp_3.o \
+  -oC:\Users\hehey\AppData\Local\Temp\xcAs11kc.\driver_tmp_3.o \
   --defsym=__MPLAB_BUILD=1 -Pintentry=04h --fixupoverflow=error -Mmem.map \
   -E1 -ver=XC8 Compiler --acfsm=1493 -ACODE=00h-07FFhx2 -ASTRCODE=00h-0FFFh \
   -ASTRING=00h-0FFhx16 -ACONST=00h-0FFhx16 -AENTRY=00h-0FFhx16 \
@@ -38,7 +38,7 @@ Machine type is 16F18854
 
                 Name                               Link     Load   Length Selector   Space Scale
 CMakeFiles\assemble.dir\C_\Users\hehey\MPLABXProjects\f18854.X\pic_8b_asm_func.s.o
-                main                                  5        5       12        8       0
+                main                                  5        5       15        8       0
                 CommonVar                            70       70        1       70       1
                 config                             8007     8007        5    1000E       0
                 reset_vec                             0        0        3        0       0
@@ -46,7 +46,7 @@ CMakeFiles\assemble.dir\C_\Users\hehey\MPLABXProjects\f18854.X\pic_8b_asm_func.s
 
 TOTAL           Name                               Link     Load   Length     Space
         CLASS   CODE           
-                main                                  5        5       12         0
+                main                                  5        5       15         0
                 reset_vec                             0        0        3         0
                 intentry                              4        4        1         0
 
@@ -157,7 +157,7 @@ TOTAL           Name                               Link     Load   Length     Sp
 SEGMENTS        Name                           Load    Length   Top    Selector   Space  Class     Delta
 
                 reset_vec                      000000  000003  000003         0       0  CODE        2
-                intentry                       000004  000013  000017         8       0  CODE        2
+                intentry                       000004  000016  00001A         8       0  CODE        2
                 CommonVar                      000070  000001  000071        70       1  COMMON      1
                 config                         008007  000005  00800C     1000E       0  CONFIG      2
 
@@ -174,13 +174,13 @@ UNUSED ADDRESS RANGES
         BANK6            0320-032F             10           1
         BIGRAM           2000-21EF            1F0           1
         CODE             0003-0003              1           2
-                         0017-0FFF            7E9
+                         001A-0FFF            7E6
         COMMON           0071-007F              F           1
         CONST            0003-0003              1           2
-                         0017-0FFF            100
+                         001A-0FFF            100
         EEDATA           F000-F0FF            100           2
         ENTRY            0003-0003              1           2
-                         0017-0FFF            100
+                         001A-0FFF            100
         IDLOC            8000-8003              4           2
         RAM              0020-006F             50           1
                          00A0-00EF             50
@@ -222,9 +222,9 @@ UNUSED ADDRESS RANGES
         SFR8             0400-046F             70           1
         SFR9             0480-04EF             70           1
         STRCODE          0003-0003              1           2
-                         0017-0FFF            FE9
+                         001A-0FFF            FE6
         STRING           0003-0003              1           2
-                         0017-0FFF            100
+                         001A-0FFF            100
 
                                   Symbol Table
 

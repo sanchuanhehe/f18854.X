@@ -1,7 +1,7 @@
 
 
 Microchip MPLAB XC8 Assembler V2.46 build 20240104201356 
-                                                                                                           Wed Jul 10 15:58:47 2024
+                                                                                                           Wed Jul 10 17:36:39 2024
 
 
      1                           	processor	16F18854
@@ -83,19 +83,23 @@ Microchip MPLAB XC8 Assembler V2.46 build 20240104201356
     77     000E  3018               	movlw	24
     78     000F  0098               	movwf	3864
     79     0010  0020               	banksel	30
-    80     0011  3091               	movlw	145
+    80     0011  3088               	movlw	136
     81     0012  009E               	movwf	30
     82     0013  0020               	banksel	31
-    83     0014  3051               	movlw	81
+    83     0014  3056               	movlw	86
     84     0015  009F               	movwf	31
-    85     0016                     LOOP:
-    86     0016  2816               	goto	LOOP
+    85     0016  0020               	banksel	29
+    86     0017  30D8               	movlw	216
+    87     0018  009D               	movwf	29
+    88     0019                     LOOP:
+    89     0019  2819               	goto	LOOP
 
 
 Microchip Technology PIC Macro Assembler V2.46 build 20240104201356 
-Symbol Table                                                                                               Wed Jul 10 15:58:47 2024
+Symbol Table                                                                                               Wed Jul 10 17:36:39 2024
 
-                            LATB 0017                              LOOP 0016                             PORTB 000D  
-                           TRISB 0012                             _main 0005                            ANSELB 0F43  
-                          T0CON0 001E                            T0CON1 001F                            RB0PPS 0F18  
-            start_initialization 0000                         char_case 0070                         reset_vec 0000  
+                            LATB 0017                              LOOP 0019                             TMR0H 001D  
+                           PORTB 000D                             TRISB 0012                             _main 0005  
+                          ANSELB 0F43                            T0CON0 001E                            T0CON1 001F  
+                          RB0PPS 0F18              start_initialization 0000                         char_case 0070  
+                       reset_vec 0000  

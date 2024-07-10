@@ -12,7 +12,7 @@
 # in delta units.  Any other numeric values are decimal.
 %PSECTS
 $CMakeFiles\assemble.dir\C_\Users\hehey\MPLABXProjects\f18854.X\pic_8b_asm_func.s.o
-main CODE 0 5 5 12 2 1
+main CODE 0 5 5 15 2 1
 intentry CODE 0 4 4 1 2 1
 reset_vec CODE 0 0 0 3 2 1
 CommonVar COMMON 1 70 70 1 1 1
@@ -38,9 +38,9 @@ BANK4 220-26F 1
 BANK5 2A0-2EF 1
 BANK6 320-32F 1
 CONST 3-3 2
-CONST 17-FFF 2
+CONST 1A-FFF 2
 ENTRY 3-3 2
-ENTRY 17-FFF 2
+ENTRY 1A-FFF 2
 IDLOC 8000-8003 2
 SFR10 500-56F 1
 SFR11 580-5EF 1
@@ -65,7 +65,7 @@ SFR29 E80-EEF 1
 SFR30 F00-F6F 1
 SFR31 F80-FEF 1
 CODE 3-3 2
-CODE 17-FFF 2
+CODE 1A-FFF 2
 SFR0 6-7 1
 SFR1 80-9F 1
 SFR2 100-11F 1
@@ -80,9 +80,9 @@ BIGRAM 2000-21EF 1
 COMMON 71-7F 1
 EEDATA F000-F0FF 2
 STRCODE 3-3 2
-STRCODE 17-FFF 2
+STRCODE 1A-FFF 2
 STRING 3-3 2
-STRING 17-FFF 2
+STRING 1A-FFF 2
 # %LINETAB Section
 # This section enumerates the file/line to address mappings.
 # The beginning of the section is indicated by %LINETAB.
@@ -114,7 +114,10 @@ F main CODE >82:C:\\Users\\hehey\\MPLABXProjects\\f18854.X\\pic_8b_asm_func.s
 13 main CODE >90:C:\\Users\\hehey\\MPLABXProjects\\f18854.X\\pic_8b_asm_func.s
 14 main CODE >91:C:\\Users\\hehey\\MPLABXProjects\\f18854.X\\pic_8b_asm_func.s
 15 main CODE >92:C:\\Users\\hehey\\MPLABXProjects\\f18854.X\\pic_8b_asm_func.s
-16 main CODE >96:C:\\Users\\hehey\\MPLABXProjects\\f18854.X\\pic_8b_asm_func.s
+16 main CODE >94:C:\\Users\\hehey\\MPLABXProjects\\f18854.X\\pic_8b_asm_func.s
+17 main CODE >95:C:\\Users\\hehey\\MPLABXProjects\\f18854.X\\pic_8b_asm_func.s
+18 main CODE >96:C:\\Users\\hehey\\MPLABXProjects\\f18854.X\\pic_8b_asm_func.s
+19 main CODE >100:C:\\Users\\hehey\\MPLABXProjects\\f18854.X\\pic_8b_asm_func.s
 8007 config CONFIG >19:C:\\Users\\hehey\\MPLABXProjects\\f18854.X\\pic_8b_asm_func.s
 8008 config CONFIG >20:C:\\Users\\hehey\\MPLABXProjects\\f18854.X\\pic_8b_asm_func.s
 8009 config CONFIG >21:C:\\Users\\hehey\\MPLABXProjects\\f18854.X\\pic_8b_asm_func.s
@@ -222,7 +225,7 @@ __Ludata_shr 0 0 ABS 0 udata_shr -
 # and size are in units of delta. The file address is in units of bytes.
 # All other numeric quantities are in decimal.
 %SEGMENTS
-intentry 0 4 8 13 2
+intentry 0 4 8 16 2
 reset_vec 0 0 0 3 2
 CommonVar 1 70 70 1 1
 config 0 8007 1000E 5 2

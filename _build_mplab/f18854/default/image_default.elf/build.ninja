@@ -44,8 +44,8 @@ cmake_ninja_workdir = C$:\Users\hehey\MPLABXProjects\f18854.X\_build_mplab\f1885
 
 build cmake_object_order_depends_target_assemble: phony || .
 
-build CMakeFiles\assemble.dir\C_\Users\hehey\MPLABXProjects\f18854.X\pic_8b_asm_func.s.p1: ASM_COMPILER__assemble_unscanned_ C$:\Users\hehey\MPLABXProjects\f18854.X\pic_8b_asm_func.s || cmake_object_order_depends_target_assemble
-  DEP_FILE = CMakeFiles\assemble.dir\C_\Users\hehey\MPLABXProjects\f18854.X\pic_8b_asm_func.s.p1.d
+build CMakeFiles\assemble.dir\C_\Users\hehey\MPLABXProjects\f18854.X\pic_8b_asm_func.s.o: ASM_COMPILER__assemble_unscanned_ C$:\Users\hehey\MPLABXProjects\f18854.X\pic_8b_asm_func.s || cmake_object_order_depends_target_assemble
+  DEP_FILE = CMakeFiles\assemble.dir\C_\Users\hehey\MPLABXProjects\f18854.X\pic_8b_asm_func.s.o.d
   FLAGS = -c -mcpu=16F18854 -mdfp=C:/Users/hehey/.mchp_packs/Microchip/PIC16F1xxxx_DFP/1.24.387/xc8 -fno-short-double -fno-short-float -memi=wordwrite -O0 -fasmfile -maddrqual=ignore -xassembler-with-cpp -mwarn=-3 -Wa,-a -DXPRJ_default=default -msummary=-psect,-class,+mem,-hex,+file -Wl,-Pintentry=04h -ginhx32 -Wl,--no-data-init -mkeep-startup -Wl,-nostartfiles -mno-osccal -moscval=0x3400 -mno-download -mno-stackcall -mdefault-config-bits -std=c99 -gdwarf-3 -mstack=compiled:auto:auto:auto
   OBJECT_DIR = CMakeFiles\assemble.dir
   OBJECT_FILE_DIR = CMakeFiles\assemble.dir\C_\Users\hehey\MPLABXProjects\f18854.X
@@ -55,7 +55,7 @@ build CMakeFiles\assemble.dir\C_\Users\hehey\MPLABXProjects\f18854.X\pic_8b_asm_
 #############################################
 # Object library assemble
 
-build assemble: phony CMakeFiles\assemble.dir\C_\Users\hehey\MPLABXProjects\f18854.X\pic_8b_asm_func.s.p1
+build assemble: phony CMakeFiles\assemble.dir\C_\Users\hehey\MPLABXProjects\f18854.X\pic_8b_asm_func.s.o
 
 # =============================================================================
 # Object build statements for EXECUTABLE target default.elf
@@ -74,10 +74,10 @@ build cmake_object_order_depends_target_default.elf: phony || cmake_object_order
 #############################################
 # Link the executable default.elf
 
-build default.elf: ASM_EXECUTABLE_LINKER__default.2eelf_ CMakeFiles\assemble.dir\C_\Users\hehey\MPLABXProjects\f18854.X\pic_8b_asm_func.s.p1 || assemble
+build default.elf: ASM_EXECUTABLE_LINKER__default.2eelf_ CMakeFiles\assemble.dir\C_\Users\hehey\MPLABXProjects\f18854.X\pic_8b_asm_func.s.o || assemble
   LINK_FLAGS = -mcpu=16F18854 -Wl,-Map=mem.map -DXPRJ_default=default -Wl,--defsym=__MPLAB_BUILD=1 -mdfp=C:/Users/hehey/.mchp_packs/Microchip/PIC16F1xxxx_DFP/1.24.387/xc8 -fno-short-double -fno-short-float -memi=wordwrite -O0 -fasmfile -maddrqual=ignore -xassembler-with-cpp -mwarn=-3 -Wa,-a -msummary=-psect,-class,+mem,-hex,+file -Wl,-Pintentry=04h -ginhx32 -Wl,--no-data-init -mkeep-startup -Wl,-nostartfiles -mno-osccal -moscval=0x3400 -mno-download -mno-stackcall -mdefault-config-bits -std=c99 -gdwarf-3 -mstack=compiled:auto:auto:auto -Wl,--memorysummary,memoryfile.xml
   OBJECT_DIR = CMakeFiles\default.elf.dir
-  POST_BUILD = cmd.exe /C "cd /D C:\Users\hehey\MPLABXProjects\f18854.X\_build_mplab\f18854\default\image_default.elf && "C:\Program Files\CMake\bin\cmake.exe" -E make_directory c:/Users/hehey/MPLABXProjects/f18854.X/out/f18854 && "C:\Program Files\CMake\bin\cmake.exe" -E copy default.elf c:/Users/hehey/MPLABXProjects/f18854.X/out/f18854/default.elf"
+  POST_BUILD = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\hehey\MPLABXProjects\f18854.X\_build_mplab\f18854\default\image_default.elf && "C:\Program Files\CMake\bin\cmake.exe" -E make_directory c:/Users/hehey/MPLABXProjects/f18854.X/out/f18854 && "C:\Program Files\CMake\bin\cmake.exe" -E copy default.elf c:/Users/hehey/MPLABXProjects/f18854.X/out/f18854/default.elf"
   PRE_LINK = cd .
   TARGET_FILE = default.elf
   TARGET_PDB = default.elf.dbg
@@ -87,7 +87,7 @@ build default.elf: ASM_EXECUTABLE_LINKER__default.2eelf_ CMakeFiles\assemble.dir
 # Utility command for edit_cache
 
 build CMakeFiles\edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cmd.exe /C "cd /D C:\Users\hehey\MPLABXProjects\f18854.X\_build_mplab\f18854\default\image_default.elf && "C:\Program Files\CMake\bin\cmake-gui.exe" -SC:\Users\hehey\MPLABXProjects\f18854.X\.generated-cmakefiles -BC:\Users\hehey\MPLABXProjects\f18854.X\_build_mplab\f18854\default\image_default.elf"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\hehey\MPLABXProjects\f18854.X\_build_mplab\f18854\default\image_default.elf && "C:\Program Files\CMake\bin\cmake-gui.exe" -SC:\Users\hehey\MPLABXProjects\f18854.X\.generated-cmakefiles -BC:\Users\hehey\MPLABXProjects\f18854.X\_build_mplab\f18854\default\image_default.elf"
   DESC = Running CMake cache editor...
   pool = console
   restat = 1
@@ -99,7 +99,7 @@ build edit_cache: phony CMakeFiles\edit_cache.util
 # Utility command for rebuild_cache
 
 build CMakeFiles\rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = cmd.exe /C "cd /D C:\Users\hehey\MPLABXProjects\f18854.X\_build_mplab\f18854\default\image_default.elf && "C:\Program Files\CMake\bin\cmake.exe" --regenerate-during-build -SC:\Users\hehey\MPLABXProjects\f18854.X\.generated-cmakefiles -BC:\Users\hehey\MPLABXProjects\f18854.X\_build_mplab\f18854\default\image_default.elf"
+  COMMAND = C:\WINDOWS\system32\cmd.exe /C "cd /D C:\Users\hehey\MPLABXProjects\f18854.X\_build_mplab\f18854\default\image_default.elf && "C:\Program Files\CMake\bin\cmake.exe" --regenerate-during-build -SC:\Users\hehey\MPLABXProjects\f18854.X\.generated-cmakefiles -BC:\Users\hehey\MPLABXProjects\f18854.X\_build_mplab\f18854\default\image_default.elf"
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
