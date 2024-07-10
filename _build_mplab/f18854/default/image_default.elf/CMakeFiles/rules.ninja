@@ -25,7 +25,7 @@ rule ASM_COMPILER__assemble_unscanned_
 # Rule for linking ASM executable.
 
 rule ASM_EXECUTABLE_LINKER__default.2eelf_
-  command = C:\WINDOWS\system32\cmd.exe /C "$PRE_LINK && C:\PROGRA~1\MICROC~1\xc8\v2.46\bin\xc8-cc.exe $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD"
+  command = cmd.exe /C "$PRE_LINK && C:\PROGRA~1\MICROC~1\xc8\v2.46\bin\xc8-cc.exe $FLAGS $LINK_FLAGS $in -o $TARGET_FILE $LINK_PATH $LINK_LIBRARIES && $POST_BUILD"
   description = Linking ASM executable $TARGET_FILE
   restat = $RESTAT
 
