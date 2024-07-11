@@ -1,2 +1,7 @@
 _build_mplab
 out
+.generated-cmakefiles
+.vscode
+build
+debug
+dist
