@@ -277,6 +277,7 @@ _main:
 
     // 无限循环
 loop:
+    call   display
     goto loop    
     end
 
