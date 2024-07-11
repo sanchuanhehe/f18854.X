@@ -82,7 +82,7 @@ intentry:
  */
  
 psect display, class=CODE, delta=2
-global display_0
+global display_0,display_data
 display_0:
     // 软件译码
     call    display_encode
