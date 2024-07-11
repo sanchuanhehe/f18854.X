@@ -218,6 +218,45 @@ global _main
  */
 _main:
     //@wanwanzhi TODO:完成下这里的端口初始化
+    BANKSEL PORTA
+    MOVLW 00000001B
+    MOVWF PORTA
+    BANKSEL PORTC
+    MOVLW 11111100B
+    MOVWF PORTC
+
+        /** 初始化PORTB和LATB为0 */
+    BANKSEL PORTB
+    CLRF    PORTB
+    BANKSEL LATB
+    CLRF    LATB
+
+    /** 将ANSELB设置为数字I/O（默认是模拟） */
+    BANKSEL ANSELB
+    CLRF    ANSELB
+
+    /** 设置RB0为输出 */
+    BANKSEL TRISB
+    BCF     TRISB, 0
+
+    /** 设置端脚复用*/
+    BANKSEL RB0PPS
+    MOVLW   0x18//TMR0=0x18
+    MOVWF   RB0PPS
+
+    /** 初始化time 0*/
+    //T0CON0=0b10001000
+    //T0CON1=0b01010110
+    BANKSEL T0CON0
+    MOVLW   0b10001000 // T0CON0配置
+    MOVWF   T0CON0
+    BANKSEL T0CON1
+    MOVLW   0b01010110 // T0CON1配置
+    MOVWF   T0CON1
+    //TMR0H=216=217-1
+    BANKSEL TMR0H
+    MOVLW   216
+    MOVWF   TMR0H
     call   display
 
     // 无限循环
