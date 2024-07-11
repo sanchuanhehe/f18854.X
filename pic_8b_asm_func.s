@@ -34,8 +34,14 @@ start_initialization:
 /** @brief 公共变量 */
 psect CommonVar, class=COMMON, space=1, delta=1
 char_case: ds 1  /**< @brief 字符变量 */
-delay_value_1:  ds  1  /**< @brief 延时变量1 */
-delay_value_2:  ds  1  /**< @brief 延时变量2 */
+/** @brief 显示数据,display子函数的参数 
+ *  @details 数据结构从高位到低位分别为：数码管1、数码管2、数码管3、数码管4
+ *           每个数码管的数据结构为：4位,从0到15分别对应0到F
+ */
+display_data: ds 2
+/**
+ * @brief 译码后的数据
+ */
 
 /** @brief 中断服务程序向量 */
 psect intentry
@@ -46,6 +52,18 @@ intentry:
 psect main, class=CODE, delta=2
 
 global _main
+
+/** @brief 显示子程序
+ *  @param display_data 2个字节的显示数据
+ *  @details 数据结构从高位到低位分别为：数码管1、数码管2、数码管3、数码管4
+ *           每个数码管的数据结构为：4位,从0到15分别对应0到F
+ */
+psect display, class=CODE, delta=2
+display:
+    // 软件译码
+    movf    display_data, W
+    call    display_1
+    return
 
 /** @def RP0
  *  @brief 寄存器页0
@@ -61,6 +79,19 @@ global _main
 #define ZERO_DIS   0x3F
 #define ONE_DIS    0x06
 #define TWO_DIS    0x5B
+#define THREE_DIS  0x4F
+#define FOUR_DIS   0x66
+#define FIVE_DIS   0x6D
+#define SIX_DIS    0x7D
+#define SEVEN_DIS  0x07
+#define EIGHT_DIS  0x7F
+#define NINE_DIS   0x6F
+#define A_DIS      0x77
+#define B_DIS      0x7C
+#define C_DIS      0x39
+#define D_DIS      0x5E
+#define E_DIS      0x79
+#define F_DIS      0x71
 
 /**
  * @brief 主函数
@@ -71,3 +102,4 @@ _main:
 
 
     end
+
