@@ -38,7 +38,9 @@ psect CommonVar, class=COMMON, space=1, delta=1
  *  @details 数据结构从高位到低位分别为：数码管1、数码管2、数码管3、数码管4
  *           每个数码管的数据结构为：8位,从0到15分别对应0到F
  */
-display_data: ds 4h
+display_data:
+    .block  4
+    .byte   0x88, 0x88, 0x88, 0x88
 /**
  * @brief 译码后的数据
  */
