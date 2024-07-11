@@ -218,7 +218,6 @@ global _main
  * 该函数初始化微控制器，设置I/O端口，并进入主循环以控制连接到RB0的LED。
  */
 _main:
-    //@wanwanzhi TODO:完成下这里的端口初始化
     BANKSEL PORTA
     MOVLW 00000001B
     MOVWF PORTA
@@ -262,6 +261,7 @@ _main:
 
     // 无限循环
 loop:
+    call   display
     goto loop    
     end
 
