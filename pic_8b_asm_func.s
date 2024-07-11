@@ -218,13 +218,28 @@ global _main
  * 该函数初始化微控制器，设置I/O端口，并进入主循环以控制连接到RB0的LED。
  */
 _main:
+    BANKSEL PORTA  ;
+    CLRF  PORTA  ;Init PORTA
+    BANKSEL LATA  ;Data Latch
+    CLRF  LATA  ;
+    BANKSEL ANSELA  ;
+    CLRF  ANSELA  ;digital I/O
+    BANKSEL TRISA  ;
+    MOVLW 00000000B
+    MOVWF TRISA
+
+    BANKSEL PORTC  ;
+    CLRF  PORTC  ;Init PORTA
+    BANKSEL LATC  ;Data Latch
+    CLRF  LATC  ;
+    BANKSEL ANSELC  ;
+    CLRF  ANSELC  ;digital I/O
+    BANKSEL TRISC  ;
+    MOVLW 00000000B
+    MOVWF TRISC
+
     //@wanwanzhi TODO:完成下这里的端口初始化
-    BANKSEL PORTA
-    MOVLW 00000001B
-    MOVWF PORTA
-    BANKSEL PORTC
-    MOVLW 11111100B
-    MOVWF PORTC
+   
 
         /** 初始化PORTB和LATB为0 */
     BANKSEL PORTB
