@@ -1,0 +1,833 @@
+<!doctype html>
+<html>
+<head>
+<meta charset='UTF-8'><meta name='viewport' content='width=device-width initial-scale=1'>
+
+<link href='https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700,700italic&subset=latin,cyrillic-ext,cyrillic,latin-ext' rel='stylesheet' type='text/css' /><style type='text/css'>html {overflow-x: initial !important;}:root { --bg-color: #ffffff; --text-color: #333333; --select-text-bg-color: #B5D6FC; --select-text-font-color: auto; --monospace: "Lucida Console",Consolas,"Courier",monospace; --title-bar-height: 20px; }
+.mac-os-11 { --title-bar-height: 28px; }
+html { font-size: 14px; background-color: var(--bg-color); color: var(--text-color); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+h1, h2, h3, h4, h5 { white-space: pre-wrap; }
+body { margin: 0px; padding: 0px; height: auto; inset: 0px; font-size: 1rem; line-height: 1.42857; overflow-x: hidden; background: inherit; }
+iframe { margin: auto; }
+a.url { word-break: break-all; }
+a:active, a:hover { outline: 0px; }
+.in-text-selection, ::selection { text-shadow: none; background: var(--select-text-bg-color); color: var(--select-text-font-color); }
+#write { margin: 0px auto; height: auto; width: inherit; word-break: normal; overflow-wrap: break-word; position: relative; white-space: normal; overflow-x: visible; padding-top: 36px; }
+#write.first-line-indent p { text-indent: 2em; }
+#write.first-line-indent li p, #write.first-line-indent p * { text-indent: 0px; }
+#write.first-line-indent li { margin-left: 2em; }
+.for-image #write { padding-left: 8px; padding-right: 8px; }
+body.typora-export { padding-left: 30px; padding-right: 30px; }
+.typora-export .footnote-line, .typora-export li, .typora-export p { white-space: pre-wrap; }
+.typora-export .task-list-item input { pointer-events: none; }
+@media screen and (max-width: 500px) {
+  body.typora-export { padding-left: 0px; padding-right: 0px; }
+  #write { padding-left: 20px; padding-right: 20px; }
+}
+#write li > figure:last-child { margin-bottom: 0.5rem; }
+#write ol, #write ul { position: relative; }
+img { max-width: 100%; vertical-align: middle; image-orientation: from-image; }
+button, input, select, textarea { color: inherit; font: inherit; }
+input[type="checkbox"], input[type="radio"] { line-height: normal; padding: 0px; }
+*, ::after, ::before { box-sizing: border-box; }
+#write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p, #write pre { width: inherit; }
+#write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p { position: relative; }
+p { line-height: inherit; }
+h1, h2, h3, h4, h5, h6 { break-after: avoid-page; break-inside: avoid; orphans: 4; }
+p { orphans: 4; }
+h1 { font-size: 2rem; }
+h2 { font-size: 1.8rem; }
+h3 { font-size: 1.6rem; }
+h4 { font-size: 1.4rem; }
+h5 { font-size: 1.2rem; }
+h6 { font-size: 1rem; }
+.md-math-block, .md-rawblock, h1, h2, h3, h4, h5, h6, p { margin-top: 1rem; margin-bottom: 1rem; }
+.hidden { display: none; }
+.md-blockmeta { color: rgb(204, 204, 204); font-weight: 700; font-style: italic; }
+a { cursor: pointer; }
+sup.md-footnote { padding: 2px 4px; background-color: rgba(238, 238, 238, 0.7); color: rgb(85, 85, 85); border-radius: 4px; cursor: pointer; }
+sup.md-footnote a, sup.md-footnote a:hover { color: inherit; text-transform: inherit; text-decoration: inherit; }
+#write input[type="checkbox"] { cursor: pointer; width: inherit; height: inherit; }
+figure { overflow-x: auto; margin: 1.2em 0px; max-width: calc(100% + 16px); padding: 0px; }
+figure > table { margin: 0px; }
+thead, tr { break-inside: avoid; break-after: auto; }
+thead { display: table-header-group; }
+table { border-collapse: collapse; border-spacing: 0px; width: 100%; overflow: auto; break-inside: auto; text-align: left; }
+table.md-table td { min-width: 32px; }
+.CodeMirror-gutters { border-right: 0px; background-color: inherit; }
+.CodeMirror-linenumber { user-select: none; }
+.CodeMirror { text-align: left; }
+.CodeMirror-placeholder { opacity: 0.3; }
+.CodeMirror pre { padding: 0px 4px; }
+.CodeMirror-lines { padding: 0px; }
+div.hr:focus { cursor: none; }
+#write pre { white-space: pre-wrap; }
+#write.fences-no-line-wrapping pre { white-space: pre; }
+#write pre.ty-contain-cm { white-space: normal; }
+.CodeMirror-gutters { margin-right: 4px; }
+.md-fences { font-size: 0.9rem; display: block; break-inside: avoid; text-align: left; overflow: visible; white-space: pre; background: inherit; position: relative !important; }
+.md-fences-adv-panel { width: 100%; margin-top: 10px; text-align: center; padding-top: 0px; padding-bottom: 8px; overflow-x: auto; }
+#write .md-fences.mock-cm { white-space: pre-wrap; }
+.md-fences.md-fences-with-lineno { padding-left: 0px; }
+#write.fences-no-line-wrapping .md-fences.mock-cm { white-space: pre; overflow-x: auto; }
+.md-fences.mock-cm.md-fences-with-lineno { padding-left: 8px; }
+.CodeMirror-line, twitterwidget { break-inside: avoid; }
+svg { break-inside: avoid; }
+.footnotes { opacity: 0.8; font-size: 0.9rem; margin-top: 1em; margin-bottom: 1em; }
+.footnotes + .footnotes { margin-top: 0px; }
+.md-reset { margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: top; background: 0px 0px; text-decoration: none; text-shadow: none; float: none; position: static; width: auto; height: auto; white-space: nowrap; cursor: inherit; -webkit-tap-highlight-color: transparent; line-height: normal; font-weight: 400; text-align: left; box-sizing: content-box; direction: ltr; }
+li div { padding-top: 0px; }
+blockquote { margin: 1rem 0px; }
+li .mathjax-block, li p { margin: 0.5rem 0px; }
+li blockquote { margin: 1rem 0px; }
+li { margin: 0px; position: relative; }
+blockquote > :last-child { margin-bottom: 0px; }
+blockquote > :first-child, li > :first-child { margin-top: 0px; }
+.footnotes-area { color: rgb(136, 136, 136); margin-top: 0.714rem; padding-bottom: 0.143rem; white-space: normal; }
+#write .footnote-line { white-space: pre-wrap; }
+@media print {
+  body, html { border: 1px solid transparent; height: 99%; break-after: avoid; break-before: avoid; font-variant-ligatures: no-common-ligatures; }
+  #write { margin-top: 0px; border-color: transparent !important; padding-top: 0px !important; padding-bottom: 0px !important; }
+  .typora-export * { -webkit-print-color-adjust: exact; }
+  .typora-export #write { break-after: avoid; }
+  .typora-export #write::after { height: 0px; }
+  .is-mac table { break-inside: avoid; }
+  #write > p:nth-child(1) { margin-top: 0px; }
+  .typora-export-show-outline .typora-export-sidebar { display: none; }
+  figure { overflow-x: visible; }
+}
+.footnote-line { margin-top: 0.714em; font-size: 0.7em; }
+a img, img a { cursor: pointer; }
+pre.md-meta-block { font-size: 0.8rem; min-height: 0.8rem; white-space: pre-wrap; background: rgb(204, 204, 204); display: block; overflow-x: hidden; }
+p > .md-image:only-child:not(.md-img-error) img, p > img:only-child { display: block; margin: auto; }
+#write.first-line-indent p > .md-image:only-child:not(.md-img-error) img { left: -2em; position: relative; }
+p > .md-image:only-child { display: inline-block; width: 100%; }
+#write .MathJax_Display { margin: 0.8em 0px 0px; }
+.md-math-block { width: 100%; }
+.md-math-block:not(:empty)::after { display: none; }
+.MathJax_ref { fill: currentcolor; }
+[contenteditable="true"]:active, [contenteditable="true"]:focus, [contenteditable="false"]:active, [contenteditable="false"]:focus { outline: 0px; box-shadow: none; }
+.md-task-list-item { position: relative; list-style-type: none; }
+.task-list-item.md-task-list-item { padding-left: 0px; }
+.md-task-list-item > input { position: absolute; top: 0px; left: 0px; margin-left: -1.2em; margin-top: calc(1em - 10px); border: none; }
+.math { font-size: 1rem; }
+.md-toc { min-height: 3.58rem; position: relative; font-size: 0.9rem; border-radius: 10px; }
+.md-toc-content { position: relative; margin-left: 0px; }
+.md-toc-content::after, .md-toc::after { display: none; }
+.md-toc-item { display: block; color: rgb(65, 131, 196); }
+.md-toc-item a { text-decoration: none; }
+.md-toc-inner:hover { text-decoration: underline; }
+.md-toc-inner { display: inline-block; cursor: pointer; }
+.md-toc-h1 .md-toc-inner { margin-left: 0px; font-weight: 700; }
+.md-toc-h2 .md-toc-inner { margin-left: 2em; }
+.md-toc-h3 .md-toc-inner { margin-left: 4em; }
+.md-toc-h4 .md-toc-inner { margin-left: 6em; }
+.md-toc-h5 .md-toc-inner { margin-left: 8em; }
+.md-toc-h6 .md-toc-inner { margin-left: 10em; }
+@media screen and (max-width: 48em) {
+  .md-toc-h3 .md-toc-inner { margin-left: 3.5em; }
+  .md-toc-h4 .md-toc-inner { margin-left: 5em; }
+  .md-toc-h5 .md-toc-inner { margin-left: 6.5em; }
+  .md-toc-h6 .md-toc-inner { margin-left: 8em; }
+}
+a.md-toc-inner { font-size: inherit; font-style: inherit; font-weight: inherit; line-height: inherit; }
+.footnote-line a:not(.reversefootnote) { color: inherit; }
+.reversefootnote { font-family: ui-monospace, sans-serif; }
+.md-attr { display: none; }
+.md-fn-count::after { content: "."; }
+code, pre, samp, tt { font-family: var(--monospace); }
+kbd { margin: 0px 0.1em; padding: 0.1em 0.6em; font-size: 0.8em; color: rgb(36, 39, 41); background: rgb(255, 255, 255); border: 1px solid rgb(173, 179, 185); border-radius: 3px; box-shadow: rgba(12, 13, 14, 0.2) 0px 1px 0px, rgb(255, 255, 255) 0px 0px 0px 2px inset; white-space: nowrap; vertical-align: middle; }
+.md-comment { color: rgb(162, 127, 3); opacity: 0.6; font-family: var(--monospace); }
+code { text-align: left; vertical-align: initial; }
+a.md-print-anchor { white-space: pre !important; border-width: initial !important; border-style: none !important; border-color: initial !important; display: inline-block !important; position: absolute !important; width: 1px !important; right: 0px !important; outline: 0px !important; background: 0px 0px !important; text-decoration: initial !important; text-shadow: initial !important; }
+.os-windows.monocolor-emoji .md-emoji { font-family: "Segoe UI Symbol", sans-serif; }
+.md-diagram-panel > svg { max-width: 100%; }
+[lang="flow"] svg, [lang="mermaid"] svg { max-width: 100%; height: auto; }
+[lang="mermaid"] .node text { font-size: 1rem; }
+table tr th { border-bottom: 0px; }
+video { max-width: 100%; display: block; margin: 0px auto; }
+iframe { max-width: 100%; width: 100%; border: none; }
+.highlight td, .highlight tr { border: 0px; }
+mark { background: rgb(255, 255, 0); color: rgb(0, 0, 0); }
+.md-html-inline .md-plain, .md-html-inline strong, mark .md-inline-math, mark strong { color: inherit; }
+.md-expand mark .md-meta { opacity: 0.3 !important; }
+mark .md-meta { color: rgb(0, 0, 0); }
+@media print {
+  .typora-export h1, .typora-export h2, .typora-export h3, .typora-export h4, .typora-export h5, .typora-export h6 { break-inside: avoid; }
+}
+.md-diagram-panel .messageText { stroke: none !important; }
+.md-diagram-panel .start-state { fill: var(--node-fill); }
+.md-diagram-panel .edgeLabel rect { opacity: 1 !important; }
+.md-fences.md-fences-math { font-size: 1em; }
+.md-fences-advanced:not(.md-focus) { padding: 0px; white-space: nowrap; border: 0px; }
+.md-fences-advanced:not(.md-focus) { background: inherit; }
+.typora-export-show-outline .typora-export-content { max-width: 1440px; margin: auto; display: flex; flex-direction: row; }
+.typora-export-sidebar { width: 300px; font-size: 0.8rem; margin-top: 80px; margin-right: 18px; }
+.typora-export-show-outline #write { --webkit-flex: 2; flex: 2 1 0%; }
+.typora-export-sidebar .outline-content { position: fixed; top: 0px; max-height: 100%; overflow: hidden auto; padding-bottom: 30px; padding-top: 60px; width: 300px; }
+@media screen and (max-width: 1024px) {
+  .typora-export-sidebar, .typora-export-sidebar .outline-content { width: 240px; }
+}
+@media screen and (max-width: 800px) {
+  .typora-export-sidebar { display: none; }
+}
+.outline-content li, .outline-content ul { margin-left: 0px; margin-right: 0px; padding-left: 0px; padding-right: 0px; list-style: none; overflow-wrap: anywhere; }
+.outline-content ul { margin-top: 0px; margin-bottom: 0px; }
+.outline-content strong { font-weight: 400; }
+.outline-expander { width: 1rem; height: 1.42857rem; position: relative; display: table-cell; vertical-align: middle; cursor: pointer; padding-left: 4px; }
+.outline-expander::before { content: ""; position: relative; font-family: Ionicons; display: inline-block; font-size: 8px; vertical-align: middle; }
+.outline-item { padding-top: 3px; padding-bottom: 3px; cursor: pointer; }
+.outline-expander:hover::before { content: ""; }
+.outline-h1 > .outline-item { padding-left: 0px; }
+.outline-h2 > .outline-item { padding-left: 1em; }
+.outline-h3 > .outline-item { padding-left: 2em; }
+.outline-h4 > .outline-item { padding-left: 3em; }
+.outline-h5 > .outline-item { padding-left: 4em; }
+.outline-h6 > .outline-item { padding-left: 5em; }
+.outline-label { cursor: pointer; display: table-cell; vertical-align: middle; text-decoration: none; color: inherit; }
+.outline-label:hover { text-decoration: underline; }
+.outline-item:hover { border-color: rgb(245, 245, 245); background-color: var(--item-hover-bg-color); }
+.outline-item:hover { margin-left: -28px; margin-right: -28px; border-left: 28px solid transparent; border-right: 28px solid transparent; }
+.outline-item-single .outline-expander::before, .outline-item-single .outline-expander:hover::before { display: none; }
+.outline-item-open > .outline-item > .outline-expander::before { content: ""; }
+.outline-children { display: none; }
+.info-panel-tab-wrapper { display: none; }
+.outline-item-open > .outline-children { display: block; }
+.typora-export .outline-item { padding-top: 1px; padding-bottom: 1px; }
+.typora-export .outline-item:hover { margin-right: -8px; border-right: 8px solid transparent; }
+.typora-export .outline-expander::before { content: "+"; font-family: inherit; top: -1px; }
+.typora-export .outline-expander:hover::before, .typora-export .outline-item-open > .outline-item > .outline-expander::before { content: "−"; }
+.typora-export-collapse-outline .outline-children { display: none; }
+.typora-export-collapse-outline .outline-item-open > .outline-children, .typora-export-no-collapse-outline .outline-children { display: block; }
+.typora-export-no-collapse-outline .outline-expander::before { content: "" !important; }
+.typora-export-show-outline .outline-item-active > .outline-item .outline-label { font-weight: 700; }
+.md-inline-math-container mjx-container { zoom: 0.95; }
+mjx-container { break-inside: avoid; }
+.md-alert.md-alert-note { border-left-color: rgb(9, 105, 218); }
+.md-alert.md-alert-important { border-left-color: rgb(130, 80, 223); }
+.md-alert.md-alert-warning { border-left-color: rgb(154, 103, 0); }
+.md-alert.md-alert-tip { border-left-color: rgb(31, 136, 61); }
+.md-alert.md-alert-caution { border-left-color: rgb(207, 34, 46); }
+.md-alert { padding: 0px 1em; margin-bottom: 16px; color: inherit; border-left: 0.25em solid rgb(0, 0, 0); }
+.md-alert-text-note { color: rgb(9, 105, 218); }
+.md-alert-text-important { color: rgb(130, 80, 223); }
+.md-alert-text-warning { color: rgb(154, 103, 0); }
+.md-alert-text-tip { color: rgb(31, 136, 61); }
+.md-alert-text-caution { color: rgb(207, 34, 46); }
+.md-alert-text { font-size: 0.9rem; font-weight: 700; }
+.md-alert-text svg { fill: currentcolor; position: relative; top: 0.125em; margin-right: 1ch; overflow: visible; }
+.md-alert-text-container::after { content: attr(data-text); text-transform: capitalize; pointer-events: none; margin-right: 1ch; }
+
+
+/* meyer reset -- http://meyerweb.com/eric/tools/css/reset/ , v2.0 | 20110126 | License: none (public domain) */
+
+@include-when-export url(https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700,700italic&subset=latin,cyrillic-ext,cyrillic,latin-ext);
+
+/* =========== */
+
+/* pt-serif-regular - latin */
+/* pt-serif-italic - latin */
+/* pt-serif-700 - latin */
+/* pt-serif-700italic - latin */
+:root {
+	--active-file-bg-color: #dadada;
+	--active-file-bg-color: rgba(32, 43, 51, 0.63);
+	--active-file-text-color: white;
+	--bg-color: #f3f2ee;
+	--text-color: #1f0909;
+	--control-text-color: #444;
+	--rawblock-edit-panel-bd: #e5e5e5;
+
+	--select-text-bg-color: rgba(32, 43, 51, 0.63);
+  --select-text-font-color: white;
+}
+
+pre {
+	--select-text-bg-color: #36284e;
+	--select-text-font-color: #fff;
+}
+
+html {
+	font-size: 16px;
+	-webkit-font-smoothing: antialiased;
+}
+
+html, body {
+	background-color: #f3f2ee;
+	font-family: "PT Serif", 'Times New Roman', Times, serif;
+	color: #1f0909;
+	line-height: 1.5em;
+}
+
+/*#write {
+	overflow-x: auto;
+    max-width: initial;
+	padding-left: calc(50% - 17em);
+    padding-right: calc(50% - 17em);
+}
+
+@media (max-width: 36em) {
+ 	#write {
+ 		padding-left: 1em;
+    	padding-right: 1em;
+ 	}
+}*/
+
+#write {
+	max-width: 40em;
+}
+
+@media only screen and (min-width: 1400px) {
+	#write {
+			max-width: 914px;
+	}
+}
+
+ol li {
+	list-style-type: decimal;
+	list-style-position: outside;
+}
+ul li {
+	list-style-type: disc;
+	list-style-position: outside;
+}
+
+ol,
+ul {
+	list-style: none;
+}
+
+blockquote,
+q {
+	quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+/* styles */
+
+/* ====== */
+
+/* headings */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-weight: bold;
+}
+h1 {
+	font-size: 1.875em;
+	/*30 / 16*/
+	line-height: 1.6em;
+	/* 48 / 30*/
+	margin-top: 2em;
+}
+h2,
+h3 {
+	font-size: 1.3125em;
+	/*21 / 16*/
+	line-height: 1.15;
+	/*24 / 21*/
+	margin-top: 2.285714em;
+	/*48 / 21*/
+	margin-bottom: 1.15em;
+	/*24 / 21*/
+}
+h3 {
+	font-weight: normal;
+}
+h4 {
+	font-size: 1.125em;
+	/*18 / 16*/
+	margin-top: 2.67em;
+	/*48 / 18*/
+}
+h5,
+h6 {
+	font-size: 1em;
+	/*16*/
+}
+h1 {
+	border-bottom: 1px solid;
+	margin-bottom: 1.875em;
+	padding-bottom: 0.8125em;
+}
+/* links */
+
+a {
+	text-decoration: none;
+	color: #065588;
+}
+a:hover,
+a:active {
+	text-decoration: underline;
+}
+/* block spacing */
+
+p,
+blockquote,
+.md-fences {
+	margin-bottom: 1.5em;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	margin-bottom: 1.5em;
+}
+/* blockquote */
+
+blockquote {
+	font-style: italic;
+	border-left: 5px solid;
+	margin-left: 2em;
+	padding-left: 1em;
+}
+/* lists */
+
+ul,
+ol {
+	margin: 0 0 1.5em 1.5em;
+}
+/* tables */
+.md-meta,.md-before, .md-after {
+	color:#999;
+}
+
+table {
+	margin-bottom: 1.5em;
+	/*24 / 16*/
+	font-size: 1em;
+	/* width: 100%; */
+}
+thead th,
+tfoot th {
+	padding: .25em .25em .25em .4em;
+	text-transform: uppercase;
+}
+th {
+	text-align: left;
+}
+td {
+	vertical-align: top;
+	padding: .25em .25em .25em .4em;
+}
+
+code,
+.md-fences {
+	background-color: #dadada;
+}
+
+code {
+	padding-left: 2px;
+	padding-right: 2px;
+}
+
+.md-fences {
+	margin-left: 2em;
+	margin-bottom: 3em;
+	padding-left: 1ch;
+	padding-right: 1ch;
+}
+
+pre,
+code,
+tt {
+	font-size: .875em;
+	line-height: 1.714285em;
+}
+/* some fixes */
+
+h1 {
+	line-height: 1.3em;
+	font-weight: normal;
+	margin-bottom: 0.5em;
+}
+
+p + ul,
+p + ol{
+	margin-top: .5em;
+}
+
+h3 + ul,
+h4 + ul,
+h5 + ul,
+h6 + ul,
+h3 + ol,
+h4 + ol,
+h5 + ol,
+h6 + ol {
+	margin-top: .5em;
+}
+
+li > ul,
+li > ol {
+	margin-top: inherit;
+	margin-bottom: 0;
+}
+
+li ol>li {
+	list-style-type: lower-alpha;
+}
+
+li li ol>li{
+	list-style-type: lower-roman;
+}
+
+h2,
+h3 {
+	margin-bottom: .75em;
+}
+hr {
+	border-top: none;
+	border-right: none;
+	border-bottom: 1px solid;
+	border-left: none;
+}
+h1 {
+	border-color: #c5c5c5;
+}
+blockquote {
+	border-color: #bababa;
+	color: #656565;
+}
+
+blockquote ul,
+blockquote ol {
+	margin-left:0;
+}
+
+.ty-table-edit {
+	background-color: transparent;
+}
+thead {
+	background-color: #dadada;
+}
+tr:nth-child(even) {
+	background: #e8e7e7;
+}
+hr {
+	border-color: #c5c5c5;
+}
+.task-list{
+	padding-left: 1rem;
+}
+
+.md-task-list-item {
+	padding-left: 1.5rem;
+	list-style-type: none;
+}
+
+.md-task-list-item > input:before {
+	content: '\221A';
+	display: inline-block;
+	width: 1.25rem;
+  	height: 1.6rem;
+	vertical-align: middle;
+	text-align: center;
+	color: #ddd;
+	background-color: #F3F2EE;
+}
+
+.md-task-list-item > input:checked:before,
+.md-task-list-item > input[checked]:before{
+	color: inherit;
+}
+
+#write pre.md-meta-block {
+	min-height: 1.875rem;
+	color: #555;
+	border: 0px;
+	background: transparent;
+	margin-top: -4px;
+	margin-left: 1em;
+	margin-top: 1em;
+}
+
+.md-image>.md-meta {
+	color: #9B5146;
+}
+
+.md-image>.md-meta{
+	font-family: Menlo, 'Ubuntu Mono', Consolas, 'Courier New', 'Microsoft Yahei', 'Hiragino Sans GB', 'WenQuanYi Micro Hei', serif;
+}
+
+
+#write>h3.md-focus:before{
+	left: -1.5rem;
+	color:#999;
+	border-color:#999;
+}
+#write>h4.md-focus:before{
+	left: -1.5rem;
+	top: .25rem;
+	color:#999;
+	border-color:#999;
+}
+#write>h5.md-focus:before{
+	left: -1.5rem;
+	top: .0.3125rem;
+	color:#999;
+	border-color:#999;
+}
+#write>h6.md-focus:before{
+	left: -1.5rem;
+	top: 0.3125rem;
+	color:#999;
+	border-color:#999;
+}
+
+.md-toc:focus .md-toc-content{
+	margin-top: 19px;
+}
+
+.md-toc-content:empty:before{
+	color: #065588;
+}
+.md-toc-item {
+	color: #065588;
+}
+#write div.md-toc-tooltip {
+	background-color: #f3f2ee;
+}
+
+#typora-sidebar {
+	background-color: #f3f2ee;
+	-webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.375);
+  	box-shadow: 0 6px 12px rgba(0, 0, 0, 0.375);
+}
+
+.pin-outline #typora-sidebar {
+	background: inherit;
+	box-shadow: none;
+	border-right: 1px dashed;
+}
+
+.pin-outline #typora-sidebar:hover .outline-title-wrapper {
+	border-left:1px dashed;
+}
+
+.outline-item:hover {
+  background-color: #dadada;
+  border-left: 28px solid #dadada;
+  border-right: 18px solid #dadada;
+}
+
+.typora-node .outline-item:hover {
+  	border-right: 28px solid #dadada;
+}
+
+.outline-expander:before {
+  content: "\f0da";
+  font-family: FontAwesome;
+  font-size:14px;
+  top: 1px;
+}
+
+.outline-expander:hover:before,
+.outline-item-open>.outline-item>.outline-expander:before {
+  content: "\f0d7";
+}
+
+.modal-content {
+	background-color: #f3f2ee;
+}
+
+.auto-suggest-container ul li {
+	list-style-type: none;
+}
+
+/** UI for electron */
+
+.megamenu-menu,
+#top-titlebar, #top-titlebar *,
+.megamenu-content {
+	background: #f3f2ee;
+	color: #1f0909;
+}
+
+.megamenu-menu-header {
+	border-bottom: 1px dashed #202B33;
+}
+
+.megamenu-menu {
+	box-shadow: none;
+	border-right: 1px dashed;
+}
+
+header, .context-menu, .megamenu-content, footer {
+	font-family: "PT Serif", 'Times New Roman', Times, serif;
+    color: #1f0909;
+}
+
+#megamenu-back-btn {
+	color: #1f0909;
+	border-color: #1f0909;
+}
+
+.megamenu-menu-header #megamenu-menu-header-title:before {
+	color: #1f0909;
+}
+
+.megamenu-menu-list li a:hover, .megamenu-menu-list li a.active {
+	color: inherit;
+	background-color: #e8e7df;
+}
+
+.long-btn:hover {
+	background-color: #e8e7df;
+}
+
+#recent-file-panel tbody tr:nth-child(2n-1) {
+    background-color: transparent !important;
+}
+
+.megamenu-menu-panel tbody tr:hover td:nth-child(2) {
+    color: inherit;
+}
+
+.megamenu-menu-panel .btn {
+	background-color: #D2D1D1;
+}
+
+.btn-default {
+	background-color: transparent;
+}
+
+.typora-sourceview-on #toggle-sourceview-btn,
+.ty-show-word-count #footer-word-count {
+	background: #c7c5c5;
+}
+
+#typora-quick-open {
+    background-color: inherit;
+}
+
+.md-diagram-panel {
+	margin-top: 8px;
+}
+
+.file-list-item-file-name {
+	font-weight: initial;
+}
+
+.file-list-item-summary {
+	opacity: 1;
+}
+
+.file-list-item {
+	color: #777;
+}
+
+.file-list-item.active {
+	background-color: inherit;
+	color: black;
+}
+
+.ty-side-sort-btn.active {
+	background-color: inherit;
+}
+
+.file-list-item.active .file-list-item-file-name  {
+	font-weight: bold;
+}
+
+.file-list-item{
+    opacity:1 !important;
+}
+
+.file-library-node.active>.file-node-background{
+	background-color: rgba(32, 43, 51, 0.63);
+	background-color: var(--active-file-bg-color);
+}
+
+.file-tree-node.active>.file-node-content{
+	color: white;
+	color: var(--active-file-text-color);
+}
+
+.md-task-list-item>input {
+	margin-left: -1.7em;
+	margin-top: calc(1rem - 12px);
+	-webkit-appearance: button;
+}
+
+input {
+	border: 1px solid #aaa;
+}
+
+.megamenu-menu-header #megamenu-menu-header-title,
+.megamenu-menu-header:hover, 
+.megamenu-menu-header:focus {
+	color: inherit;
+}
+
+.dropdown-menu .divider {
+	border-color: #e5e5e5;
+	opacity: 1;
+}
+
+/* https://github.com/typora/typora-issues/issues/2046 */
+.os-windows-7 strong,
+.os-windows-7 strong  {
+	font-weight: 760;
+}
+
+.ty-preferences .btn-default {
+	background: transparent;
+}
+
+.ty-preferences .window-header {
+	border-bottom: 1px dashed #202B33;
+	box-shadow: none;
+}
+
+#sidebar-loading-template, #sidebar-loading-template.file-list-item {
+	color: #777;
+}
+
+.searchpanel-search-option-btn.active {
+	background: #777;
+	color: white;
+}
+
+.export-detail, .light .export-detail, 
+.light .export-item.active, 
+.light .export-items-list-control {
+	background: #e0e0e0;
+	border-radius: 2px;
+	font-weight: 700;
+	color: inherit
+}
+
+
+</style><title>00556e</title>
+</head>
+<body class='typora-export os-windows'><div class='typora-export-content'>
+<div id='write'  class=''><p><span>Implementing a Table Read</span></p><figure class='table-figure'><table><thead><tr><th><span>Microchip Technology Inc.</span></th></tr></thead><tbody></tbody></table></figure><p><img src="0_image_0.png" referrerpolicy="no-referrer" alt="0_image_0.png"></p><h2 id='introduction'><span>Introduction</span></h2><p><span>AN556</span>
+<span>This application note shows how to implement a table look-up for the following devices: - PIC12CXXX - PIC12CEXXX - PIC16CXXX - PIC16CEXXX - PIC16FXXX The examples shown are for the PIC16CXXX family. An explanation of differences for the PIC16C5X family is at the end of this application note. To access data in program memory, a table read operation must be performed. The table consists of a series of retlw K instructions where, the 8-bit table constants are assigned to the literal K. The first instruction in the table computes the offset to the table by using addwf PCL,F and consequently, the program branches to the appropriate retlw K instruction</span>
+<span>(Example 1).</span></p><h2 id='example-1'><span>Example 1:</span></h2><p><span>.</span></p><p><span>.</span></p><p><span>movlw offset ;load offset in w reg call Table</span>
+<span>. .</span></p><p><span>.</span></p><p><span>Table:</span>
+<span>addwf PCL,F ;add offset to pc to </span>
+<span>;generate a computed goto retlw &#39;A&#39; ;return the ASCII char A retlw &#39;B&#39; ;return the ASCII char B</span>
+<span>retlw &#39;C&#39; ;return the ASCII char C</span>
+<span>. .</span></p><p><span>.</span></p><p><span>The method is straight forward, however, certain precautions have to be exercised when doing a table read in the PIC16CXXX.</span></p><h2 id='implementation-program-counter-loading'><span>Implementation Program Counter Loading</span></h2><p><span>The Program Counter (PC) in the PIC16CXXX is 13bits wide. The low 8-bits (PCL) are mapped in RAM at location 02h and are directly readable and writable. The high 5-bits are not accessible directly and can only be written through the PCLATH register (Figure 1). The PCLATH register is a R/W register with only five of its bits implemented </span><a href='http://4:0' target='_blank' class='url'>4:0</a><span>, all other bits read as &#39;0&#39;.</span></p><p><span>FIGURE 1: LOADING OF PC IN </span></p><p><img src="0_image_1.png" referrerpolicy="no-referrer" alt="0_image_1.png"></p><p><img src="1_image_0.png" referrerpolicy="no-referrer" alt="1_image_0.png"></p><h2 id='section-1-call-and-goto-instructions'><span>Section 1 Call </span><strong><span>And</span></strong><span> Goto </span><strong><span>Instructions</span></strong></h2><p><span>When executing a CALL or GOTO, the low 11-bits are loaded directly from the instruction opcode. The high 2-bits are loaded from bits 3 and 4 of the PCLATH register. It is a good practice to pre-load PCLATH with the high byte of the routine&#39;s address before executing the routine. This can be done as follows:</span></p><p><span>EXAMPLE 2:</span></p><p><span>. . movlw HIGH Table ;load high 8-bit </span></p><p><span>;address of Table</span></p><p><span>movwf PCLATH ;into PCLATH call Routine ;execute Call </span></p><p><span>;instruction</span></p><p><span>. .</span></p><h2 id='computed-goto-instruction'><span>Computed Goto </span><strong><span>Instruction</span></strong></h2><p><span>Any instruction with PCL as the destination, will load the PCH with the 5 low bits from the PCLATH (Figure 1). In Example 3, if the address where the CALL was made was on Page 0 and the address of the actual table was on Page 3, then when executing the computed GOTO, the program will go to a location in Page 0 instead of a location on Page 3. To prevent the program from branching to an unintended location when doing a table read, the PCLATH register should be pre-loaded with the high byte of the &quot;Table&quot; address. Example 3A shows how this can be done.</span></p><p><span>EXAMPLE 3:</span></p><p><span>.</span></p><p><span>org 0x80 ;code location in page 0</span></p><p><span>movlw offset ;load offset in w reg call Table</span></p><p><span>.</span></p><p><span>. org 0x0320 ;Table located in page 3</span></p><p><span>Table:</span></p><p><span>addwf PCL,F ;add offset to pc to </span></p><p><span>;generate a computed goto</span></p><p><span>retlw &#39;A&#39; ;return the ASCII char A retlw &#39;B&#39; ;return the ASCII char B retlw &#39;C&#39; ;return the ASCII char C . . .</span></p><p><span>EXAMPLE 3A:</span></p><p><span>org 0x80</span></p><p><span>movlw HIGH Table movwf PCLATH</span></p><p><span>movlw offset</span></p><p><span>call Table .</span></p><p><span>.</span></p><p><span>. org 0x320</span></p><p><span>Table:</span></p><p><span>addwf PCL,F retlw &#39;A&#39;</span></p><p><span>retlw &#39;B&#39;</span></p><p><span>. .</span></p><p><span>.</span></p><figure class='table-figure'><table><thead><tr><th><span>Note:</span></th><th><span>If the program memory size is less than 2K-words, then the above precaution is not necessary.</span></th></tr></thead><tbody></tbody></table></figure><p><img src="2_image_0.png" referrerpolicy="no-referrer" alt="2_image_0.png"></p><p><span>When doing a computed GOTO for a table read, care should be taken about page boundaries. The ADDWF</span>
+<span>PCL instruction will not compute a value greater than 8bits. In Example 4, the result of the computed GOTO will result in a branch to an unintended portion of the code for a value in offset greater than zero. The user either has to be cautious as to where in a page the Table resides or has to monitor page roll-over and add it to the PCLATH ahead of the computed GOTO. </span></p><figure class='table-figure'><table><thead><tr><th><span>PCL instruction will not compute a value greater than 8- bits. In Example 4, the result of the computed GOTO will result in a branch to an unintended portion of the code for a value in offset greater than zero. The user either has to be cautious as to where in a page the Table resides or has to monitor page roll-over and add it to the PCLATH ahead of the computed GOTO.</span></th><th><span>org</span></th><th><span>0x80</span></th><th>&nbsp;</th></tr></thead><tbody><tr><td><span>movlw</span></td><td><span>LOW Table</span></td><td><span>;get low 8 bits of ; address</span></td><td>&nbsp;</td></tr><tr><td><span>addwf</span></td><td><span>offset,F</span></td><td><span>;do an 8-bit add ; operation</span></td><td>&nbsp;</td></tr><tr><td><span>movlw</span></td><td><span>HIGH Table ;get high 5 bits of  ; address</span></td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td><span>btfsc</span></td><td><span>status,c</span></td><td><span>;page crossed?</span></td><td>&nbsp;</td></tr><tr><td><span>addlw</span></td><td><span>1</span></td><td><span>;yes then increment ; high address</span></td><td>&nbsp;</td></tr><tr><td><span>movwf</span></td><td><span>PCLATH</span></td><td><span>;load high address in ; latch</span></td><td>&nbsp;</td></tr><tr><td><span>movf</span></td><td><span>offset,w</span></td><td><span>;load computed offset ; in w reg</span></td><td>&nbsp;</td></tr><tr><td><span>call</span></td><td><span>Table</span></td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td><span>. . org</span></td><td><span>0x9FD</span></td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td><span>Table: movwf</span></td><td><span>PCL,F</span></td><td><span>;load computed offset ; in PCL</span></td><td>&nbsp;</td></tr><tr><td><span>retlw</span></td><td><span>&#39;A&#39;</span></td><td><span>;return the ASCII ; char A</span></td><td>&nbsp;</td></tr><tr><td><span>retlw</span></td><td><span>&#39;B&#39;</span></td><td><span>;return the ASCII ; char B</span></td><td>&nbsp;</td></tr><tr><td><span>retlw</span></td><td><span>&#39;C&#39;</span></td><td><span>;return the ASCII ; char C</span></td><td>&nbsp;</td></tr><tr><td><span>. . .</span></td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td><span>EXAMPLE 4: . org 0x80</span></td><td><span>;code location in ; page 0</span></td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td><span>movlw</span></td><td><span>HIGH Table ;load PCLATH with hi ; address</span></td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td><span>movwf</span></td><td><span>PCLATH</span></td><td><span>;</span></td><td><span>/</span></td></tr><tr><td><span>movlw</span></td><td><span>offset,F</span></td><td><span>;load offset in w reg</span></td><td>&nbsp;</td></tr><tr><td><span>call</span></td><td><span>Table</span></td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td><span>. . org</span></td><td><span>0x02ff</span></td><td><span>;Table located end of ; page 2</span></td><td>&nbsp;</td></tr><tr><td><span>Table: addwf</span></td><td><span>PCL,F</span></td><td><span>;value in pc will not ; roll over to page 3</span></td><td>&nbsp;</td></tr><tr><td><span>retlw</span></td><td><span>&#39;A&#39;</span></td><td><span>;return the ASCII ; char A</span></td><td>&nbsp;</td></tr><tr><td><span>retlw</span></td><td><span>&#39;B&#39;</span></td><td><span>;return the ASCII ; char B</span></td><td>&nbsp;</td></tr><tr><td><span>retlw</span></td><td><span>&#39;C&#39;</span></td><td><span>;return the ASCII ; char C</span></td><td>&nbsp;</td></tr><tr><td><span>.</span></td><td><span>SECTION 2</span></td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table></figure><h2 id='implementation-for-the-pic16c5x-family'><span>Implementation For The Pic16C5X Family</span></h2><p><span>The PIC16C5X has no PCH or PCLATH register, so the user has to take into consideration all the precautions mentioned in Section 1. In the PIC16C5X, the location of the Table has to be in the top half of a 512 word page. This restriction is not valid for the PIC16CXXX family. To convert a table read operation from PIC16C5X code to the PIC16CXXX code, the following should be done: - Remove any program memory page select instructions (PIC16C56/57), if present. </span></p><ul><li><p><span>Do a 13-bit computed GOTO operation (as shown in Example 5), when doing a table read operation.</span></p></li></ul><h2 id='note-the-following-details-of-the-code-protection-feature-on-picmicro®-mcus'><span>Note The Following Details Of The Code Protection Feature On Picmicro® Mcus.</span></h2><ul><li><p><span>The PICmicro family meets the specifications contained in the Microchip Data Sheet. - Microchip believes that its family of PICmicro microcontrollers is one of the most secure products of its kind on the market today, when used in the intended manner and under normal conditions.</span></p></li><li><p><span>There are dishonest and possibly illegal methods used to breach the code protection feature. All of these methods, to our knowledge, require using the PICmicro microcontroller in a manner outside the operating specifications contained in the data sheet. </span></p></li></ul><p><span>The person doing so may be engaged in theft of intellectual property.</span></p><ul><li><p><span>Microchip is willing to work with the customer who is concerned about the integrity of their code. - Neither Microchip nor any other semiconductor manufacturer can guarantee the security of their code. Code protection does not mean that we are guaranteeing the product as &quot;unbreakable&quot;.</span></p></li><li><p><span>Code protection is constantly evolving. We at Microchip are committed to continuously improving the code protection features of our product.</span></p></li></ul><p><span>If you have any further questions about this matter, please contact the local sales office nearest to you. Information contained in this publication regarding device applications and the like is intended through suggestion only and may be superseded by updates. It is your responsibility to ensure that your application meets with your specifications.</span></p><p><span>No representation or warranty is given and no liability is assumed by Microchip Technology Incorporated with respect to the accuracy or use of such information, or infringement of patents or other intellectual property rights arising from such use or otherwise. Use of Microchip&#39;s products as critical components in life support systems is not authorized except with express written approval by Microchip. No licenses are conveyed, implicitly or otherwise, under any intellectual property rights.</span></p><h2 id='trademarks'><span>Trademarks</span></h2><p><span>The Microchip name and logo, the Microchip logo, FilterLab, KEELOQ, microID, MPLAB, PIC, PICmicro, PICMASTER,</span>
+<span>PICSTART, PRO MATE, SEEVAL and The Embedded Control Solutions Company are registered trademarks of Microchip Technology Incorporated in the U.S.A. and other countries.</span></p><p><span>dsPIC, ECONOMONITOR, FanSense, FlexROM, fuzzyLAB,</span>
+<span>In-Circuit Serial Programming, ICSP, ICEPIC, microPort, Migratable Memory, MPASM, MPLIB, MPLINK, MPSIM,</span>
+<span>MXDEV, PICC, PICDEM, PICDEM.net, rfPIC, Select Mode and Total Endurance are trademarks of Microchip Technology Incorporated in the U.S.A.</span></p><p><span>Serialized Quick Turn Programming (SQTP) is a service mark of Microchip Technology Incorporated in the U.S.A. All other trademarks mentioned herein are property of their respective companies. © 2002, Microchip Technology Incorporated, Printed in the U.S.A., All Rights Reserved.</span></p><p><span> Printed on recycled paper.</span></p><p><span>Microchip received QS-9000 quality system certification for its worldwide headquarters, design and wafer fabrication facilities in Chandler and Tempe, Arizona in July 1999. The Company&#39;s quality system processes and procedures are QS-9000 compliant for its PICmicro® 8-bit MCUs, KEELOQ® </span><em><span>code hopping</span></em><span> devices, Serial EEPROMs and microperipheral products. In addition, Microchip&#39;s quality system for the design and manufacture of development systems is ISO 9001 certified.</span></p><p><img src="3_image_0.png" referrerpolicy="no-referrer" alt="3_image_0.png"></p><p><img src="4_image_0.png" referrerpolicy="no-referrer" alt="4_image_0.png"></p><h2 id='worldwide-sales-and-service'><span>Worldwide Sales And Service</span></h2><p><span>AMERICAS</span></p><p><span>Corporate Office</span></p><p><span>2355 West Chandler Blvd. Chandler, AZ 85224-6199</span></p><p><span>Tel: 480-792-7200 Fax: 480-792-7277</span></p><p><span>Technical Support: 480-792-7627 Web Address: </span><a href='http://www.microchip.com' target='_blank' class='url'>http://www.microchip.com</a></p><p><span>Rocky Mountain</span></p><p><span>2355 West Chandler Blvd.</span></p><p><span>Chandler, AZ 85224-6199</span></p><p><span>Tel: 480-792-7966 Fax: 480-792-7456</span></p><p><span>Atlanta</span></p><p><span>500 Sugar Mill Road, Suite 200B</span></p><p><span>Atlanta, GA 30350</span></p><p><span>Tel: 770-640-0034 Fax: 770-640-0307</span></p><p><span>Boston</span></p><p><span>2 Lan Drive, Suite 120</span></p><p><span>Westford, MA 01886</span></p><p><span>Tel: 978-692-3848 Fax: 978-692-3821</span></p><p><span>Chicago</span></p><p><span>333 Pierce Road, Suite 180</span></p><p><span>Itasca, IL 60143</span></p><p><span>Tel: 630-285-0071 Fax: 630-285-0075</span></p><p><span>Dallas</span></p><p><span>4570 Westgrove Drive, Suite 160</span></p><p><span>Addison, TX 75001</span></p><p><span>Tel: 972-818-7423 Fax: 972-818-2924</span></p><p><span>Detroit</span></p><p><span>Tri-Atria Office Building </span></p><p><span>32255 Northwestern Highway, Suite 190</span></p><p><span>Farmington Hills, MI 48334</span></p><p><span>Tel: 248-538-2250 Fax: 248-538-2260</span></p><p><span>Kokomo</span></p><p><span>2767 S. Albright Road </span></p><p><span>Kokomo, Indiana 46902</span></p><p><span>Tel: 765-864-8360 Fax: 765-864-8387</span></p><p><span>Los Angeles</span></p><p><span>18201 Von Karman, Suite 1090</span></p><p><span>Irvine, CA 92612</span></p><p><span>Tel: 949-263-1888 Fax: 949-263-1338</span></p><p><span>New York</span></p><p><span>150 Motor Parkway, Suite 202</span></p><p><span>Hauppauge, NY 11788 Tel: 631-273-5305 Fax: 631-273-5335</span></p><p><span>San Jose</span></p><p><span>Microchip Technology Inc.</span></p><p><span>2107 North First Street, Suite 590</span></p><p><span>San Jose, CA 95131 Tel: 408-436-7950 Fax: 408-436-7955</span></p><p><span>Toronto</span></p><p><span>6285 Northam Drive, Suite 108</span></p><p><span>Mississauga, Ontario L4V 1X5, Canada</span></p><p><span>Tel: 905-673-0699 Fax: 905-673-6509</span></p><figure class='table-figure'><table><thead><tr><th><span>ASIA/PACIFIC Australia Microchip Technology Australia Pty Ltd Suite 22, 41 Rawson Street Epping 2121, NSW Australia Tel: 61-2-9868-6733 Fax: 61-2-9868-6755 China - Beijing Microchip Technology Consulting (Shanghai) Co., Ltd., Beijing Liaison Office Unit 915 Bei Hai Wan Tai Bldg. No. 6 Chaoyangmen Beidajie  Beijing, 100027, No. China Tel: 86-10-85282100 Fax: 86-10-85282104 China - Chengdu Microchip Technology Consulting (Shanghai) Co., Ltd., Chengdu Liaison Office Rm. 2401, 24th Floor,  Ming Xing Financial Tower No. 88 TIDU Street Chengdu 610016, China Tel: 86-28-6766200 Fax: 86-28-6766599 China - Fuzhou Microchip Technology Consulting (Shanghai) Co., Ltd., Fuzhou Liaison Office Unit 28F, World Trade Plaza No. 71 Wusi Road Fuzhou 350001, China Tel: 86-591-7503506 Fax: 86-591-7503521 China - Shanghai Microchip Technology Consulting (Shanghai) Co., Ltd. Room 701, Bldg. B Far East International Plaza No. 317 Xian Xia Road Shanghai, 200051 Tel: 86-21-6275-5700 Fax: 86-21-6275-5060 China - Shenzhen Microchip Technology Consulting (Shanghai) Co., Ltd., Shenzhen Liaison Office Rm. 1315, 13/F, Shenzhen Kerry Centre, Renminnan Lu Shenzhen 518001, China Tel: 86-755-2350361 Fax: 86-755-2366086 Hong Kong Microchip Technology Hongkong Ltd. Unit 901-6, Tower 2, Metroplaza 223 Hing Fong Road Kwai Fong, N.T., Hong Kong Tel: 852-2401-1200 Fax: 852-2401-3431 India Microchip Technology Inc. India Liaison Office Divyasree Chambers 1 Floor, Wing A (A3/A4) No. 11, O&#39;Shaugnessey Road Bangalore, 560 025, India Tel: 91-80-2290061 Fax: 91-80-2290062</span></th></tr></thead><tbody></tbody></table></figure><figure class='table-figure'><table><thead><tr><th><span>Japan Microchip Technology Japan K.K. Benex S-1 6F 3-18-20, Shinyokohama Kohoku-Ku, Yokohama-shi Kanagawa, 222-0033, Japan Tel: 81-45-471- 6166 Fax: 81-45-471-6122 Korea Microchip Technology Korea 168-1, Youngbo Bldg. 3 Floor Samsung-Dong, Kangnam-Ku Seoul, Korea 135-882 Tel: 82-2-554-7200 Fax: 82-2-558-5934 Singapore Microchip Technology Singapore Pte Ltd. 200 Middle Road #07-02 Prime Centre Singapore, 188980 Tel: 65-334-8870 Fax: 65-334-8850 Taiwan Microchip Technology Taiwan 11F-3, No. 207 Tung Hua North Road Taipei, 105, Taiwan Tel: 886-2-2717-7175 Fax: 886-2-2545-0139</span></th></tr></thead><tbody></tbody></table></figure><figure class='table-figure'><table><thead><tr><th><span>EUROPE Denmark Microchip Technology Nordic ApS Regus Business Centre Lautrup hoj 1-3 Ballerup DK-2750 Denmark Tel: 45 4420 9895 Fax: 45 4420 9910 France Microchip Technology SARL Parc d&#39;Activite du Moulin de Massy 43 Rue du Saule Trapu Batiment A - ler Etage 91300 Massy, France Tel: 33-1-69-53-63-20 Fax: 33-1-69-30-90-79 Germany Microchip Technology GmbH Gustav-Heinemann Ring 125 D-81739 Munich, Germany Tel: 49-89-627-144 0 Fax: 49-89-627-144-44 Italy Microchip Technology SRL Centro Direzionale Colleoni  Palazzo Taurus 1 V. Le Colleoni 1 20041 Agrate Brianza Milan, Italy  Tel: 39-039-65791-1 Fax: 39-039-6899883 United Kingdom Arizona Microchip Technology Ltd. 505 Eskdale Road Winnersh Triangle Wokingham  Berkshire, England RG41 5TU Tel: 44 118 921 5869 Fax: 44-118 921-5820</span></th></tr></thead><tbody></tbody></table></figure></div></div>
+</body>
+</html>
