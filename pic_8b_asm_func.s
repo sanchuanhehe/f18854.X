@@ -73,13 +73,29 @@ intentry:
 #define D_DIS      0x5E
 #define E_DIS      0x79
 #define F_DIS      0x71
+#define ZERO_DIS_DP   0xBF
+#define ONE_DIS_DP    0x86
+#define TWO_DIS_DP    0xDB
+#define THREE_DIS_DP  0xCF
+#define FOUR_DIS_DP   0xE6
+#define FIVE_DIS_DP   0xED
+#define SIX_DIS_DP    0xFD
+#define SEVEN_DIS_DP  0x87
+#define EIGHT_DIS_DP  0xFF
+#define NINE_DIS_DP   0xEF
+#define A_DIS_DP      0xF7
+#define B_DIS_DP      0xFC
+#define C_DIS_DP      0xB9
+#define D_DIS_DP      0xDE
+#define E_DIS_DP      0xF9
+#define F_DIS_DP      0xF1
 
 /** @brief 宏函数
  *  @param A, B, C, D 数据
  *  @details 将A, B, C, D分别写入display_data的第1, 2, 3, 4个字节
  *  @note @wanwanzhi 给你做的接口,快谢谢我
  */
-print0x MACRO param1 param2 param3 param4
+print0x MACRO param1,param2,param3,param4
     ; 宏定义开始
     MOVLW param1
     MOVWF display_data
@@ -296,7 +312,7 @@ _main:
     MOVWF   TMR0H
     call    display_0
     //初始化显示数据为abcd
-    print0x 0xAA 0xBB 0xCC 0xDD
+    print0x 0xAA,0xBB,0xCC,0xDD
     // 无限循环
 loop:
     call    display_0
