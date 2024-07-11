@@ -82,30 +82,35 @@ intentry:
  */
  
 psect display, class=CODE, delta=2
-display:
+global display_0
+display_0:
     // 软件译码
     call    display_encode
     // 位选切换 TODO:优化位选切换
-    // 如果是4,则切换到1
-    movf    digit_select, w
-    xorlw   0x04
-    btfss   STATUS, 2
+    // 如果是4(0b0111),则切换到1
+    movlw   0b0111
+    xorwf   digit_select, w
+    btfsc   STATUS, 2
     goto    display_1
     // 如果是1,则切换到2
-    movf    digit_select, w
-    xorlw   0x01
-    btfss   STATUS, 2
+    movlw   0b1110
+    xorwf   digit_select, w
+    btfsc   STATUS, 2
     goto    display_2
     // 如果是2,则切换到3
-    movf    digit_select, w
-    xorlw   0x02
-    btfss   STATUS, 2
+    movlw   0b1101
+    xorwf   digit_select, w
+    btfsc   STATUS, 2
     goto    display_3
     // 如果是3,则切换到4
-    movf    digit_select, w
-    xorlw   0x03
-    btfss   STATUS, 2
+    movlw   0b1011
+    xorwf   digit_select, w
+    btfsc   STATUS, 2
     goto    display_4
+    // 如果是其他,则切换到1
+    movlw   0b1110
+    movwf   digit_select
+    goto    display_1
 
 display_next://下一步操作,将位选加载到PORTA
     movf    digit_select, w
@@ -120,7 +125,7 @@ display_1://将位选切换到1
     movwf   PORTC
     goto    display_next
 display_2://将位选切换到2
-    movlw   0x1101
+    movlw   0b1101
     movwf   digit_select
     //从display_data_decode+1中取出数据
     movf    display_data_decode+1, w
@@ -128,7 +133,7 @@ display_2://将位选切换到2
     movwf   PORTC
     goto    display_next
 display_3://将位选切换到3
-    movlw   0x1011
+    movlw   0b1011
     movwf   digit_select
     //从display_data_decode+2中取出数据
     movf    display_data_decode+2, w
@@ -136,7 +141,7 @@ display_3://将位选切换到3
     movwf   PORTC
     goto    display_next
 display_4://将位选切换到4
-    movlw   0x0111
+    movlw   0b0111
     movwf   digit_select
     //从display_data_decode+3中取出数据
     movf    display_data_decode+3, w
@@ -178,8 +183,7 @@ display_encode:
  */
 display_encode_hf:
     ; 从display_data + display_offset中取出数据一个半字节
-    andlw   0x0F
-    addwf   PCL, f
+    BRW
     
     ; 数码管显示编码表
     retlw      ZERO_DIS
@@ -274,11 +278,17 @@ _main:
     BANKSEL TMR0H
     MOVLW   216
     MOVWF   TMR0H
-    call   display
-
+    call    display_0
+    //初始化显示数据为8888
+    MOVLW   0x08
+    MOVWF   display_data
+    MOVWF   display_data + 1
+    MOVWF   display_data + 2
+    MOVWF   display_data + 3
     // 无限循环
 loop:
-    call   display
-    goto loop    
+    call    display_0
+    goto loop
+
     end
 
