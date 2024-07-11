@@ -48,6 +48,11 @@ display_data_decode: ds 4h
  * @brief 位选数据
  */
 digit_select: ds 1h
+/**
+ * @brief 公共索引变量
+ */
+index: ds 1h
+index_1: ds 1h
 
 /** @brief 中断服务程序向量 */
 psect intentry
@@ -125,6 +130,21 @@ print0x MACRO param1,param2,param3,param4
     MOVWF display_data+3
     endm
 
+/**
+ * @brief 显示不定义画面一帧
+ */
+printdraw MACRO param1,param2,param3,param4
+    ; 宏定义开始
+    MOVLW param1
+    MOVWF display_data_decode
+    MOVLW param2
+    MOVWF display_data_decode+1
+    MOVLW param3
+    MOVWF display_data_decode+2
+    MOVLW param4
+    MOVWF display_data_decode+3
+    call display_one_frame_loop
+endm
 
 /** @brief 显示子程序
  *  @param display_data 4个字节的显示数据
@@ -139,6 +159,7 @@ display_0:
     call    display_encode
     // 位选切换 TODO:优化位选切换
     // 如果是4(0b0111),则切换到1
+display_without_encode:
     movlw   0b0111
     xorwf   digit_select, w
     btfsc   STATUS, 2
@@ -236,12 +257,13 @@ display_encode:
     return
 
 /**
- * @brief 译码子程序,半字译码
+ * @brief 译码子程序,5位译码
  * @param 从display_data中取出数据一个半字节
  * @details 从display_data中取出数据一个半字节并进行译码，返回数码管显示编码
  */
 display_encode_h:
-    ; 从display_data + display_offset中取出数据一个半字节
+    ; 只保留低5位
+    andlw   0x1F
     BRW
     ; 数码管显示编码表
     retlw      ZERO_DIS
@@ -342,7 +364,7 @@ _main:
     //T0CON0=0b10001000
     //T0CON1=0b01010110
     BANKSEL T0CON0
-    MOVLW   0b10001000 // T0CON0配置
+    MOVLW   0b00001000 // T0CON0配置
     MOVWF   T0CON0
     BANKSEL T0CON1
     MOVLW   0b01010110 // T0CON1配置
@@ -360,10 +382,53 @@ _main:
     bsf PIE0, 5
     banksel INTCON
     bsf INTCON, 6
+
+    //雕花,画圈,将0x39,0b00001001,0b00001001,0b00001111存入display_data_decode
+    //0b00001001,0b00001001,0b00001111
+    printdraw 0x39,0b00001001,0b00001001,0b00001111
+    printdraw 1,1,0,0
+    printdraw 0,1,1,0
+    printdraw 0,0,1,1
+    printdraw 0,0,0,3
+    printdraw 0,0,0,6
+    printdraw 0,0,0,12
+    printdraw 0,0,8,8
+    printdraw 0,8,8,0
+    printdraw 8,8,0,0
+    printdraw 24,0,0,0
+    printdraw 48,0,0,0
+    printdraw 0b00100001,0,0,0
+    printdraw 0xff,0,0,0
+    printdraw 0,0,0,0xff
+    printdraw 0,0,0xff,0
+    printdraw 0,0xff,0,0
+
+    banksel INTCON
     bsf INTCON, 7
+    //打开定时器
+    banksel T0CON0
+    bsf T0CON0, 7
 loop:
     call    display_0
     goto loop
+
+display_one_frame_loop:
+    //初始化index
+    MOVLW 0
+    MOVWF index_1
+//利用index,循环256次
+outer_loop:
+    call display_without_encode
+    MOVLW 0
+    MOVWF index
+inner_loop:
+    DECFSZ index, 1   ; 将 index 减1，如果结果为零则跳过下一个指令
+    goto inner_loop   ; 跳转到 inner_loop 标签处继续内层循环
+    
+    // 内层循环结束后继续外层循环
+    DECFSZ index_1, 1      ; 将 y 减1，如果结果为零则跳过下一个指令
+    goto outer_loop  ; 跳转到 outer_loop 标签处继续外层循环
+    return
 
     end
 
