@@ -42,37 +42,13 @@ display_data: ds 2
 /**
  * @brief 译码后的数据
  */
+display_data_decode: ds 4
 
 /** @brief 中断服务程序向量 */
 psect intentry
 intentry:
     retfie
 
-/** @brief 主代码段 */
-psect main, class=CODE, delta=2
-
-global _main
-
-/** @brief 显示子程序
- *  @param display_data 2个字节的显示数据
- *  @details 数据结构从高位到低位分别为：数码管1、数码管2、数码管3、数码管4
- *           每个数码管的数据结构为：4位,从0到15分别对应0到F
- */
-psect display, class=CODE, delta=2
-display:
-    // 软件译码
-    movf    display_data, W
-    call    display_1
-    return
-
-/** @def RP0
- *  @brief 寄存器页0
- */
-#define RP0 5
-/** @def RP1
- *  @brief 寄存器页1
- */
-#define RP1 6
 /**
  * @brief 宏定义数码管显示
  */
@@ -93,13 +69,42 @@ display:
 #define E_DIS      0x79
 #define F_DIS      0x71
 
+/** @brief 显示子程序
+ *  @param display_data 2个字节的显示数据
+ *  @details 数据结构从高位到低位分别为：数码管1、数码管2、数码管3、数码管4
+ *           每个数码管的数据结构为：4位,从0到15分别对应0到F
+ */
+ 
+psect display, class=CODE, delta=2
+display:
+    // 软件译码
+    movf    display_data, W
+    call    display_1
+    return
+/**
+ * @breif 译码子程序
+ */
+display_1:
+
+/** @brief 主代码段 */
+psect main, class=CODE, delta=2
+global _main
+/** @def RP0
+ *  @brief 寄存器页0
+ */
+#define RP0 5
+/** @def RP1
+ *  @brief 寄存器页1
+ */
+#define RP1 6
+
 /**
  * @brief 主函数
  *
  * 该函数初始化微控制器，设置I/O端口，并进入主循环以控制连接到RB0的LED。
  */
 _main:
-
+    //@wanwanzhi TODO:完成下这里的端口初始化
 
     end
 
