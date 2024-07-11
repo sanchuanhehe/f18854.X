@@ -40,7 +40,6 @@ psect CommonVar, class=COMMON, space=1, delta=1
  */
 display_data:
     ds 4h       ; 分配4个字节的空间，并初始化为0
-    .byte   0x88, 0x88, 0x88, 0x88  ; 设置具体的初始值
 /**
  * @brief 译码后的数据
  */
