@@ -79,7 +79,7 @@ intentry:
  *  @details 将A, B, C, D分别写入display_data的第1, 2, 3, 4个字节
  *  @note @wanwanzhi 给你做的接口,快谢谢我
  */
-print0x MACRO param1,param2,param3,param4
+print0x MACRO param1 param2 param3 param4
     ; 宏定义开始
     MOVLW param1
     MOVWF display_data
@@ -296,7 +296,7 @@ _main:
     MOVWF   TMR0H
     call    display_0
     //初始化显示数据为abcd
-    print0x 0xAA, 0xBB, 0xCC, 0xDD
+    print0x 0xAA 0xBB 0xCC 0xDD
     // 无限循环
 loop:
     call    display_0
