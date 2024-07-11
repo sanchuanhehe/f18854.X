@@ -241,7 +241,7 @@ _main:
     //@wanwanzhi TODO:完成下这里的端口初始化
    
 
-        /** 初始化PORTB和LATB为0 */
+    /** 初始化PORTB和LATB为0 */
     BANKSEL PORTB
     CLRF    PORTB
     BANKSEL LATB
