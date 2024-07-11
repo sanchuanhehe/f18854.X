@@ -146,8 +146,8 @@ display_0:
     goto    display_1
 
 display_next://下一步操作,将位选加载到PORTA
-    movf    digit_select, w
-    movwf   PORTA
+    ; movf    digit_select, w
+    ; movwf   PORTA
     return
 display_1://将位选切换到1
     movlw   0b1110
@@ -156,6 +156,8 @@ display_1://将位选切换到1
     movf    display_data_decode, w
     banksel PORTC
     movwf   PORTC
+    movf    digit_select, w
+    movwf   PORTA
     goto    display_next
 display_2://将位选切换到2
     movlw   0b1101
@@ -164,6 +166,8 @@ display_2://将位选切换到2
     movf    display_data_decode+1, w
     banksel PORTC
     movwf   PORTC
+    movf    digit_select, w
+    movwf   PORTA
     goto    display_next
 display_3://将位选切换到3
     movlw   0b1011
@@ -172,6 +176,8 @@ display_3://将位选切换到3
     movf    display_data_decode+2, w
     banksel PORTC
     movwf   PORTC
+    movf    digit_select, w
+    movwf   PORTA
     goto    display_next
 display_4://将位选切换到4
     movlw   0b0111
@@ -180,6 +186,8 @@ display_4://将位选切换到4
     movf    display_data_decode+3, w
     banksel PORTC
     movwf   PORTC
+    movf    digit_select, w
+    movwf   PORTA
     goto    display_next
 /**
  * @breif 译码子程序
@@ -189,22 +197,22 @@ display_4://将位选切换到4
 display_encode:
     ; 取出第一个字节
     movf    display_data, 0
-    call    display_encode_hf
+    call    display_encode_h
     movwf   display_data_decode
     
     ; 取出第二个字节
     movf    display_data + 1, 0
-    call    display_encode_hf
+    call    display_encode_h
     movwf   display_data_decode + 1
     
     ; 取出第三个字节
     movf    display_data + 2, 0
-    call    display_encode_hf
+    call    display_encode_h
     movwf   display_data_decode + 2
     
     ; 取出第四个字节
     movf    display_data + 3, 0
-    call    display_encode_hf
+    call    display_encode_h
     movwf   display_data_decode + 3
     
     return
@@ -214,7 +222,7 @@ display_encode:
  * @param 从display_data中取出数据一个半字节
  * @details 从display_data中取出数据一个半字节并进行译码，返回数码管显示编码
  */
-display_encode_hf:
+display_encode_h:
     ; 从display_data + display_offset中取出数据一个半字节
     BRW
     ; 数码管显示编码表
@@ -250,7 +258,6 @@ display_encode_hf:
     retlw      D_DIS_DP
     retlw      E_DIS_DP
     retlw      F_DIS_DP
-    
     return
 
 /** @brief 主代码段 */
@@ -326,9 +333,8 @@ _main:
     BANKSEL TMR0H
     MOVLW   216
     MOVWF   TMR0H
-    call    display_0
     //初始化显示数据为abcd
-    print0x 0x1A,0x1B,0x1C,0x1D
+    print0x 0x1A,0xB,0xC,0xD
     // 无限循环
 loop:
     call    display_0
