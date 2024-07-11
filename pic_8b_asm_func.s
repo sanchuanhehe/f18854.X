@@ -105,25 +105,41 @@ display:
     xorlw   0x03
     btfss   STATUS, 2
     goto    display_4
-display_next://下一步操作
-
-
-    return/
+display_next://下一步操作,将位选加载到PORTA
+    movf    digit_select, w
+    movwf   PORTA
+    return
 display_1://将位选切换到1
     movlw   0x01
     movwf   digit_select
+    //从display_data_decode中取出数据
+    movf    display_data_decode, w
+    banksel PORTC
+    movwf   PORTC
     goto    display_next
 display_2://将位选切换到2
     movlw   0x02
     movwf   digit_select
+    //从display_data_decode+1中取出数据
+    movf    display_data_decode+1, w
+    banksel PORTC
+    movwf   PORTC
     goto    display_next
 display_3://将位选切换到3
     movlw   0x03
     movwf   digit_select
+    //从display_data_decode+2中取出数据
+    movf    display_data_decode+2, w
+    banksel PORTC
+    movwf   PORTC
     goto    display_next
 display_4://将位选切换到4
     movlw   0x04
     movwf   digit_select
+    //从display_data_decode+3中取出数据
+    movf    display_data_decode+3, w
+    banksel PORTA
+    movwf   PORTA
     goto    display_next
 /**
  * @breif 译码子程序
