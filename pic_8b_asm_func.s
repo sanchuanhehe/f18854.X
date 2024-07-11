@@ -65,7 +65,7 @@ intentry:
 #define FIVE_DIS   0x6D
 #define SIX_DIS    0x7D
 #define SEVEN_DIS  0x07
-#define EIGHT_DIS  0x7F
+#define EIGHT_DIS  0x7f
 #define NINE_DIS   0x6F
 #define A_DIS      0x77
 #define B_DIS      0x7C
@@ -82,7 +82,7 @@ intentry:
  */
  
 psect display, class=CODE, delta=2
-global display_0,display_data
+global display_0
 display_0:
     // 软件译码
     call    display_encode
@@ -145,8 +145,8 @@ display_4://将位选切换到4
     movwf   digit_select
     //从display_data_decode+3中取出数据
     movf    display_data_decode+3, w
-    banksel PORTA
-    movwf   PORTA
+    banksel PORTC
+    movwf   PORTC
     goto    display_next
 /**
  * @breif 译码子程序
@@ -155,22 +155,22 @@ display_4://将位选切换到4
  */
 display_encode:
     ; 取出第一个半字节
-    movf    display_data, w
+    movf    display_data, 0
     call    display_encode_hf
     movwf   display_data_decode
     
     ; 取出第二个半字节
-    movf    display_data + 1, w
+    movf    display_data + 1, 0
     call    display_encode_hf
     movwf   display_data_decode + 1
     
     ; 取出第三个半字节
-    movf    display_data + 2, w
+    movf    display_data + 2, 0
     call    display_encode_hf
     movwf   display_data_decode + 2
     
     ; 取出第四个半字节
-    movf    display_data + 3, w
+    movf    display_data + 3, 0
     call    display_encode_hf
     movwf   display_data_decode + 3
     
@@ -184,7 +184,6 @@ display_encode:
 display_encode_hf:
     ; 从display_data + display_offset中取出数据一个半字节
     BRW
-    
     ; 数码管显示编码表
     retlw      ZERO_DIS
     retlw      ONE_DIS
@@ -234,7 +233,7 @@ _main:
     MOVWF TRISA
 
     BANKSEL PORTC  ;
-    CLRF  PORTC  ;Init PORTA
+    CLRF  PORTC  ;Init PORTC
     BANKSEL LATC  ;Data Latch
     CLRF  LATC  ;
     BANKSEL ANSELC  ;
