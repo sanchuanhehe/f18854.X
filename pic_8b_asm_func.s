@@ -39,8 +39,8 @@ psect CommonVar, class=COMMON, space=1, delta=1
  *           每个数码管的数据结构为：8位,从0到15分别对应0到F
  */
 display_data:
-    .block  4
-    .byte   0x88, 0x88, 0x88, 0x88
+    res 4       ; 分配4个字节的空间，并初始化为0
+    .byte   0x88, 0x88, 0x88, 0x88  ; 设置具体的初始值
 /**
  * @brief 译码后的数据
  */
