@@ -84,7 +84,7 @@ psect display, class=CODE, delta=2
 display:
     // 软件译码
     call    display_encode
-    // 位选切换
+    // 位选切换 TODO:优化位选切换
     // 如果是4,则切换到1
     movf    digit_select, w
     xorlw   0x04
@@ -105,12 +105,13 @@ display:
     xorlw   0x03
     btfss   STATUS, 2
     goto    display_4
+
 display_next://下一步操作,将位选加载到PORTA
     movf    digit_select, w
     movwf   PORTA
     return
 display_1://将位选切换到1
-    movlw   0x01
+    movlw   0b1110
     movwf   digit_select
     //从display_data_decode中取出数据
     movf    display_data_decode, w
@@ -118,7 +119,7 @@ display_1://将位选切换到1
     movwf   PORTC
     goto    display_next
 display_2://将位选切换到2
-    movlw   0x02
+    movlw   0x1101
     movwf   digit_select
     //从display_data_decode+1中取出数据
     movf    display_data_decode+1, w
@@ -126,7 +127,7 @@ display_2://将位选切换到2
     movwf   PORTC
     goto    display_next
 display_3://将位选切换到3
-    movlw   0x03
+    movlw   0x1011
     movwf   digit_select
     //从display_data_decode+2中取出数据
     movf    display_data_decode+2, w
@@ -134,7 +135,7 @@ display_3://将位选切换到3
     movwf   PORTC
     goto    display_next
 display_4://将位选切换到4
-    movlw   0x04
+    movlw   0x0111
     movwf   digit_select
     //从display_data_decode+3中取出数据
     movf    display_data_decode+3, w
@@ -180,22 +181,22 @@ display_encode_hf:
     addwf   PCL, f
     
     ; 数码管显示编码表
-    dt      ZERO_DIS
-    dt      ONE_DIS
-    dt      TWO_DIS
-    dt      THREE_DIS
-    dt      FOUR_DIS
-    dt      FIVE_DIS
-    dt      SIX_DIS
-    dt      SEVEN_DIS
-    dt      EIGHT_DIS
-    dt      NINE_DIS
-    dt      A_DIS
-    dt      B_DIS
-    dt      C_DIS
-    dt      D_DIS
-    dt      E_DIS
-    dt      F_DIS
+    retlw      ZERO_DIS
+    retlw      ONE_DIS
+    retlw      TWO_DIS
+    retlw      THREE_DIS
+    retlw      FOUR_DIS
+    retlw      FIVE_DIS
+    retlw      SIX_DIS
+    retlw      SEVEN_DIS
+    retlw      EIGHT_DIS
+    retlw      NINE_DIS
+    retlw      A_DIS
+    retlw      B_DIS
+    retlw      C_DIS
+    retlw      D_DIS
+    retlw      E_DIS
+    retlw      F_DIS
     
     return
 
