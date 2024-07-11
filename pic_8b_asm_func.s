@@ -1,5 +1,5 @@
 #include <xc.inc>
-
+#define DEBUG
 /** @brief 配置和初始化段 */
 psect   init, class=CODE, delta=2
 psect   end_init, class=CODE, delta=2
@@ -34,7 +34,9 @@ start_initialization:
 /** @brief 公共变量 */
 psect CommonVar, class=COMMON, space=1, delta=1
 char_case: ds 1  /**< @brief 字符变量 */
-
+#ifdef DEBUG
+flag: ds 1 /**< @brief 定时器标志 */
+#endif
 
 /** @brief 中断服务程序向量 */
 psect intentry
@@ -97,6 +99,25 @@ _main:
 
     //死循环
     LOOP:
-        GOTO    LOOP
-
+    #ifdef DEBUG
+    BANKSEL T0CON0
+    BTFSS   T0CON0, 5
+    call    SET_0
+    BTFSC   T0CON0, 5
+    call    SET_1
+    #endif
+    GOTO    LOOP
+#ifdef DEBUG
+SET_0:
+    BTFSS   flag, 0//如果是1,置0
+    RETURN
+    BCF	    flag, 0
+    RETURN
+    
+SET_1:
+    BTFSC   flag, 0//如果是0,置1
+    RETURN
+    BSF	    flag, 0
+    RETURN
+#endif
     END

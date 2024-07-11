@@ -35,9 +35,37 @@ $$
 
 ### 仿真与结果展示
 
+#### 使用16位计数器进行理论分析
+
 [ipynb](rel2.ipynb)
 
+```powershell
+results_db = 10 * np.log10(results)
+Minimum dB value: -inf
+Corresponding n: 2
+Corresponding m: 62500 (log2(m) = 15.931568569324174)
+
+```
+
+
+
+![image-20240711060122536](./assets/image-20240711060122536.png)
+
+#### 使用八位计数器进行理论分析
+
 [ipynb](rel3.ipynb)
+
+```powershell
+Minimum percentage dB value: -21.937922302804797
+Minimum percentage value: 0.006400409626206027
+Corresponding x: 6
+Corresponding y: 217 (log2(y) = 7.7615512324444795)
+Corresponding z: 9
+```
+
+
+
+![image-20240711060220493](./assets/image-20240711060220493.png)
 
 
 根据以上分析与计算
@@ -45,10 +73,9 @@ $$
 T0CON0=0b10001000\\
 T0CON1=0b01010110\\
 预置TMR0 High Byte\\
-217 - 1 = 215
+217 - 1 = 216\\
+理论误差率为0.006400409626206027\%\\
 $$
-
-
 
 ### 代码框架与流程梳理
 
@@ -58,50 +85,6 @@ graph TB
     D --> E[初始化TMR0]
     E --> F[死循环]
     F --> F
-```
-
-
-
-```mermaid
-graph TB
-    A[初始化PORTB和LATB为0] --> B[将ANSELB设置为数字I/O]
-    B --> C[设置RB0为输出]
-    C --> D[设置端脚复用]
-    D --> E[初始化TMR0]
-    E --> F[死循环]
-    
-    subgraph 初始化PORTB和LATB为0
-        direction TB
-        A1[选择PORTB寄存器] --> A2[清除PORTB寄存器]
-        A2 --> A3[选择LATB寄存器] --> A4[清除LATB寄存器]
-    end
-    
-    subgraph 将ANSELB设置为数字I/O
-        direction TB
-        B1[选择ANSELB寄存器] --> B2[清除ANSELB寄存器]
-    end
-    
-    subgraph 设置RB0为输出
-        direction TB
-        C1[选择TRISB寄存器] --> C2[清除TRISB第0位]
-    end
-    
-    subgraph 设置端脚复用
-        direction TB
-        D1[选择RB0PPS寄存器] --> D2[将0x18写入RB0PPS]
-    end
-    
-    subgraph 初始化TMR0
-        direction TB
-        E1[选择T0CON0寄存器] --> E2[将0b10010001写入T0CON0]
-        E2 --> E3[选择T0CON1寄存器] --> E4[将0b01010000写入T0CON1]
-    end
-    
-    subgraph 死循环
-        direction TB
-        F1[GOTO LOOP]
-    end
-
 ```
 
 ### 实验结果观察与结果验证
@@ -201,14 +184,18 @@ _main:
     MOVWF   RB0PPS
 
     /** 初始化time 0*/
-    //T0CON0=1xx10001
-    //T0CON1=01010010
+    //T0CON0=0b10001000
+    //T0CON1=0b01010110
     BANKSEL T0CON0
-    MOVLW   0b10010001 // T0CON0配置
+    MOVLW   0b10001000 // T0CON0配置
     MOVWF   T0CON0
     BANKSEL T0CON1
-    MOVLW   0b01010000 // T0CON1配置
+    MOVLW   0b01010110 // T0CON1配置
     MOVWF   T0CON1
+    //TMR0H=216=217-1
+    BANKSEL TMR0H
+    MOVLW   216
+    MOVWF   TMR0H
 
     //死循环
     LOOP:
