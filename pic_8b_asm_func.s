@@ -62,54 +62,6 @@ global _main
  * 该函数初始化微控制器，设置I/O端口，并进入主循环以控制连接到RB0的LED。
  */
 _main:
-    /** 初始化PORTB和LATB为0 */
-    BANKSEL PORTB
-    CLRF    PORTB
-    BANKSEL LATB
-    CLRF    LATB
 
-    /** 将ANSELB设置为数字I/O（默认是模拟） */
-    BANKSEL ANSELB
-    CLRF    ANSELB
-
-    /** 设置RB0为输出 */
-    BANKSEL TRISB
-    BCF     TRISB, 0
-
-/** @brief 主循环，切换LED状态 */
-loop:
-    /** 点亮连接到RB0的LED（阳极连接到RB0） */
-    BANKSEL LATB
-    BSF     LATB, 0
-
-    /** 延时循环 */
-    MOVLW   250    
-    MOVWF   delay_value_1
-loop1:
-    MOVLW   250    
-    MOVWF   delay_value_2
-loop2:
-    DECFSZ  delay_value_2, f
-    goto    loop2  /**< @brief 如果delay_value_2不为0，继续减1 */
-    DECFSZ  delay_value_1, f
-    goto    loop1  /**< @brief 如果delay_value_1不为0，跳回到loop2 */
-
-    /** 熄灭LED */
-    BANKSEL LATB
-    BCF     LATB, 0
-
-    /** 延时循环 */
-    MOVLW   250
-    MOVWF   delay_value_1
-loop3:
-    MOVLW   250
-    MOVWF   delay_value_2
-loop4:
-    DECFSZ  delay_value_2, f
-    goto    loop4  /**< @brief 如果delay_value_2不为0，继续减1 */
-    DECFSZ  delay_value_1, f
-    goto    loop3  /**< @brief 如果delay_value_1不为0，跳回到loop4 */
-
-    goto loop  /**< @brief 返回主循环 */
 
     end
