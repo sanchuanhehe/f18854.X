@@ -145,7 +145,7 @@ display_0:
     movwf   digit_select
     goto    display_1
 
-display_next://下一步操作,将位选加载到PORTA
+; display_next://下一步操作,将位选加载到PORTA
     ; movf    digit_select, w
     ; movwf   PORTA
     return
@@ -158,7 +158,7 @@ display_1://将位选切换到1
     movwf   PORTC
     movf    digit_select, w
     movwf   PORTA
-    goto    display_next
+    return
 display_2://将位选切换到2
     movlw   0b1101
     movwf   digit_select
@@ -168,7 +168,7 @@ display_2://将位选切换到2
     movwf   PORTC
     movf    digit_select, w
     movwf   PORTA
-    goto    display_next
+    return
 display_3://将位选切换到3
     movlw   0b1011
     movwf   digit_select
@@ -178,7 +178,7 @@ display_3://将位选切换到3
     movwf   PORTC
     movf    digit_select, w
     movwf   PORTA
-    goto    display_next
+    return
 display_4://将位选切换到4
     movlw   0b0111
     movwf   digit_select
@@ -188,7 +188,7 @@ display_4://将位选切换到4
     movwf   PORTC
     movf    digit_select, w
     movwf   PORTA
-    goto    display_next
+    return
 /**
  * @breif 译码子程序
  * @param display_data 2个字节的显示数据
