@@ -187,22 +187,22 @@ display_4://将位选切换到4
  * @details 
  */
 display_encode:
-    ; 取出第一个半字节
+    ; 取出第一个字节
     movf    display_data, 0
     call    display_encode_hf
     movwf   display_data_decode
     
-    ; 取出第二个半字节
+    ; 取出第二个字节
     movf    display_data + 1, 0
     call    display_encode_hf
     movwf   display_data_decode + 1
     
-    ; 取出第三个半字节
+    ; 取出第三个字节
     movf    display_data + 2, 0
     call    display_encode_hf
     movwf   display_data_decode + 2
     
-    ; 取出第四个半字节
+    ; 取出第四个字节
     movf    display_data + 3, 0
     call    display_encode_hf
     movwf   display_data_decode + 3
@@ -234,6 +234,22 @@ display_encode_hf:
     retlw      D_DIS
     retlw      E_DIS
     retlw      F_DIS
+    retlw      ZERO_DIS_DP
+    retlw      ONE_DIS_DP
+    retlw      TWO_DIS_DP
+    retlw      THREE_DIS_DP
+    retlw      FOUR_DIS_DP
+    retlw      FIVE_DIS_DP
+    retlw      SIX_DIS_DP
+    retlw      SEVEN_DIS_DP
+    retlw      EIGHT_DIS_DP
+    retlw      NINE_DIS_DP
+    retlw      A_DIS_DP
+    retlw      B_DIS_DP
+    retlw      C_DIS_DP
+    retlw      D_DIS_DP
+    retlw      E_DIS_DP
+    retlw      F_DIS_DP
     
     return
 
@@ -312,7 +328,7 @@ _main:
     MOVWF   TMR0H
     call    display_0
     //初始化显示数据为abcd
-    print0x 0xAA,0xBB,0xCC,0xDD
+    print0x 0x1A,0x1B,0x1C,0x1D
     // 无限循环
 loop:
     call    display_0
