@@ -225,7 +225,7 @@ _main:
     MOVLW 11111100B
     MOVWF PORTC
 
-        /** 初始化PORTB和LATB为0 */
+    /** 初始化PORTB和LATB为0 */
     BANKSEL PORTB
     CLRF    PORTB
     BANKSEL LATB
