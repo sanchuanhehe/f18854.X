@@ -52,7 +52,25 @@ digit_select: ds 1h
 /** @brief 中断服务程序向量 */
 psect intentry
 intentry:
+    call update_display_data  ; 更新显示数据
+    banksel PIR0
+    bcf PIR0, 5
     retfie
+
+/** @brief 更新显示数据的子程序 */
+update_display_data:
+    movf display_data, W
+    addlw 0x1  ; 根据需要进行调整
+    movwf display_data
+    movf display_data+1, W
+    addlw 0x1  ; 根据需要进行调整
+    movwf display_data+1
+    movf display_data+2, W
+    addlw 0x1  ; 根据需要进行调整
+    movwf display_data+2
+    movf display_data+3, W
+    addlw 0x1  ; 根据需要进行调整
+    movwf display_data+3
 
 /**
  * @brief 宏定义数码管显示
@@ -334,8 +352,15 @@ _main:
     MOVLW   216
     MOVWF   TMR0H
     //初始化显示数据为abcd
-    print0x 0x1A,0xB,0xC,0xD
+    print0x 0x0,0x1,0x2,0x3
     // 无限循环
+
+    //使能TMR0中断
+    banksel PIE0
+    bsf PIE0, 5
+    banksel INTCON
+    bsf INTCON, 6
+    bsf INTCON, 7
 loop:
     call    display_0
     goto loop
