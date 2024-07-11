@@ -52,6 +52,54 @@ digit_select: ds 1h
 /** @brief 中断服务程序向量 */
 psect intentry
 intentry:
+    BANKSEL PIR0
+    BCF PIR0,5
+    BANKSEL TMR0H
+    MOVLW 00010111B
+    MOVWF TMR0H
+    BANKSEL TMR0L
+    MOVLW 11000111B
+    MOVWF TMR0L
+
+    MOVLW 00001101B
+    SUBWF OUT_NUM,0
+    BTFSS    STATUS,2  ;判断输出是否为13
+    goto d0            ;否
+    print0x 0xD,0xE,0xF,0x1 ;是
+    goto endout
+
+    d0:
+    MOVLW 00001110B
+    SUBWF OUT_NUM,0
+    BTFSS    STATUS,2  ;判断输出是否为14
+    goto d1            ;否
+    print0x 0xE,0xF,0x1,0x2 ;是
+    goto endout
+
+    d1:
+    MOVLW 11111111B
+    SUBWF OUT_NUM,0
+    BTFSS    STATUS,2  ;判断输出是否为15
+    goto d2            ;否
+    BANKSEL STATUS     ;是
+    BCF STATUS,2	   ;清楚状态寄存器Z位
+    MOVLW   
+    print0x 0xF,0x1,0x2,0x3
+    goto endout
+
+    d2:
+    BANKSEL PORTA
+    MOVF  OUT_NUM,0
+    ADDLW 00000001B
+    MOVWF 0x20h
+    ADDLW 00000001B
+    MOVWF 0x21h
+    ADDLW 00000001B
+    MOVWF 0x22h
+    print0x OUT_NUM,0x20h,0x21h,0x22h
+    endout：
+    MOVLW 00000001B
+    ADDWF OUT_NUM,1  ;将输出值增1
     retfie
 
 /**
@@ -278,6 +326,29 @@ global _main
  * 该函数初始化微控制器，设置I/O端口，并进入主循环以控制连接到RB0的LED。
  */
 _main:
+    OUT_NUM EQU 0x7f
+    MOVLW 00000000B
+    MOVWF OUT_NUM
+    BANKSEL T0CON0
+    MOVLW 10010001B
+    MOVWF T0CON0
+    BANKSEL T0CON1
+    MOVLW 01000000B
+    MOVWF T0CON1
+    
+    BANKSEL INTCON
+    BSF INTCON,7 
+    
+    BANKSEL PIE0
+    BSF PIE0,5 
+
+    BANKSEL TMR0H
+    MOVLW 00010111B
+    MOVWF TMR0H
+    BANKSEL TMR0L
+    MOVLW 11000111B
+    MOVWF TMR0L
+
     BANKSEL PORTA  ;
     CLRF  PORTA  ;Init PORTA
     BANKSEL LATA  ;Data Latch
