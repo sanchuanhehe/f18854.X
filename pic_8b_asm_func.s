@@ -55,6 +55,12 @@ global _main
  *  @brief 寄存器页1
  */
 #define RP1 6
+/**
+ * @brief 宏定义数码管显示
+ */
+#define ZERO_DIS   0x3F
+#define ONE_DIS    0x06
+#define TWO_DIS    0x5B
 
 /**
  * @brief 主函数
