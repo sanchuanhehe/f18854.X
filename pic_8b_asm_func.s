@@ -153,7 +153,7 @@ endm
  */
  
 psect display, class=CODE, delta=2
-global display_0
+global display_0,display_without_encode,display_one_frame_loop
 display_0:
     // 软件译码
     call    display_encode
@@ -184,9 +184,6 @@ display_without_encode:
     movwf   digit_select
     goto    display_1
 
-; display_next://下一步操作,将位选加载到PORTA
-    ; movf    digit_select, w
-    ; movwf   PORTA
     return
 display_1://将位选切换到1
     movlw   0b1110
@@ -228,6 +225,25 @@ display_4://将位选切换到4
     movf    digit_select, w
     movwf   PORTA
     return
+
+display_one_frame_loop:
+    //初始化index
+    MOVLW 0
+    MOVWF index_1
+//利用index,循环256次
+outer_loop:
+    call display_without_encode
+    MOVLW 0
+    MOVWF index
+inner_loop:
+    DECFSZ index, 1   ; 将 index 减1，如果结果为零则跳过下一个指令
+    goto inner_loop   ; 跳转到 inner_loop 标签处继续内层循环
+    
+    // 内层循环结束后继续外层循环
+    DECFSZ index_1, 1      ; 将 y 减1，如果结果为零则跳过下一个指令
+    goto outer_loop  ; 跳转到 outer_loop 标签处继续外层循环
+    return
+
 /**
  * @breif 译码子程序
  * @param display_data 2个字节的显示数据
@@ -359,6 +375,10 @@ _main:
     BANKSEL RB0PPS
     MOVLW   0x18//TMR0=0x18
     MOVWF   RB0PPS
+    
+    MOVLW 0
+    MOVWF index_1
+    MOVWF index
 
     /** 初始化time 0*/
     //T0CON0=0b10001000
@@ -385,6 +405,38 @@ _main:
 
     //雕花,画圈,将0x39,0b00001001,0b00001001,0b00001111存入display_data_decode
     //0b00001001,0b00001001,0b00001111
+    ; printdraw 0x39,0b00001001,0b00001001,0b00001111
+    ; printdraw 1,1,0,0
+    ; printdraw 0,1,1,0
+    ; printdraw 0,0,1,1
+    ; printdraw 0,0,0,3
+    ; printdraw 0,0,0,6
+    ; printdraw 0,0,0,12
+    ; printdraw 0,0,8,8
+    ; printdraw 0,8,8,0
+    ; printdraw 8,8,0,0
+    ; printdraw 24,0,0,0
+    ; printdraw 48,0,0,0
+    ; printdraw 0b00100001,0,0,0
+    ; printdraw 0xff,0,0,0
+    ; printdraw 0,0,0,0xff
+    ; printdraw 0,0,0xff,0
+    ; printdraw 0,0xff,0,0
+    call draw_0
+back:
+    banksel INTCON
+    bsf INTCON, 7
+    //打开定时器
+    banksel T0CON0
+    bsf T0CON0, 7
+    ;进入主循环
+    goto loop
+loop:
+    call    display_0
+    goto loop
+psect draw_0, class=CODE, delta=2
+global draw_0
+draw_0:
     printdraw 0x39,0b00001001,0b00001001,0b00001111
     printdraw 1,1,0,0
     printdraw 0,1,1,0
@@ -395,6 +447,18 @@ _main:
     printdraw 0,0,8,8
     printdraw 0,8,8,0
     printdraw 8,8,0,0
+    ; printdraw 24,0,0,0
+    ; printdraw 48,0,0,0
+    ; printdraw 0b00100001,0,0,0
+    ; printdraw 0xff,0,0,0
+    ; printdraw 0,0,0,0xff
+    ; printdraw 0,0,0xff,0
+    ; printdraw 0,0xff,0,0
+    goto draw_1
+goto draw_1
+psect draw_1, class=CODE, delta=2
+global draw_1
+draw_1:
     printdraw 24,0,0,0
     printdraw 48,0,0,0
     printdraw 0b00100001,0,0,0
@@ -402,33 +466,5 @@ _main:
     printdraw 0,0,0,0xff
     printdraw 0,0,0xff,0
     printdraw 0,0xff,0,0
-
-    banksel INTCON
-    bsf INTCON, 7
-    //打开定时器
-    banksel T0CON0
-    bsf T0CON0, 7
-loop:
-    call    display_0
-    goto loop
-
-display_one_frame_loop:
-    //初始化index
-    MOVLW 0
-    MOVWF index_1
-//利用index,循环256次
-outer_loop:
-    call display_without_encode
-    MOVLW 0
-    MOVWF index
-inner_loop:
-    DECFSZ index, 1   ; 将 index 减1，如果结果为零则跳过下一个指令
-    goto inner_loop   ; 跳转到 inner_loop 标签处继续内层循环
-    
-    // 内层循环结束后继续外层循环
-    DECFSZ index_1, 1      ; 将 y 减1，如果结果为零则跳过下一个指令
-    goto outer_loop  ; 跳转到 outer_loop 标签处继续外层循环
-    return
-
+    goto back
     end
-
