@@ -116,7 +116,6 @@ update_display_data:
 /** @brief 宏函数
  *  @param A, B, C, D 数据
  *  @details 将A, B, C, D分别写入display_data的第1, 2, 3, 4个字节
- *  @note @wanwanzhi 给你做的接口,快谢谢我
  */
 print0x MACRO param1,param2,param3,param4
     ; 宏定义开始
@@ -422,7 +421,7 @@ _main:
     ; printdraw 0,0,0,0xff
     ; printdraw 0,0,0xff,0
     ; printdraw 0,0xff,0,0
-    call draw_0
+    goto draw_0//画圈
 back:
     banksel INTCON
     bsf INTCON, 7
@@ -430,7 +429,7 @@ back:
     banksel T0CON0
     bsf T0CON0, 7
     ;进入主循环
-    goto loop
+    ; goto loop
 loop:
     call    display_0
     goto loop
@@ -455,7 +454,6 @@ draw_0:
     ; printdraw 0,0,0xff,0
     ; printdraw 0,0xff,0,0
     goto draw_1
-goto draw_1
 psect draw_1, class=CODE, delta=2
 global draw_1
 draw_1:
