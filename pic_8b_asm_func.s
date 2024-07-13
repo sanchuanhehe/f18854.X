@@ -215,30 +215,37 @@ display_0:
     // 位选切换 TODO:优化位选切换
     // 如果是4(0b0111),则切换到1
 display_without_encode:
-    movlw   0b0111
-    xorwf   digit_select, w
-    btfsc   STATUS, 2
-    goto    display_1
-    // 如果是1,则切换到2
-    movlw   0b1110
-    xorwf   digit_select, w
-    btfsc   STATUS, 2
-    goto    display_2
-    // 如果是2,则切换到3
-    movlw   0b1101
-    xorwf   digit_select, w
-    btfsc   STATUS, 2
-    goto    display_3
-    // 如果是3,则切换到4
-    movlw   0b1011
-    xorwf   digit_select, w
-    btfsc   STATUS, 2
-    goto    display_4
-    // 如果是其他,则切换到1
-    movlw   0b1110
-    movwf   digit_select
-    goto    display_1
-
+    /**
+     * @brief 显示数据显示位切换程序
+     * @details 位选切换程序,使用BRW查表加goto实现
+     * 如果是4(0b0111 = 7),则goto display_1
+     * 如果是1(0b1110 = 14),则goto display_2
+     * 如果是2(0b1101 = 13),则goto display_3
+     * 如果是3(0b1011 = 11),则goto display_4
+     */
+    //从digit_select加载数据到w
+    movf    digit_select, w
+    // 取出位选数据
+    andlw   0x0F
+    // 位选切换
+    BRW
+    // 位选切换表
+    goto    display_1//0
+    goto    display_1//1
+    goto    display_1//2
+    goto    display_1//3
+    goto    display_1//4
+    goto    display_1//5
+    goto    display_1//6
+    goto    display_1//7
+    goto    display_1//8
+    goto    display_1//9
+    goto    display_1//10
+    goto    display_4//11
+    goto    display_1//12
+    goto    display_3//13
+    goto    display_2//14
+    goto    display_1//15
     return
 display_1://将位选切换到1
     movlw   0b1110
@@ -376,9 +383,10 @@ display_encode_h:
 psect keyboard, class=CODE, delta=2
 global keyboard_scan
 /**
- * @brief 键盘扫描函数
+ * @brief 键盘扫描函数,扫描一次
  * @param key_data 键盘数据,在每次扫描后更新
  * @details 键盘数据结构为：1个字节，表示0-10个按键的状态,为0表示没有按下，为1表示按下1
+ *          端口定义：PORTB0-1为键盘端口,采用全扫描的方式
  */
 keyboard_scan:
     
@@ -476,6 +484,7 @@ draw_back:
     call display_one_frame_loop
     print0x BLANK_DIS, BLANK_DIS, BLANK_DIS, BLANK_DIS
 loop:
+    print0x 0x0,0x1,0x2,0x3
     //扫描键盘并更新显示数据
     ; call keyboard_scan
     goto loop
