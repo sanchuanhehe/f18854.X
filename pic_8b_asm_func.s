@@ -326,7 +326,7 @@ display_encode:
     movf    display_data + 2, 0
     call    display_encode_h
     movwf   display_data_decode + 2
-    
+display_encode_4:
     ; 取出第四个字节
     movf    display_data + 3, 0
     call    display_encode_h
@@ -387,11 +387,375 @@ global keyboard_scan
  * @param key_data 键盘数据,在每次扫描后更新
  * @details 键盘数据结构为：1个字节，表示0-10个按键的状态,为0表示没有按下，为1表示按下1
  *          端口定义：PORTB0-1为键盘端口,采用全扫描的方式
+| 按下的按键 | 第1次扫描(1110) | 第2次扫描(1101) | 第3次扫描(1011) | 第4次扫描(0111) |
+| ---------- | --------------- | --------------- | --------------- | --------------- |
+| 10         | 0110            | 0101            | 0011            | 0111            |
+| 4          | 0110            | 1101            | 1011            | 0110            |
+| 9          | 1010            | 1001            | 1011            | 0011            |
+| 2          | 1010            | 1101            | 1010            | 0111            |
+| 1          | 1100            | 1100            | 1011            | 0111            |
+| 8          | 1100            | 1101            | 1001            | 0101            |
+| 5          | 1110            | 0101            | 1011            | 0101            |
+| 3          | 1110            | 1001            | 1001            | 0111            |
+| 7          | 1110            | 1100            | 1010            | 0110            |
+| 6          | 1110            | 1101            | 0011            | 0011            |
+| 0          | 1110            | 1101            | 1011            | 0111            |
  */
 keyboard_scan:
-    
-    // 从key_data中取出数据,并写入display_data
+    // 1110扫描
+    call scan_1110
+    BRW ;根据扫描结果跳转
+    return//0000
+    return//0001
+    return//0010
+    return//0011
+    return//0100
+    return//0101
+    goto scan_1101_0110//0110
+    return//0111
+    return//1000
+    return//1001
+    goto scan_1101_1010//1010
+    return//1011
+    goto scan_1101_1100//1100
+    return//1101
+    goto scan_1101_1110//1110
+    return//1111
+scan_1101_0110:
+    // 1101扫描
+    call scan_1101
+    BRW ;根据扫描结果跳转
+    return//0000
+    return//0001
+    return//0010
+    return//0011
+    return//0100
+    goto scan_1011_0110_0101//0101
+    return//0110
+    return//0111
+    return//1000
+    return//1001
+    return//1010
+    return//1011
+    return//1100
+    goto scan_1011_0110_1101//1101
+    return//1110
+    return//1111
+scan_1011_0110_0101:
+    // 1011扫描
+    call scan_1011
+    // 判断W是否为0b0011
+    xorlw 0b0011
+    // 如果不等于0b0011,则return
+    btfsc STATUS, 2
+    return
+    // 0111扫描
+    call scan_0111
+    // 判断W是否为0b0111
+    xorlw 0b0111
+    // 如果不等于0b0111,则return
+    btfsc STATUS, 2
+    return
+    // 更新key_data
+    movlw 10
+    movwf key_data
+    return
+scan_1011_0110_1101:
+    // 1011扫描
+    call scan_1011
+    // 判断W是否为0b1011
+    xorlw 0b1011
+    // 如果不等于0b1011,则return
+    btfsc STATUS, 2
+    return
+    // 0111扫描
+    call scan_0111
+    // 判断W是否为0b0110
+    xorlw 0b0110
+    // 如果不等于0b0110,则return
+    btfsc STATUS, 2
+    return
+    // 更新key_data
+    movlw 4
+    movwf key_data
+    return
+scan_1101_1010:
+    // 1101扫描
+    call scan_1101
+    BRW ;根据扫描结果跳转
+    return//0000
+    return//0001
+    return//0010
+    return//0011
+    return//0100
+    return//0101
+    return//0110
+    return//0111
+    return//1000
+    goto scan_1011_1010_1001//1001
+    return//1010
+    return//1011
+    return//1100
+    goto scan_1011_1010_1101//1101
+    return//1110
+    return//1111
+scan_1011_1010_1001:
+    // 1011扫描
+    call scan_1011
+    // 判断W是否为0b1011
+    xorlw 0b1011
+    // 如果不等于0b1011,则return
+    btfsc STATUS, 2
+    return
+    // 0111扫描
+    call scan_0111
+    // 判断W是否为0b11
+    xorlw 0b11
+    // 如果不等于0b11,则return
+    btfsc STATUS, 2
+    return
+    // 更新key_data
+    movlw 9
+    movwf key_data
+    return
+scan_1011_1010_1101:
+    // 1011扫描
+    call scan_1011
+    // 判断W是否为0b1011
+    xorlw 0b1011
+    // 如果不等于0b1011,则return
+    btfsc STATUS, 2
+    return
+    // 0111扫描
+    call scan_0111
+    // 判断W是否为0b0111
+    xorlw 0b0111
+    // 如果不等于0b0111,则return
+    btfsc STATUS, 2
+    return
+    // 更新key_data
+    movlw 2
+    movwf key_data
+    return
+scan_1101_1100:
+    // 1101扫描
+    call scan_1101
+    BRW ;根据扫描结果跳转
+    return//0000
+    return//0001
+    return//0010
+    return//0011
+    return//0100
+    return//0101
+    return//0110
+    return//0111
+    return//1000
+    return//1001
+    return//1010
+    return//1011
+    goto scan_1011_1100_1100//1100
+    goto scan_1011_1100_1101//1101
+    return//1110
+    return//1111
+scan_1011_1100_1100:
+    // 1011扫描
+    call scan_1011
+    // 判断W是否为0b1011
+    xorlw 0b1011
+    // 如果不等于0b1011,则return
+    btfsc STATUS, 2
+    return
+    // 0111扫描
+    call scan_0111
+    // 判断W是否为0b0111
+    xorlw 0b0111
+    // 如果不等于0b0111,则return
+    btfsc STATUS, 2
+    return
+    // 更新key_data
+    movlw 1
+    movwf key_data
+    return
+scan_1011_1100_1101:
+    // 1011扫描
+    call scan_1011
+    // 判断W是否为0b1001
+    xorlw 0b1001
+    // 如果不等于0b1001,则return
+    btfsc STATUS, 2
+    return
+    // 0111扫描
+    call scan_0111
+    // 判断W是否为0b0111
+    xorlw 0b0101
+    // 如果不等于0b0101,则return
+    btfsc STATUS, 2
+    return
+    // 更新key_data
+    movlw 8
+    movwf key_data
+    return
+scan_1101_1110:
+    // 1101扫描
+    call scan_1101
+    BRW ;根据扫描结果跳转
+    return//0000
+    return//0001
+    return//0010
+    return//0011
+    return//0100
+    goto scan_1011_1110_0101//0101
+    return//0110
+    return//0111
+    return//1000
+    goto scan_1011_1110_1001//1001
+    return//1010
+    return//1011
+    goto scan_1011_1110_1100//1100
+    goto scan_1011_1110_1101//1101
+    return//1110
+    return//1111
+scan_1011_1110_0101:
+    // 1011扫描
+    call scan_1011
+    // 判断W是否为0b1011
+    xorlw 0b1011
+    // 如果不等于0b1011,则return
+    btfsc STATUS, 2
+    return
+    // 0111扫描
+    call scan_0111
+    // 判断W是否为0b0101
+    xorlw 0b0101
+    // 如果不等于0b0101,则return
+    btfsc STATUS, 2
+    return
+    // 更新key_data
+    movlw 5
+    movwf key_data
+    return
+scan_1011_1110_1001:
+    // 1011扫描
+    call scan_1011
+    // 判断W是否为0b1011
+    xorlw 0b1011
+    // 如果不等于0b1011,则return
+    btfsc STATUS, 2
+    return
+    // 0111扫描
+    call scan_0111
+    // 判断W是否为0b0111
+    xorlw 0b0111
+    // 如果不等于0b1001,则return
+    btfsc STATUS, 2
+    return
+    // 更新key_data
+    movlw 3
+    movwf key_data
+    return
+scan_1011_1110_1100:
+    // 1011扫描
+    call scan_1011
+    // 判断W是否为0b1010
+    xorlw 0b1010
+    // 如果不等于0b1010,则return
+    btfsc STATUS, 2
+    return
+    // 0111扫描
+    call scan_0111
+    // 判断W是否为0b0110
+    xorlw 0b0110
+    // 如果不等于0b0110,则return
+    btfsc STATUS, 2
+    return
+    // 更新key_data
+    movlw 7
+    movwf key_data
+    return
+scan_1011_1110_1101:
+    // 1011扫描
+    call scan_1011
+    // 判断W是否为0b1011
+    xorlw 0b1011
+    // 如果不等于0b1011,则goto
+    btfsc STATUS, 2
+    goto scan_0
+    // 1011扫描
+    call scan_1011
+    // 判断W是否为0b0011
+    xorlw 0b0011
+    // 如果不等于0b0011,则return
+    btfsc STATUS, 2
+    return
+    // 0111扫描
+    call scan_0111
+    // 判断W是否为0b0011
+    xorlw 0b0011
+    // 如果不等于0b0011,则return
+    btfsc STATUS, 2
+    return
+    // 更新key_data
+    movlw 6
+    movwf key_data
+    return
+scan_0:
+    // 0111扫描
+    call scan_0111
+    // 判断W是否为0b0111
+    xorlw 0b0111
+    // 如果不等于0b0111,则return
+    btfsc STATUS, 2
+    return
+    // 更新key_data
+    movlw 0
+    movwf key_data
+    return
+/**
+ * @brief 1110扫描
+ */
+scan_1110:
+    // 将POATB设置为输入
+    BANKSEL TRISB
+    MOVLW 0b00001110
+    MOVWF TRISB
+    // 读取PORTB
+    MOVF PORTB, 0
+    andlw 0x0F
+    return
+/**
+ * @brief 1101扫描
+ */
+scan_1101:
+    // 将POATB设置为输入
+    BANKSEL TRISB
+    MOVLW 0b00001101
+    MOVWF TRISB
+    // 读取PORTB
+    MOVF PORTB, 0
+    andlw 0x0F
+    return
 
+/**
+ * @brief 1011扫描
+ */
+scan_1011:
+    // 将POATB设置为输入
+    BANKSEL TRISB
+    MOVLW 0b00001011
+    MOVWF TRISB
+    // 读取PORTB
+    MOVF PORTB, 0
+    andlw 0x0F
+    return
+
+scan_0111:
+    // 将POATB设置为输入
+    BANKSEL TRISB
+    MOVLW 0b00000111
+    MOVWF TRISB
+    // 读取PORTB
+    MOVF PORTB, 0
+    andlw 0x0F
     return
 
 /** @brief 主代码段 */
@@ -441,14 +805,15 @@ _main:
     BANKSEL ANSELB
     CLRF    ANSELB
 
-    /** 设置RB0为输出 */
-    BANKSEL TRISB
-    BCF     TRISB, 0
-
-    /** 设置端脚复用*/
-    BANKSEL RB0PPS
-    MOVLW   0x18//TMR0=0x18
-    MOVWF   RB0PPS
+    /** 打开B组弱上拉 */
+    BANKSEL WPUB
+    MOVLW   0xff
+    MOVWF   WPUB
+    
+    ; /** 设置端脚复用*/
+    ; BANKSEL RB0PPS
+    ; MOVLW   0x18//TMR0=0x18
+    ; MOVWF   RB0PPS
     
     MOVLW 0
     MOVWF index_1
@@ -472,7 +837,7 @@ _main:
     bsf PIE0, 5
     banksel INTCON
     bsf INTCON, 6
-    goto draw_0
+    ; goto draw_0
 draw_back:
     banksel INTCON
     bsf INTCON, 7
@@ -483,10 +848,18 @@ draw_back:
     print0x 0x0,0x1,0x2,0x3
     call display_one_frame_loop
     print0x BLANK_DIS, BLANK_DIS, BLANK_DIS, BLANK_DIS
+    // 清空key_data
+    clrf key_data
 loop:
-    print0x 0x0,0x1,0x2,0x3
     //扫描键盘并更新显示数据
-    ; call keyboard_scan
+    call keyboard_scan
+    //显示数据显示按下的键
+    // 读入key_data
+    movf key_data, 0
+    // 写入display_data+3
+    movwf display_data+3
+    // 译码
+    call display_encode_4
     goto loop
 psect draw_0, class=CODE, delta=2
 global draw_0
