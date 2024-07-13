@@ -421,6 +421,7 @@ keyboard_scan:
     return//1101
     goto scan_1101_1110//1110
     return//1111
+psect scan_0110_xxxx, class=CODE, delta=2
 scan_1101_0110:
     // 1101扫描
     call scan_1101
@@ -447,14 +448,14 @@ scan_1011_0110_0101:
     // 判断W是否为0b0011
     xorlw 0b0011
     // 如果不等于0b0011,则return
-    btfsc STATUS, 2
+    btfss STATUS, 2
     return
     // 0111扫描
     call scan_0111
     // 判断W是否为0b0111
     xorlw 0b0111
     // 如果不等于0b0111,则return
-    btfsc STATUS, 2
+    btfss STATUS, 2
     return
     // 更新key_data
     movlw 10
@@ -466,19 +467,20 @@ scan_1011_0110_1101:
     // 判断W是否为0b1011
     xorlw 0b1011
     // 如果不等于0b1011,则return
-    btfsc STATUS, 2
+    btfss STATUS, 2
     return
     // 0111扫描
     call scan_0111
     // 判断W是否为0b0110
     xorlw 0b0110
     // 如果不等于0b0110,则return
-    btfsc STATUS, 2
+    btfss STATUS, 2
     return
     // 更新key_data
     movlw 4
     movwf key_data
     return
+psect scan_1010_xxxx, class=CODE, delta=2
 scan_1101_1010:
     // 1101扫描
     call scan_1101
@@ -505,14 +507,14 @@ scan_1011_1010_1001:
     // 判断W是否为0b1011
     xorlw 0b1011
     // 如果不等于0b1011,则return
-    btfsc STATUS, 2
+    btfss STATUS, 2
     return
     // 0111扫描
     call scan_0111
     // 判断W是否为0b11
     xorlw 0b11
     // 如果不等于0b11,则return
-    btfsc STATUS, 2
+    btfss STATUS, 2
     return
     // 更新key_data
     movlw 9
@@ -524,19 +526,20 @@ scan_1011_1010_1101:
     // 判断W是否为0b1011
     xorlw 0b1011
     // 如果不等于0b1011,则return
-    btfsc STATUS, 2
+    btfss STATUS, 2
     return
     // 0111扫描
     call scan_0111
     // 判断W是否为0b0111
     xorlw 0b0111
     // 如果不等于0b0111,则return
-    btfsc STATUS, 2
+    btfss STATUS, 2
     return
     // 更新key_data
-    movlw 2
+    movlw 2 //TODO:fix
     movwf key_data
     return
+psect scan_1100_xxxx, class=CODE, delta=2
 scan_1101_1100:
     // 1101扫描
     call scan_1101
@@ -563,14 +566,14 @@ scan_1011_1100_1100:
     // 判断W是否为0b1011
     xorlw 0b1011
     // 如果不等于0b1011,则return
-    btfsc STATUS, 2
+    btfss STATUS, 2
     return
     // 0111扫描
     call scan_0111
     // 判断W是否为0b0111
     xorlw 0b0111
     // 如果不等于0b0111,则return
-    btfsc STATUS, 2
+    btfss STATUS, 2
     return
     // 更新key_data
     movlw 1
@@ -582,19 +585,20 @@ scan_1011_1100_1101:
     // 判断W是否为0b1001
     xorlw 0b1001
     // 如果不等于0b1001,则return
-    btfsc STATUS, 2
+    btfss STATUS, 2
     return
     // 0111扫描
     call scan_0111
     // 判断W是否为0b0111
     xorlw 0b0101
     // 如果不等于0b0101,则return
-    btfsc STATUS, 2
+    btfss STATUS, 2
     return
     // 更新key_data
     movlw 8
     movwf key_data
     return
+psect scan_1110_xxxx, class=CODE, delta=2
 scan_1101_1110:
     // 1101扫描
     call scan_1101
@@ -621,14 +625,14 @@ scan_1011_1110_0101:
     // 判断W是否为0b1011
     xorlw 0b1011
     // 如果不等于0b1011,则return
-    btfsc STATUS, 2
+    btfss STATUS, 2
     return
     // 0111扫描
     call scan_0111
     // 判断W是否为0b0101
     xorlw 0b0101
     // 如果不等于0b0101,则return
-    btfsc STATUS, 2
+    btfss STATUS, 2
     return
     // 更新key_data
     movlw 5
@@ -640,17 +644,17 @@ scan_1011_1110_1001:
     // 判断W是否为0b1011
     xorlw 0b1011
     // 如果不等于0b1011,则return
-    btfsc STATUS, 2
+    btfss STATUS, 2
     return
     // 0111扫描
     call scan_0111
     // 判断W是否为0b0111
     xorlw 0b0111
     // 如果不等于0b1001,则return
-    btfsc STATUS, 2
+    btfss STATUS, 2
     return
     // 更新key_data
-    movlw 3
+    movlw 3 //TODO:fix
     movwf key_data
     return
 scan_1011_1110_1100:
@@ -659,14 +663,14 @@ scan_1011_1110_1100:
     // 判断W是否为0b1010
     xorlw 0b1010
     // 如果不等于0b1010,则return
-    btfsc STATUS, 2
+    btfss STATUS, 2
     return
     // 0111扫描
     call scan_0111
     // 判断W是否为0b0110
     xorlw 0b0110
     // 如果不等于0b0110,则return
-    btfsc STATUS, 2
+    btfss STATUS, 2
     return
     // 更新key_data
     movlw 7
@@ -677,7 +681,7 @@ scan_1011_1110_1101:
     call scan_1011
     // 判断W是否为0b1011
     xorlw 0b1011
-    // 如果不等于0b1011,则goto
+    // 如果等于0b1011,则goto
     btfsc STATUS, 2
     goto scan_0
     // 1011扫描
@@ -685,14 +689,14 @@ scan_1011_1110_1101:
     // 判断W是否为0b0011
     xorlw 0b0011
     // 如果不等于0b0011,则return
-    btfsc STATUS, 2
+    btfss STATUS, 2
     return
     // 0111扫描
     call scan_0111
     // 判断W是否为0b0011
     xorlw 0b0011
     // 如果不等于0b0011,则return
-    btfsc STATUS, 2
+    btfss STATUS, 2
     return
     // 更新key_data
     movlw 6
@@ -704,12 +708,13 @@ scan_0:
     // 判断W是否为0b0111
     xorlw 0b0111
     // 如果不等于0b0111,则return
-    btfsc STATUS, 2
+    btfss STATUS, 2
     return
     // 更新key_data
     movlw 0
     movwf key_data
     return
+psect scan_xxxx, class=CODE, delta=2
 /**
  * @brief 1110扫描
  */
@@ -718,6 +723,7 @@ scan_1110:
     BANKSEL TRISB
     MOVLW 0b00001110
     MOVWF TRISB
+    movwf PORTB
     // 读取PORTB
     MOVF PORTB, 0
     andlw 0x0F
@@ -730,6 +736,7 @@ scan_1101:
     BANKSEL TRISB
     MOVLW 0b00001101
     MOVWF TRISB
+    movwf PORTB
     // 读取PORTB
     MOVF PORTB, 0
     andlw 0x0F
@@ -743,6 +750,7 @@ scan_1011:
     BANKSEL TRISB
     MOVLW 0b00001011
     MOVWF TRISB
+    movwf PORTB
     // 读取PORTB
     MOVF PORTB, 0
     andlw 0x0F
@@ -753,6 +761,7 @@ scan_0111:
     BANKSEL TRISB
     MOVLW 0b00000111
     MOVWF TRISB
+    movwf PORTB
     // 读取PORTB
     MOVF PORTB, 0
     andlw 0x0F
