@@ -57,26 +57,10 @@ index_1: ds 1h
 /** @brief 中断服务程序向量 */
 psect intentry
 intentry:
-    call update_display_data  ; 更新显示数据
+    call display_without_encode
     banksel PIR0
     bcf PIR0, 5
     retfie
-
-/** @brief 更新显示数据的子程序 */
-update_display_data:
-    movf display_data, W
-    addlw 0x1  ; 根据需要进行调整
-    movwf display_data
-    movf display_data+1, W
-    addlw 0x1  ; 根据需要进行调整
-    movwf display_data+1
-    movf display_data+2, W
-    addlw 0x1  ; 根据需要进行调整
-    movwf display_data+2
-    movf display_data+3, W
-    addlw 0x1  ; 根据需要进行调整
-    movwf display_data+3
-
 /**
  * @brief 宏定义数码管显示
  */
@@ -112,6 +96,72 @@ update_display_data:
 #define D_DIS_DP      0xDE
 #define E_DIS_DP      0xF9
 #define F_DIS_DP      0xF1
+#define G_DIS         0x7D
+#define G_DIS_DP      0xFD
+#define H_DIS         0x76
+#define H_DIS_DP      0xF6
+#define I_DIS         0x06
+#define I_DIS_DP      0x86
+#define J_DIS         0x1E
+#define J_DIS_DP      0x9E
+#define K_DIS         0x76
+#define K_DIS_DP      0xF6
+#define L_DIS         0x38
+#define L_DIS_DP      0xB8
+#define M_DIS         0x55
+#define M_DIS_DP      0xD5
+#define N_DIS         0x37
+#define N_DIS_DP      0xB7
+#define O_DIS         0x3F
+#define O_DIS_DP      0xBF
+#define P_DIS         0x73
+#define P_DIS_DP      0xF3
+#define Q_DIS         0x67
+#define Q_DIS_DP      0xE7
+#define R_DIS         0x33
+#define R_DIS_DP      0xB3
+#define S_DIS         0x6D
+#define S_DIS_DP      0xED
+#define T_DIS         0x78
+#define T_DIS_DP      0xF8
+#define U_DIS         0x3E
+#define U_DIS_DP      0xBE
+#define V_DIS         0x3E
+#define V_DIS_DP      0xBE
+#define W_DIS         0x3E
+#define W_DIS_DP      0xBE
+#define X_DIS         0x76
+#define X_DIS_DP      0xF6
+#define Y_DIS         0x6E
+#define Y_DIS_DP      0xEE
+#define Z_DIS         0x5B
+#define Z_DIS_DP      0xDB
+#define BLANK_DIS     0x00
+#define BLANK_DIS_DP  0x80
+#define DASH_DIS      0x40
+#define DASH_DIS_DP   0xC0
+#define UNDERLINE_DIS 0x08
+#define UNDERLINE_DIS_DP 0x88
+#define EQUAL_DIS     0x48
+#define EQUAL_DIS_DP  0xC8
+#define PLUS_DIS      0x70
+#define PLUS_DIS_DP   0xF0
+#define ASTERISK_DIS  0x37
+#define ASTERISK_DIS_DP 0xB7
+#define SLASH_DIS     0x5B
+#define SLASH_DIS_DP  0xDB
+#define BACKSLASH_DIS 0x6E
+#define BACKSLASH_DIS_DP 0xEE
+#define PERCENT_DIS   0x72
+#define PERCENT_DIS_DP 0xF2
+#define LESS_DIS      0x71
+#define LESS_DIS_DP   0xF1
+#define GREATER_DIS   0x76
+#define GREATER_DIS_DP 0xF6
+#define QUESTION_DIS  0x53
+#define QUESTION_DIS_DP 0xD3
+#define EXCLAMATION_DIS 0x06
+#define EXCLAMATION_DIS_DP 0x86
 
 /** @brief 宏函数
  *  @param A, B, C, D 数据
@@ -127,6 +177,8 @@ print0x MACRO param1,param2,param3,param4
     MOVWF display_data+2
     MOVLW param4
     MOVWF display_data+3
+    ; 译码
+    call display_encode
     endm
 
 /**
@@ -352,10 +404,6 @@ _main:
     BANKSEL TRISC  ;
     MOVLW 00000000B
     MOVWF TRISC
-
-    //@wanwanzhi TODO:完成下这里的端口初始化
-   
-
     /** 初始化PORTB和LATB为0 */
     BANKSEL PORTB
     CLRF    PORTB
@@ -383,55 +431,32 @@ _main:
     //T0CON0=0b10001000
     //T0CON1=0b01010110
     BANKSEL T0CON0
-    MOVLW   0b00001000 // T0CON0配置
+    MOVLW   0b00000100 // T0CON0配置
     MOVWF   T0CON0
     BANKSEL T0CON1
-    MOVLW   0b01010110 // T0CON1配置
+    MOVLW   0b01010000 // T0CON1配置
     MOVWF   T0CON1
-    //TMR0H=216=217-1
+    //TMR0H=24=25-1
     BANKSEL TMR0H
-    MOVLW   216
+    MOVLW   24
     MOVWF   TMR0H
-    //初始化显示数据为abcd
-    print0x 0x0,0x1,0x2,0x3
-    // 无限循环
-
     //使能TMR0中断
     banksel PIE0
     bsf PIE0, 5
     banksel INTCON
     bsf INTCON, 6
-
-    //雕花,画圈,将0x39,0b00001001,0b00001001,0b00001111存入display_data_decode
-    //0b00001001,0b00001001,0b00001111
-    ; printdraw 0x39,0b00001001,0b00001001,0b00001111
-    ; printdraw 1,1,0,0
-    ; printdraw 0,1,1,0
-    ; printdraw 0,0,1,1
-    ; printdraw 0,0,0,3
-    ; printdraw 0,0,0,6
-    ; printdraw 0,0,0,12
-    ; printdraw 0,0,8,8
-    ; printdraw 0,8,8,0
-    ; printdraw 8,8,0,0
-    ; printdraw 24,0,0,0
-    ; printdraw 48,0,0,0
-    ; printdraw 0b00100001,0,0,0
-    ; printdraw 0xff,0,0,0
-    ; printdraw 0,0,0,0xff
-    ; printdraw 0,0,0xff,0
-    ; printdraw 0,0xff,0,0
-    goto draw_0//画圈
-back:
+    goto draw_0
+draw_back:
     banksel INTCON
     bsf INTCON, 7
     //打开定时器
     banksel T0CON0
     bsf T0CON0, 7
     ;进入主循环
-    ; goto loop
+    print0x 0x0,0x1,0x2,0x3
 loop:
-    call    display_0
+
+    //扫描键盘并更新显示数据
     goto loop
 psect draw_0, class=CODE, delta=2
 global draw_0
@@ -446,13 +471,6 @@ draw_0:
     printdraw 0,0,8,8
     printdraw 0,8,8,0
     printdraw 8,8,0,0
-    ; printdraw 24,0,0,0
-    ; printdraw 48,0,0,0
-    ; printdraw 0b00100001,0,0,0
-    ; printdraw 0xff,0,0,0
-    ; printdraw 0,0,0,0xff
-    ; printdraw 0,0,0xff,0
-    ; printdraw 0,0xff,0,0
     goto draw_1
 psect draw_1, class=CODE, delta=2
 global draw_1
@@ -464,5 +482,5 @@ draw_1:
     printdraw 0,0,0,0xff
     printdraw 0,0,0xff,0
     printdraw 0,0xff,0,0
-    goto back
+    goto draw_back
     end
