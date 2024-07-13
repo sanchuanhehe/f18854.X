@@ -33,7 +33,6 @@ start_initialization:
 
 /** @brief 公共变量 */
 psect CommonVar, class=COMMON, space=1, delta=1
-; char_case: ds 1h  /**< @brief 字符变量 */
 /** @brief 显示数据,display子函数的参数 
  *  @details 数据结构从高位到低位分别为：数码管1、数码管2、数码管3、数码管4
  *           每个数码管的数据结构为：8位,从0到15分别对应0到F
@@ -49,10 +48,15 @@ display_data_decode: ds 4h
  */
 digit_select: ds 1h
 /**
+ * @brief key_data
+ */
+key_data: ds 1h
+/**
  * @brief 公共索引变量
  */
 index: ds 1h
 index_1: ds 1h
+
 
 /** @brief 中断服务程序向量 */
 psect intentry
@@ -366,6 +370,21 @@ display_encode_h:
     retlw      E_DIS_DP
     retlw      F_DIS_DP
     return
+/**
+ * @brief 键盘相关函数区域
+ */
+psect keyboard, class=CODE, delta=2
+global keyboard_scan
+/**
+ * @brief 键盘扫描函数
+ * @param key_data 键盘数据,在每次扫描后更新
+ * @details 键盘数据结构为：1个字节，表示0-10个按键的状态,为0表示没有按下，为1表示按下1
+ */
+keyboard_scan:
+    
+    // 从key_data中取出数据,并写入display_data
+
+    return
 
 /** @brief 主代码段 */
 psect main, class=CODE, delta=2
@@ -454,9 +473,11 @@ draw_back:
     bsf T0CON0, 7
     ;进入主循环
     print0x 0x0,0x1,0x2,0x3
+    call display_one_frame_loop
+    print0x BLANK_DIS, BLANK_DIS, BLANK_DIS, BLANK_DIS
 loop:
-
     //扫描键盘并更新显示数据
+    ; call keyboard_scan
     goto loop
 psect draw_0, class=CODE, delta=2
 global draw_0
