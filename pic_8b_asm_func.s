@@ -57,6 +57,8 @@ key_data: ds 1h
 index: ds 1h
 index_1: ds 1h
 
+psect BANK0Var, class=BANK0, space=1, delta=1
+
 
 /** @brief 中断服务程序向量 */
 psect intentry
