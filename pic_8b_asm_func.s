@@ -42,11 +42,11 @@ display_data:
 /**
  * @brief 译码后的数据
  */
-display_data_decode: ds 4h
+display_data_decode: ds 4h//TODO:计划移入bank0
 /**
  * @brief 位选数据
  */
-digit_select: ds 1h
+digit_select: ds 1h//TODO:计划移入bank0
 /**
  * @brief key_data
  */
@@ -193,7 +193,7 @@ print0x MACRO param1,param2,param3,param4
 printdraw MACRO param1,param2,param3,param4
     ; 宏定义开始
     MOVLW param1
-    MOVWF display_data_decode
+    MOVWF display_data_decode//TODO:计划移入bank0,如果移入,请检查这里
     MOVLW param2
     MOVWF display_data_decode+1
     MOVLW param3
@@ -250,41 +250,41 @@ display_without_encode:
     goto    display_1//15
     return
 display_1://将位选切换到1
+    banksel PORTC
     movlw   0b1110
     movwf   digit_select
     //从display_data_decode中取出数据
     movf    display_data_decode, w
-    banksel PORTC
     movwf   PORTC
     movf    digit_select, w
     movwf   PORTA
     return
 display_2://将位选切换到2
+    banksel PORTC
     movlw   0b1101
     movwf   digit_select
     //从display_data_decode+1中取出数据
     movf    display_data_decode+1, w
-    banksel PORTC
     movwf   PORTC
     movf    digit_select, w
     movwf   PORTA
     return
 display_3://将位选切换到3
+    banksel PORTC
     movlw   0b1011
     movwf   digit_select
     //从display_data_decode+2中取出数据
     movf    display_data_decode+2, w
-    banksel PORTC
     movwf   PORTC
     movf    digit_select, w
     movwf   PORTA
     return
 display_4://将位选切换到4
+    banksel PORTC
     movlw   0b0111
     movwf   digit_select
     //从display_data_decode+3中取出数据
     movf    display_data_decode+3, w
-    banksel PORTC
     movwf   PORTC
     movf    digit_select, w
     movwf   PORTA
@@ -316,22 +316,22 @@ inner_loop:
 display_encode:
     ; 取出第一个字节
     movf    display_data, 0
-    call    display_encode_h
+    call    display_encode_h//TODO:计划移入bank0,如果移入,请检查这里
     movwf   display_data_decode
     
     ; 取出第二个字节
     movf    display_data + 1, 0
-    call    display_encode_h
+    call    display_encode_h//TODO:计划移入bank0,如果移入,请检查这里
     movwf   display_data_decode + 1
     
     ; 取出第三个字节
     movf    display_data + 2, 0
-    call    display_encode_h
+    call    display_encode_h//TODO:计划移入bank0,如果移入,请检查这里
     movwf   display_data_decode + 2
 display_encode_4:
     ; 取出第四个字节
     movf    display_data + 3, 0
-    call    display_encode_h
+    call    display_encode_h//TODO:计划移入bank0,如果移入,请检查这里
     movwf   display_data_decode + 3
     
     return
@@ -862,7 +862,7 @@ loop:
     //显示数据显示按下的键
     // 读入key_data
     movf key_data, 0
-    // 写入display_data+3
+    // 写入display_data+3//TODO:计划移入bank0,如果移入,请注意检查这里
     movwf display_data+3
     // 译码
     call display_encode_4
