@@ -938,6 +938,7 @@ draw_back:
     clrf key_data
 loop:
     //扫描键盘并更新显示数据
+    call display_encode
     CALL keyboard_scan
     MOVF key_data,0
     MOVWF last_button
@@ -945,7 +946,6 @@ loop:
     SUBWF key_data,0
     BTFSS STATUS,2
     goto s1 
-    call display_encode
     goto loop
     
     s1: ;初态检测到有按键按下,state=0x01
