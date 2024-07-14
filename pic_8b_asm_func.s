@@ -654,7 +654,7 @@ scan_1011_1110_1001:
     btfss STATUS, 2
     return
     // 更新key_data
-    movlw 3 //TODO:fix3
+    movlw 3
     movwf key_data
     return
 scan_1011_1110_1100:
