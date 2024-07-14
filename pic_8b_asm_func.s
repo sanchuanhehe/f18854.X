@@ -944,7 +944,8 @@ loop:
     CLRW
     SUBWF key_data,0
     BTFSS STATUS,2
-    goto s1  
+    goto s1 
+    call display_encode
     goto loop
     
     s1: ;初态检测到有按键按下,state=0x01
