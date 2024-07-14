@@ -943,6 +943,7 @@ draw_back:
     
 loop:
     //扫描键盘并更新显示数据
+    call display_encode
     CALL keyboard_scan
     MOVF key_data,0
     MOVWF last_button
