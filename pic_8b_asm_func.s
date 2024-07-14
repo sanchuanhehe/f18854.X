@@ -56,7 +56,11 @@ key_data: ds 1h
  */
 index: ds 1h
 index_1: ds 1h
+delay: ds 1h
+state: ds 1h
+last_button: ds 1h
 
+OPTION_NUM:ds 1h
 psect BANK0Var, class=BANK0, space=1, delta=1
 
 
@@ -66,6 +70,82 @@ intentry:
     call display_without_encode
     banksel PIR0
     bcf PIR0, 5
+    MOVLW 0x01
+    SUBWF state,0
+    BTFSS STATUS,2
+    goto if_state2
+    goto delay_5ms
+
+    if_state2:        ;用于判断是否为state2
+    MOVLW 0x02
+    SUBWF state,0
+    BTFSS STATUS,2
+    goto if_state3
+    goto delay_50ms
+    
+    if_state3:       ;用于判断是否为state3
+    MOVLW 0x03
+    SUBWF state,0
+    BTFSS STATUS,2
+    goto if_state4
+    goto delay_5ms
+    
+    if_state4:
+    MOVLW 0x04
+    SUBWF state,0
+    BTFSS STATUS,2
+    goto if_state5
+    goto delay_50ms
+    
+    if_state5:
+    MOVLW 0x05
+    SUBWF state,0
+    BTFSS STATUS,2
+    goto if_state7
+    goto delay_5ms
+
+    if_state7:
+    MOVLW 0x07
+    SUBWF state,0
+    BTFSS STATUS,2
+    goto theend
+    goto delay_5ms
+    
+    
+    delay_5ms:       ;用于延迟5ms
+    MOVLW 0x01
+    ADDWF delay,1
+    MOVLW 0x03	     ;用于判断是否为s3
+    SUBWF state,0
+    BTFSS STATUS,2
+    goto if_is_s5       ;用于判断是否为s5
+    goto delay_50ms
+    
+    if_is_s5:
+    MOVLW 0x05
+    SUBWF state,0
+    BTFSS STATUS,2
+    goto theend
+    goto delay_50ms
+    
+    delay_50ms:       ;每过1ms index_1++，每过50ms index++
+    MOVLW 00010111B
+    SUBWF index_1,0
+    BTFSS STATUS,2
+    goto not_50ms	    
+    goto is_50ms
+    not_50ms:
+    MOVLW 0x01
+    ADDWF index_1,1
+    goto theend
+    is_50ms:
+    CLRF index_1
+    MOVLW 0x01
+    ADDWF index,1
+    goto theend
+    
+ 
+    theend:
     retfie
 /**
  * @brief 宏定义数码管显示
@@ -858,15 +938,144 @@ draw_back:
     clrf key_data
 loop:
     //扫描键盘并更新显示数据
-    call keyboard_scan
-    //显示数据显示按下的键
-    // 读入key_data
-    movf key_data, 0
-    // 写入display_data+3//TODO:计划移入bank0,如果移入,请注意检查这里
-    movwf display_data+3
-    // 译码
-    call display_encode_4
+    CALL keyboard_scan
+    MOVF key_data,0
+    MOVWF last_button
+    CLRW
+    SUBWF key_data,0
+    BTFSS STATUS,2
+    goto s1  
     goto loop
+    
+    s1: ;初态检测到有按键按下,state=0x01
+    MOVLW 0x01
+    MOVWF state
+    MOVLW 0x05
+    SUBWF delay,0
+    BTFSS STATUS,0;判断延时是否达到5ms
+    goto s1       ;没有达到5ms
+    CALL keyboard_scan   ;达到5ms
+    MOVF key_data,0
+    SUBWF last_button,0  ;检测是否为同一个按键
+    BTFSS STATUS,2
+    goto loop
+    CLRF delay
+    CLRF index       ;用于计算有几个50ms
+    CLRF index_1     ;用于计算现在是多少ms（模五十）
+    goto s2
+    
+    s2: ;确认有按键按下，state=0x02
+    MOVLW 0x02
+    MOVWF state
+    MOVLW 00010011B   ;判断是否达到1s
+    SUBWF index,0
+    BTFSS STATUS,0
+    goto if_s3         ;没到1s去判断是否该进入s3
+    goto s8	       ;到了则去s8
+    
+    if_s3:	      ;判断是否为应该进入释放按钮检测
+    CALL keyboard_scan 
+    CLRW
+    SUBWF key_data,0   ;判断键盘是否没有按钮按下
+    BTFSS STATUS,2
+    goto s2            ;仍然按下则回到s2
+    goto s3		;否则去判断是否为一次有效的松开
+    
+    s3:			;用于检测按键是否松开
+    MOVLW 0x03
+    MOVWF state
+    MOVLW 0x05
+    SUBWF delay,0
+    BTFSS STATUS,0;判断延时是否达到5ms
+    goto s3       ;没有达到5ms
+    CALL keyboard_scan   ;达到5ms
+    CLRW
+    SUBWF key_data,0   ;判断键盘是否没有按钮按下
+    BTFSS STATUS,2
+    goto s2
+    CLRF delay       ;用于消抖
+    CLRF index       ;用于计算有几个50ms
+    CLRF index_1     ;用于计算现在是多少ms（模五十）
+    goto s4
+    
+    s4:			;按键确实松开
+    MOVLW 0x04
+    MOVWF state
+    MOVLW 00000001B  ;判断是否到达50ms
+    SUBWF index,0
+    BTFSS STATUS,0
+    goto if_s5       ;没有则去判断是否应该进入s5
+    MOVLW 0x00  ;执行单次按下程序,按键存储在last_button中
+    MOVWF OPTION_NUM
+    goto loop          ;回到初态
+    
+    if_s5:		;判断是否需要进入s5
+    CALL keyboard_scan
+    MOVF key_data,0
+    SUBWF last_button,0
+    BTFSS STATUS,2   ;检查与上次按下的是否相同
+    goto s4       
+    goto s5
+    
+    s5:                  ;检测是否短时间有第二次摁下
+    MOVLW 0x05
+    MOVWF state
+    MOVLW 0x05
+    SUBWF delay,0
+    BTFSS STATUS,0;判断延时是否达到5ms
+    goto s5       ;没有达到5ms
+    CALL keyboard_scan      ;达到5ms
+    MOVF key_data,0
+    SUBWF last_button,0
+    BTFSS STATUS,2   ;检查与上次按下的是否相同
+    goto s4
+    MOVLW 0x01  ;执行双击按下程序,按键存储在last_button中
+    MOVWF OPTION_NUM
+    CLRF delay       ;用于消抖
+    CLRF index       ;用于计算有几个50ms
+    CLRF index_1     ;用于计算现在是多少ms（模五十）
+    goto s6
+    
+    s6:                   ;确认为双击
+    MOVLW 0x06
+    MOVWF state
+    CALL keyboard_scan 
+    CLRW
+    SUBWF key_data,0   ;判断键盘是否没有按钮按下
+    BTFSS STATUS,2
+    goto s6
+    goto s7
+    
+    s7:			   ;
+    MOVLW 0x07
+    MOVWF state
+    MOVLW 0x05
+    SUBWF delay,0
+    BTFSS STATUS,0;判断延时是否达到5ms
+    goto s7       ;没有达到5ms
+    CALL keyboard_scan   ;达到5ms
+    CLRW
+    SUBWF key_data,0   ;判断键盘是否没有按钮按下
+    BTFSS STATUS,2
+    goto s6
+    goto loop
+    
+    s8:           ;确认为长摁
+    MOVLW 0x08
+    MOVWF state
+    MOVLW 0x02  ;执行程序,按键存储在last_button中
+    MOVWF OPTION_NUM
+    CLRF delay       ;用于消抖
+    CLRF index       ;用于计算有几个50ms
+    CLRF index_1     ;用于计算现在是多少ms（模五十）
+    wait:
+    CALL keyboard_scan 
+    CLRW
+    SUBWF key_data,0   ;判断键盘是否没有按钮按下
+    BTFSS STATUS,2
+    goto wait
+    goto s7
+
 psect draw_0, class=CODE, delta=2
 global draw_0
 draw_0:
