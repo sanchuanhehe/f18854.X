@@ -253,7 +253,7 @@ intentry:
  *  @param A, B, C, D 数据
  *  @details 将A, B, C, D分别写入display_data的第1, 2, 3, 4个字节
  */
-print0x MACRO param1,param2,param3,param4
+    print0x MACRO param1,param2,param3,param4
     ; 宏定义开始
     MOVLW param1
     MOVWF display_data
@@ -936,6 +936,11 @@ draw_back:
     print0x BLANK_DIS, BLANK_DIS, BLANK_DIS, BLANK_DIS
     // 清空key_data
     clrf key_data
+    CLRF display_data
+    CLRF display_data+1
+    CLRF display_data+2
+    CLRF display_data+3
+    
 loop:
     //扫描键盘并更新显示数据
     CALL keyboard_scan
@@ -944,13 +949,12 @@ loop:
     CLRW
     SUBWF key_data,0
     BTFSS STATUS,2
-    goto s1 
-    call display_encode
+    goto s1
     goto loop
     
     s1: ;初态检测到有按键按下,state=0x01
     MOVLW 0x01
-    MOVWF state
+    MOVWF state  
     MOVLW 0x05
     SUBWF delay,0
     BTFSS STATUS,0;判断延时是否达到5ms
@@ -1002,12 +1006,16 @@ loop:
     s4:			;按键确实松开
     MOVLW 0x04
     MOVWF state
-    MOVLW 00000001B  ;判断是否到达50ms
+    MOVLW 00010000B  ;判断是否到达0.8s
     SUBWF index,0
     BTFSS STATUS,0
     goto if_s5       ;没有则去判断是否应该进入s5
-    MOVLW 0x00  ;执行单次按下程序,按键存储在last_button中
-    MOVWF OPTION_NUM
+    
+    ;执行短按显示逻辑
+    MOVLW 0x01
+    ADDWF display_data,1
+    MOVF  last_button,0 
+    MOVWF display_data+3
     goto loop          ;回到初态
     
     if_s5:		;判断是否需要进入s5
@@ -1030,11 +1038,17 @@ loop:
     SUBWF last_button,0
     BTFSS STATUS,2   ;检查与上次按下的是否相同
     goto s4
-    MOVLW 0x01  ;执行双击按下程序,按键存储在last_button中
+    MOVLW 0x01	     ;执行双击按下程序,按键存储在last_button中
     MOVWF OPTION_NUM
     CLRF delay       ;用于消抖
     CLRF index       ;用于计算有几个50ms
     CLRF index_1     ;用于计算现在是多少ms（模五十）
+    ;执行双击逻辑
+    MOVLW 0x01
+    ADDWF display_data+1,1
+    MOVF  last_button,0
+    MOVWF display_data+3
+    CALL display_encode
     goto s6
     
     s6:                   ;确认为双击
@@ -1059,9 +1073,17 @@ loop:
     SUBWF key_data,0   ;判断键盘是否没有按钮按下
     BTFSS STATUS,2
     goto s6
+    
     goto loop
     
     s8:           ;确认为长摁
+    ;执行显示逻辑
+    MOVLW 0x01
+    ADDWF display_data+2,1
+    MOVF  last_button,0 
+    MOVWF display_data+3
+    CALL display_encode
+    
     MOVLW 0x08
     MOVWF state
     MOVLW 0x02  ;执行程序,按键存储在last_button中
