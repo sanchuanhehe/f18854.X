@@ -819,11 +819,6 @@ _main:
     MOVLW   0xff
     MOVWF   WPUB
     
-    ; /** 设置端脚复用*/
-    ; BANKSEL RB0PPS
-    ; MOVLW   0x18//TMR0=0x18
-    ; MOVWF   RB0PPS
-    
     MOVLW 0
     MOVWF index_1
     MOVWF index
