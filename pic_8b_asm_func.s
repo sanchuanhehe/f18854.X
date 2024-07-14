@@ -857,6 +857,7 @@ draw_back:
 loop:
     //扫描键盘并更新显示数据
     call keyboard_scan
+    //如果key_data不为0,则
     //显示数据显示按下的键
     // 读入key_data
     movf key_data, 0
