@@ -971,10 +971,10 @@ loop:
     s2: ;确认有按键按下，state=0x02
     MOVLW 0x02
     MOVWF state
-    MOVLW 00010011B   ;判断是否达到1s
+    MOVLW 00100110B   ;判断是否达到2s
     SUBWF index,0
     BTFSS STATUS,0
-    goto if_s3         ;没到1s去判断是否该进入s3
+    goto if_s3         ;没到2s去判断是否该进入s3
     goto s8	       ;到了则去s8
     
     if_s3:	      ;判断是否为应该进入释放按钮检测
@@ -1005,7 +1005,7 @@ loop:
     s4:			;按键确实松开
     MOVLW 0x04
     MOVWF state
-    MOVLW 00010000B  ;判断是否到达0.8s
+    MOVLW 00001000B  ;判断是否到达0.4s
     SUBWF index,0
     BTFSS STATUS,0
     goto if_s5       ;没有则去判断是否应该进入s5
