@@ -937,8 +937,6 @@ draw_back:
     // 打开全局中断
     BANKSEL INTCON
     BSF INTCON, 7
-
-    
 loop:
     //扫描键盘并更新显示数据
     call display_encode
