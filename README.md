@@ -45,3 +45,9 @@
 ## 利用逻辑分析仪快速调试,快速定位问题
 
 ![image-20240714222700827](./assets/image-20240714222700827.png)
+
+## 按键类型判断  
+
+![button_test](./assets/whiteboard_exported_image.png)
+
+使用状态机的办法在编程是能做到非常清晰。
