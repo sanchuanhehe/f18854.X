@@ -925,8 +925,6 @@ _main:
     bsf INTCON, 6
     ; goto draw_0
 draw_back:
-    banksel INTCON
-    bsf INTCON, 7
     //打开定时器
     banksel T0CON0
     bsf T0CON0, 7
@@ -936,10 +934,10 @@ draw_back:
     print0x BLANK_DIS, BLANK_DIS, BLANK_DIS, BLANK_DIS
     // 清空key_data
     clrf key_data
-    CLRF display_data
-    CLRF display_data+1
-    CLRF display_data+2
-    CLRF display_data+3
+    // 打开全局中断
+    BANKSEL INTCON
+    BSF INTCON, 7
+
     
 loop:
     //扫描键盘并更新显示数据
