@@ -67,20 +67,72 @@
 // #pragma config statements should precede project file includes.
 // Use project enums instead of #define for ON and OFF.
 
-#include <pic16f18854.h>
+#include "display.h"
 #include <xc.h>
 
+DisplayData display = {ZERO_DIS, ZERO_DIS, ZERO_DIS, ZERO_DIS, 0b1110};
+PDisplayData pDisplayData = &display;
+DisplayBuffer displayBuffer = {'0', '0', '0', '0'};
+PDisplayBuffer pDisplayBuffer = &displayBuffer;
+void __interrupt() ISR() {
+  if (TMR0IF) {
+    TMR0IF = 0;
+    // 切换位选信号和数码管显示
+    if (display.digit_select == 0b1110) {
+      display.digit_select = 0b1101;
+      PORTA = display.digit_select;
+      PORTC = display.digit2;
+    } else if (display.digit_select == 0b1101) {
+      display.digit_select = 0b1011;
+      PORTA = display.digit_select;
+      PORTC = display.digit3;
+    } else if (display.digit_select == 0b1011) {
+      display.digit_select = 0b0111;
+      PORTA = display.digit_select;
+      PORTC = display.digit4;
+    } else if (display.digit_select == 0b0111) {
+      display.digit_select = 0b1110;
+      PORTA = display.digit_select;
+      PORTC = display.digit1;
+    } else {
+      display.digit_select = 0b1110;
+      PORTA = display.digit_select;
+      PORTC = display.digit1;
+    }
+  }
+}
 // 闪灯实验
 
 void main(void) {
+  // 初始化IO口
   PORTB = 0x00;
-  LATB = 0x00;
+  LATB = 0x00; // 设置LATB寄存器的值为0x00
   ANSELB = 0x00;
-  TRISBbits.TRISB0 = 0;
-  RB0PPS = 0x18;       // TMR0=0x18
-  T0CON0 = 0b10001000; // T0CON0配置
-  T0CON1 = 0b01010110; // T0CON1配置
-  TMR0H = 216;
+  PORTC = 0x00;
+  LATC = 0x00;
+  ANSELC = 0x00;
+  PORTA = 0x00;
+  LATA = 0x00;
+  ANSELA = 0x00;
+  TRISA = 0xf0;
+  TRISB = 0x00;
+  TRISC = 0x00;
+  //   TRISBbits.TRISB0 = 0;
+  //   RB0PPS = 0x18;       // TMR0=0x18
+  T0CON0 = 0b10000100; // T0CON0配置
+  T0CON1 = 0b01010000; // T0CON1配置
+  TMR0H = 24;
+  // 启用PIE0寄存器中的TMR0IE中断使能位
+  PIE0bits.TMR0IE = 1;
+  // 启用INTCON寄存器中的PEIE位
+  INTCONbits.PEIE = 1;
+  // TODO:这里添加开机动画
+
+  // 启用INTCON寄存器中的GIE位
+  INTCONbits.GIE = 1;
+
+  displaychar(pDisplayData, "4.4.4.4");
+
   while (1) {
     // 主循环中可以执行其他任务
   }
