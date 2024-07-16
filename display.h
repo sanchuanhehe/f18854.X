@@ -141,5 +141,7 @@ unsigned char encode(char ch, _Bool with_dp);
 #define QUESTION_DIS_DP 0xD3
 #define EXCLAMATION_DIS 0x06
 #define EXCLAMATION_DIS_DP 0x86
+#define MINUS_DIS 0x40
+#define MINUS_DIS_DP 0xC0
 
 #endif

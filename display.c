@@ -101,6 +101,88 @@ unsigned char encode(char ch, _Bool with_dp) {
   case 'F':
   case 'f':
     return with_dp ? F_DIS_DP : F_DIS;
+  case 'G':
+  case 'g':
+    return with_dp ? G_DIS_DP : G_DIS;
+  case 'H':
+  case 'h':
+    return with_dp ? H_DIS_DP : H_DIS;
+  case 'I':
+  case 'i':
+    return with_dp ? I_DIS_DP : I_DIS;
+  case 'J':
+  case 'j':
+    return with_dp ? J_DIS_DP : J_DIS;
+  case 'K':
+  case 'k':
+    return with_dp ? K_DIS_DP : K_DIS;
+  case 'L':
+  case 'l':
+    return with_dp ? L_DIS_DP : L_DIS;
+  case 'M':
+  case 'm':
+    return with_dp ? M_DIS_DP : M_DIS;
+  case 'N':
+  case 'n':
+    return with_dp ? N_DIS_DP : N_DIS;
+  case 'O':
+  case 'o':
+    return with_dp ? O_DIS_DP : O_DIS;
+  case 'P':
+  case 'p':
+    return with_dp ? P_DIS : P_DIS;
+  case 'Q':
+  case 'q':
+    return with_dp ? Q_DIS : Q_DIS;
+  case 'R':
+  case 'r':
+    return with_dp ? R_DIS : R_DIS;
+  case 'S':
+  case 's':
+    return with_dp ? S_DIS : S_DIS;
+  case 'T':
+  case 't':
+    return with_dp ? T_DIS : T_DIS;
+  case 'U':
+  case 'u':
+    return with_dp ? U_DIS : U_DIS;
+  case 'V':
+  case 'v':
+    return with_dp ? V_DIS : V_DIS;
+  case 'W':
+  case 'w':
+    return with_dp ? W_DIS : W_DIS;
+  case 'X':
+  case 'x':
+    return with_dp ? X_DIS : X_DIS;
+  case 'Y':
+  case 'y':
+    return with_dp ? Y_DIS : Y_DIS;
+  case 'Z':
+  case 'z':
+    return with_dp ? Z_DIS : Z_DIS;
+  case '-':
+    return with_dp ? MINUS_DIS : MINUS_DIS;
+  case '_':
+    return with_dp ? UNDERLINE_DIS : UNDERLINE_DIS;
+  case '=':
+    return with_dp ? EQUAL_DIS : EQUAL_DIS;
+  case '+':
+    return with_dp ? PLUS_DIS : PLUS_DIS;
+  case '*':
+    return with_dp ? ASTERISK_DIS : ASTERISK_DIS;
+  case '/':
+    return with_dp ? SLASH_DIS : SLASH_DIS;
+  case '\\':
+    return with_dp ? BACKSLASH_DIS : BACKSLASH_DIS;
+  case '%':
+    return with_dp ? PERCENT_DIS : PERCENT_DIS;
+  case '<':
+    return with_dp ? LESS_DIS : LESS_DIS;
+  case '>':
+    return with_dp ? GREATER_DIS : GREATER_DIS;
+  case ' ':
+    return with_dp ? BLANK_DIS : BLANK_DIS;
   default:
     return 0x00; // 未知字符返回0
   }
