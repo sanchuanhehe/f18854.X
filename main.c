@@ -71,6 +71,8 @@
 #include "touch.h"
 #include <xc.h>
 
+#define _XTAL_FREQ 1000000UL  // 时钟频率是 1 MHz
+
 DisplayData display = {ZERO_DIS, ZERO_DIS, ZERO_DIS, ZERO_DIS, 0b1110};
 PDisplayData pDisplayData = &display;
 DisplayBuffer displayBuffer = {'0', '0', '0', '0'};
@@ -139,7 +141,13 @@ void main(void) {
   while (1) {
     uint16_t adc = readADC();
     splitVoltage(adc, &integerPart, &decimalPart);
-    displayformatted(pDisplayData, "%d.%d", integerPart, decimalPart);
+    displayformatted(pDisplayData, "%d.%03d", integerPart, decimalPart);
+
+    //延时,防止显示过快,导致无法看清,这里延时100ms
+    for (int i = 0; i < 200; i++) {
+      __delay_ms(1);
+    }
+
   }
   return;
 }

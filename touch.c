@@ -70,5 +70,5 @@ void splitVoltage(uint16_t voltage, uint8_t *integerPart, uint32_t *decimalPart)
 {
     voltage = ADC2VOLTAGE(voltage); // 将adc转换为电压
     *integerPart = (uint8_t)(voltage / 1024);    // 获取整数部分
-    *decimalPart = ((uint32_t)(voltage % 1024))*100000/1024;  // 获取小数部分
+    *decimalPart = ((uint32_t)(voltage % 1024))*1000/1024;  // 获取小数部分
 }
