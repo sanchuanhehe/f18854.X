@@ -35,6 +35,20 @@
 #define ANA5 0b000101
 #define ANA6 0b000110
 
+typedef void (*ButtonCallback)(void); // 定义回调函数类型
+
+typedef uint16_t (*ReadADCFunction)(uint8_t); // 定义读取ADC值的函数类型
+
+typedef struct {
+  uint8_t port; // ADC通道
+  uint16_t adcValue;
+  uint16_t threshold;
+  uint8_t isPressed;
+  ReadADCFunction readADC; // 读取ADC值的函数指针
+  ButtonCallback onPress;
+  ButtonCallback onRelease;
+} Button;
+
 /**
  * @brief 电压结构体
  *
@@ -80,5 +94,26 @@ uint16_t readADC_with_Port(uint8_t port);
  * @param uint32_t decimalPart 小数部分
  */
 void splitVoltage(uint16_t adcValue, Voltage *voltageStruct);
+
+/**
+ * @brief 初始化按键
+ *
+ * @param button
+ * @param port
+ * @param threshold
+ * @param readADC
+ * @param onPress
+ * @param onRelease
+ */
+void initButton(Button *button, uint8_t port, uint16_t threshold,
+                ReadADCFunction readADC, ButtonCallback onPress,
+                ButtonCallback onRelease);
+
+/**
+ * @brief 更新按键状态
+ *
+ * @param button 按键结构体指针
+ */
+void updateButtonState(Button *button);
 
 #endif // TOUCH_H

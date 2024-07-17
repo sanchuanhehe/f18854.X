@@ -84,27 +84,65 @@ void __interrupt() ISR() {
     if (display.digit_select == 0b1110) {
       display.digit_select = 0b1101;
       PORTA = display.digit_select;
+      PORTC = 0;
       PORTC = display.digit2;
     } else if (display.digit_select == 0b1101) {
       display.digit_select = 0b1011;
       PORTA = display.digit_select;
+      PORTC = 0;
       PORTC = display.digit3;
     } else if (display.digit_select == 0b1011) {
       display.digit_select = 0b0111;
       PORTA = display.digit_select;
+      PORTC = 0;
       PORTC = display.digit4;
     } else if (display.digit_select == 0b0111) {
       display.digit_select = 0b1110;
       PORTA = display.digit_select;
+      PORTC = 0;
       PORTC = display.digit1;
     } else {
       display.digit_select = 0b1110;
       PORTA = display.digit_select;
+      PORTC = 0;
       PORTC = display.digit1;
     }
   }
 }
 
+void onButtonPress4() {
+  // 按钮按下的行为
+  // static uint8_t i = 0;
+  // i++;
+  displayformatted(pDisplayData, "%d", 4);
+}
+
+void onButtonRelease4() {
+  // 按钮抬起的行为
+  displayformatted(pDisplayData, "%d", 1);
+}
+void onButtonPress5() {
+  // 按钮按下的行为
+  // static uint8_t i = 0;
+  // i++;
+  displayformatted(pDisplayData, "%02d", 5);
+}
+
+void onButtonRelease5() {
+  // 按钮抬起的行为
+  displayformatted(pDisplayData, "%02d", 1);
+}
+void onButtonPress6() {
+  // 按钮按下的行为
+  // static uint8_t i = 0;
+  // i++;
+  displayformatted(pDisplayData, "%03d", 6);
+}
+
+void onButtonRelease6() {
+  // 按钮抬起的行为
+  displayformatted(pDisplayData, "%03d", 1);
+}
 void main(void) {
   // 初始化IO口
   PORTB = 0x00;
@@ -137,14 +175,23 @@ void main(void) {
 
   init_ADC();
   //  创建A4-A6的电压结构体
-  Voltage voltageA4;
-  Voltage voltageA5;
-  Voltage voltageA6;
+  // Voltage voltageA4;
+  // Voltage voltageA5;
+  // Voltage voltageA6;
+  Button button4;
+  Button button5;
+  Button button6;
+  initButton(&button4, ANA4, 320, readADC_with_Port, onButtonPress4,
+             onButtonRelease4);
+  initButton(&button5, ANA5, 320, readADC_with_Port, onButtonPress5,
+             onButtonRelease5);
+  initButton(&button6, ANA6, 340, readADC_with_Port, onButtonPress6,
+             onButtonRelease6);
   while (1) {
-    uint16_t adc = readADC_with_Port(ANA4);
-    splitVoltage(adc, &voltageA4);
-    displayformatted(pDisplayData, "%d.%03d", voltageA4.integerPart,
-                     voltageA4.decimalPart);
+    updateButtonState(&button4);
+    updateButtonState(&button5);
+    updateButtonState(&button6);
+    // displayformatted(pDisplayData, "%d", button4.adcValue);
   }
   return;
 }
