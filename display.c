@@ -29,6 +29,9 @@
 #include <stdbool.h>
 #include <xc.h>
 #include <stdarg.h>
+#include <string.h>
+#include <stdio.h>
+
 /**
  * @brief 将字符串译码为数码管显示,并写入显存
  *
@@ -189,6 +192,41 @@ unsigned char encode(char ch, _Bool with_dp) {
 }
 
 
+void itoa(int value, char *str, int base) {
+    char *rc;
+    char *ptr;
+    char *low;
+
+    // Set 'ptr' to the end of the string
+    ptr = str;
+
+    // Set 'low' to the end of the string
+    low = ptr;
+
+    // Check for negative value and if so, set 'value' to its absolute value
+    if (value < 0 && base == 10) {
+        *ptr++ = '-';
+        value = -value;
+    }
+
+    // Process individual digits
+    do {
+        *ptr++ = "0123456789abcdef"[value % base];
+        value /= base;
+    } while (value);
+
+    // Terminate the string
+    *ptr-- = '\0';
+
+    // Reverse the digits
+    rc = low;
+    while (rc < ptr) {
+        char tmp = *rc;
+        *rc++ = *ptr;
+        *ptr-- = tmp;
+    }
+}
+
 /**
  * @brief 格式化字符串并显示到数码管
  * @param Display 显示数据结构体指针
@@ -196,10 +234,36 @@ unsigned char encode(char ch, _Bool with_dp) {
  * @param ... 可变参数
  */
 void displayformatted(PDisplayData Display, const char *format, ...) {
-    char buffer[16];  // 假设最大格式化字符串长度为16
+    char buffer[8];  // 最大格式化字符串长度为8
+    char *pbuffer = buffer;
+    const char *pformat = format;
     va_list args;
     va_start(args, format);
-    vsnprintf(buffer, sizeof(buffer), format, args);
+
+    while (*pformat != '\0' && (pbuffer - buffer) < sizeof(buffer) - 1) {
+        if (*pformat == '%') {
+            ++pformat;
+            if (*pformat == 'd') {
+                int val = va_arg(args, int);
+                char num_str[12];
+                itoa(val, num_str, 10);
+                size_t num_len = strlen(num_str);
+                if (num_len + (pbuffer - buffer) < sizeof(buffer) - 1) {
+                    strcpy(pbuffer, num_str);
+                    pbuffer += num_len;
+                } else {
+                    break; // 超出缓冲区长度，停止复制
+                }
+            }
+            // 添加更多格式处理如 %x, %f 等等
+        } else {
+            *pbuffer++ = *pformat;
+        }
+        ++pformat;
+    }
+    *pbuffer = '\0';
+
     va_end(args);
+
     displaychar(Display, buffer);
 }

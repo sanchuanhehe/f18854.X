@@ -35,10 +35,10 @@
  * ADCS<2:0> = 000000 (2.0 s),ADPCH<5:0> = 000110 = ANA6 ,000101 = ANA5
  * ,000100 = ANA4 ADPRE=1,ADDPOL=0
  */
-void initADC() {
-  ADCON0 = 0b11000101;
+void init_ADC() {
+  ADCON0 = 0b10000101;
   ADCON1 = 0b00000000; // TODO:bit5到bit0展示还要再看看
-  ADCON2 = 0b11001100;
+  ADCON2 = 0b11111100; //bit 6-4 ADCRS<2:0>,Low-pass filter time constant is 2ADCRS, filter gain is 1: 
   ADCON3 = 0b00100000;
   ADCLK = 0x00; // 设置时钟频率
   ADPCH = 0b00000100; // 设置通道
@@ -52,9 +52,23 @@ void initADC() {
  *
  * @return unsigned int
  */
-unsigned int readADC() {
+uint16_t readADC() {
   ADCON0bits.ADGO = 1;
   while (ADCON0bits.ADGO)
     ;
-  return ADRESH << 8 | ADRESL;
+  return (uint16_t)((((uint16_t)ADRESH) << 8) | ((uint16_t)ADRESL));
+}
+
+/**
+ * @brief 将电压分割为整数部分和小数部分
+ *
+ * @param uint16_t voltage 电压
+ * @param uint8_t integerPart 整数部分
+ * @param uint32_t decimalPart 小数部分
+ */
+void splitVoltage(uint16_t voltage, uint8_t *integerPart, uint32_t *decimalPart)
+{
+    voltage = ADC2VOLTAGE(voltage); // 将adc转换为电压
+    *integerPart = (uint8_t)(voltage / 1024);    // 获取整数部分
+    *decimalPart = ((uint32_t)(voltage % 1024))*100000/1024;  // 获取小数部分
 }

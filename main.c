@@ -68,6 +68,7 @@
 // Use project enums instead of #define for ON and OFF.
 
 #include "display.h"
+#include "touch.h"
 #include <xc.h>
 
 DisplayData display = {ZERO_DIS, ZERO_DIS, ZERO_DIS, ZERO_DIS, 0b1110};
@@ -102,7 +103,6 @@ void __interrupt() ISR() {
   }
 }
 
-
 void main(void) {
   // 初始化IO口
   PORTB = 0x00;
@@ -113,7 +113,7 @@ void main(void) {
   ANSELC = 0x00;
   PORTA = 0x00;
   LATA = 0x00;
-  ANSELA = 0x0f;// 设置ANSELA寄存器的值为0x0f,使得RA4-RA7为模拟输入
+  ANSELA = 0x0f; // 设置ANSELA寄存器的值为0x0f,使得RA4-RA7为模拟输入
   TRISA = 0xf0;
   TRISB = 0x00;
   TRISC = 0x00;
@@ -133,10 +133,13 @@ void main(void) {
 
   displaychar(pDisplayData, "12.3.4");
 
-  initADC();
-
+  init_ADC();
+  uint8_t integerPart;
+  uint32_t decimalPart;
   while (1) {
-    // 主循环中可以执行其他任务
+    uint16_t adc = readADC();
+    splitVoltage(adc, &integerPart, &decimalPart);
+    displayformatted(pDisplayData, "%d.%d", integerPart, decimalPart);
   }
   return;
 }
