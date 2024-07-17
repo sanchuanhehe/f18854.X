@@ -75,8 +75,8 @@ unsigned char encode(char ch, _Bool with_dp);
 #define D_DIS_DP 0xDE
 #define E_DIS_DP 0xF9
 #define F_DIS_DP 0xF1
-#define G_DIS 0x7D
-#define G_DIS_DP 0xFD
+#define G_DIS 0b00111101
+#define G_DIS_DP 0xBB
 #define H_DIS 0x76
 #define H_DIS_DP 0xF6
 #define I_DIS 0x06

@@ -131,7 +131,7 @@ void main(void) {
   // 启用INTCON寄存器中的GIE位
   INTCONbits.GIE = 1;
 
-  displaychar(pDisplayData, "4.4.4.4");
+  displaychar(pDisplayData, "12.3.4");
 
   while (1) {
     // 主循环中可以执行其他任务

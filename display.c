@@ -38,14 +38,14 @@
 void displaychar(PDisplayData Display, char *digit) {
   _Bool with_dp = false;
   size_t j = 0;
-  uint8_t *digits[4] = {&(Display->digit4), &(Display->digit3),
-                        &(Display->digit2), &(Display->digit1)};
+  uint8_t *digits[4] = {&(Display->digit1), &(Display->digit2),
+                        &(Display->digit3), &(Display->digit4)};
 
   for (size_t i = 0; digit[i] != '\0' && j < 4; i++) {
-    if (digit[i] == '.') {
+    if (digit[i + 1] == '.') {
       with_dp = true;
     } else {
-      *digits[j++] = encode(digit[i], with_dp);
+      *digits[j++] = encode(digit[i - with_dp], with_dp);
       with_dp = false;
     }
   }
