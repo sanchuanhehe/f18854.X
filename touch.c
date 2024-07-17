@@ -26,6 +26,7 @@
  */
 
 #include "touch.h"
+#include <stdint.h>
 #include <xc.h>
 
 /**
@@ -53,6 +54,18 @@ void init_ADC() {
  * @return unsigned int
  */
 uint16_t readADC() {
+  ADCON0bits.ADGO = 1;
+  while (ADCON0bits.ADGO)
+    ;
+  return (uint16_t)((((uint16_t)ADRESH) << 8) | ((uint16_t)ADRESL));
+}
+/**
+ * @brief 读取adc
+ *
+ * @return unsigned int
+ */
+uint16_t readADC_with_Port(uint8_t port) {
+  ADPCH = port;
   ADCON0bits.ADGO = 1;
   while (ADCON0bits.ADGO)
     ;

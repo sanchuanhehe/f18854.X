@@ -141,7 +141,7 @@ void main(void) {
   Voltage voltageA5;
   Voltage voltageA6;
   while (1) {
-    uint16_t adc = readADC();
+    uint16_t adc = readADC_with_Port(ANA4);
     splitVoltage(adc, &voltageA4);
     displayformatted(pDisplayData, "%d.%03d", voltageA4.integerPart,
                      voltageA4.decimalPart);

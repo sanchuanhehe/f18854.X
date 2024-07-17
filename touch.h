@@ -27,6 +27,13 @@
 #ifndef TOUCH_H
 #define TOUCH_H
 #include <stdint.h> // uint16_t
+/**
+ * @brief 000110 = ANA6 000101 = ANA5 000100 = ANA4
+ *
+ */
+#define ANA4 0b000100
+#define ANA5 0b000101
+#define ANA6 0b000110
 
 /**
  * @brief 电压结构体
@@ -53,6 +60,13 @@ void init_ADC();
 uint16_t readADC();
 
 /**
+ * @brief 读取adc,并指定端口
+ *
+ * @return unsigned int
+ */
+uint16_t readADC_with_Port(uint8_t port);
+
+/**
  * @brief 将adres转换成电压(单位:V),后10位为小数,前6位为整数
  *
  */
@@ -66,6 +80,5 @@ uint16_t readADC();
  * @param uint32_t decimalPart 小数部分
  */
 void splitVoltage(uint16_t adcValue, Voltage *voltageStruct);
-
 
 #endif // TOUCH_H
