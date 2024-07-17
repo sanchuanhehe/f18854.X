@@ -63,12 +63,11 @@ uint16_t readADC() {
  * @brief 将电压分割为整数部分和小数部分
  *
  * @param uint16_t voltage 电压
- * @param uint8_t integerPart 整数部分
- * @param uint32_t decimalPart 小数部分
+ * @param Voltage *voltageStruct 指向 Voltage 结构体的指针
  */
-void splitVoltage(uint16_t voltage, uint8_t *integerPart, uint32_t *decimalPart)
+void splitVoltage(uint16_t adcValue, Voltage *voltageStruct)
 {
-    voltage = ADC2VOLTAGE(voltage); // 将adc转换为电压
-    *integerPart = (uint8_t)(voltage / 1024);    // 获取整数部分
-    *decimalPart = ((uint32_t)(voltage % 1024))*1000/1024;  // 获取小数部分
+    uint16_t voltage = ADC2VOLTAGE(adcValue); // 将adc转换为电压
+    voltageStruct->integerPart = (uint8_t)(voltage / 1024);    // 获取整数部分
+    voltageStruct->decimalPart = ((uint32_t)(voltage % 1024))*1000/1024;  // 获取小数部分
 }

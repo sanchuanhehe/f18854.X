@@ -29,6 +29,17 @@
 #include <stdint.h> // uint16_t
 
 /**
+ * @brief 电压结构体
+ *
+ * @param integerPart 整数部分
+ * @param decimalPart 小数部分
+ */
+typedef struct {
+  uint8_t integerPart;
+  uint32_t decimalPart;
+} Voltage;
+
+/**
  * @brief 初始化adc
  *
  */
@@ -54,6 +65,7 @@ uint16_t readADC();
  * @param uint8_t integerPart 整数部分
  * @param uint32_t decimalPart 小数部分
  */
-void splitVoltage(uint16_t voltage, uint8_t *integerPart,
-                  uint32_t *decimalPart);
+void splitVoltage(uint16_t adcValue, Voltage *voltageStruct);
+
+
 #endif // TOUCH_H
