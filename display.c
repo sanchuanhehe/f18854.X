@@ -28,7 +28,7 @@
 #include "display.h"
 #include <stdbool.h>
 #include <xc.h>
-
+#include <stdarg.h>
 /**
  * @brief 将字符串译码为数码管显示,并写入显存
  *
@@ -186,4 +186,20 @@ unsigned char encode(char ch, _Bool with_dp) {
   default:
     return 0x00; // 未知字符返回0
   }
+}
+
+
+/**
+ * @brief 格式化字符串并显示到数码管
+ * @param Display 显示数据结构体指针
+ * @param format 格式化字符串
+ * @param ... 可变参数
+ */
+void displayformatted(PDisplayData Display, const char *format, ...) {
+    char buffer[16];  // 假设最大格式化字符串长度为16
+    va_list args;
+    va_start(args, format);
+    vsnprintf(buffer, sizeof(buffer), format, args);
+    va_end(args);
+    displaychar(Display, buffer);
 }

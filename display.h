@@ -43,6 +43,14 @@ void displaychar(PDisplayData Display, char *digit);
  */
 unsigned char encode(char ch, _Bool with_dp);
 
+/**
+ * @brief 格式化字符串并显示到数码管
+ * @param Display 显示数据结构体指针
+ * @param format 格式化字符串
+ * @param ... 可变参数
+ */
+void displayformatted(PDisplayData Display, const char *format, ...);
+
 #define ZERO_DIS 0x3F
 #define ONE_DIS 0x06
 #define TWO_DIS 0x5B

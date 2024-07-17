@@ -101,7 +101,7 @@ void __interrupt() ISR() {
     }
   }
 }
-// 闪灯实验
+
 
 void main(void) {
   // 初始化IO口
@@ -113,7 +113,7 @@ void main(void) {
   ANSELC = 0x00;
   PORTA = 0x00;
   LATA = 0x00;
-  ANSELA = 0x00;
+  ANSELA = 0x0f;// 设置ANSELA寄存器的值为0x0f,使得RA4-RA7为模拟输入
   TRISA = 0xf0;
   TRISB = 0x00;
   TRISC = 0x00;
@@ -132,6 +132,8 @@ void main(void) {
   INTCONbits.GIE = 1;
 
   displaychar(pDisplayData, "12.3.4");
+
+  initADC();
 
   while (1) {
     // 主循环中可以执行其他任务

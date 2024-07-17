@@ -27,6 +27,22 @@
 #ifndef TOUCH_H
 #define TOUCH_H
 
+/**
+ * @brief 初始化adc
+ * 
+ */
+void initADC();
 
+/**
+ * @brief 读取adc
+ * 
+ * @return unsigned int 
+ */
+unsigned int readADC();
+
+/**
+ * @brief 初始化touch,
+ * 
+ */
 
 #endif // TOUCH_H
