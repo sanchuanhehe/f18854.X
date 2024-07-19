@@ -114,7 +114,11 @@ void __interrupt() ISR() {
       PORTC = display.digit1;
     }
   }
-  
+  if (PIR3bits.RCIF) {
+    PIR3bits.RCIF = 0;
+    eusart_rx_func();
+    // TODO:这里添加串口接收中断处理,操作
+  }
 }
 
 void onButtonPress4() {
