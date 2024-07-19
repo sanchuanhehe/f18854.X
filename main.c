@@ -127,11 +127,11 @@ void __interrupt() ISR() {
     }
     eusart_receive_buffer = 0;
     displaygame(pDisplayData, pBulletGame);
-    eusart_tx_func(&(display.digit1));
-    eusart_tx_func(&(display.digit2));
-    eusart_tx_func(&(display.digit3));
-    eusart_tx_func(&(display.digit4));
-    eusart_tx_func(&carriage_return);
+    // eusart_tx_func(&(display.digit1));
+    // eusart_tx_func(&(display.digit2));
+    // eusart_tx_func(&(display.digit3));
+    // eusart_tx_func(&(display.digit4));
+    // eusart_tx_func(&carriage_return);
   }
 }
 
