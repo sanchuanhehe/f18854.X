@@ -146,7 +146,7 @@ void onButtonRelease4() {
   // 按钮抬起的行为
   // move_bullet(pBulletGame, 1);
   pBulletGame->bullet_position = (pBulletGame->bullet_position++) % 5;
-  pBulletGame->man_position = (pBulletGame->man_position++) % 5;
+  // pBulletGame->man_position = (pBulletGame->man_position++) % 5;
   displaygame(pDisplayData, pBulletGame);
 }
 void onButtonPress5() {
@@ -171,7 +171,7 @@ void onButtonRelease6() {
   // 按钮抬起的行为
   // move_bullet(pBulletGame, -1);
   pBulletGame->bullet_position = (pBulletGame->bullet_position--) % 5;
-  pBulletGame->man_position = (pBulletGame->man_position--) % 5;
+  // pBulletGame->man_position = (pBulletGame->man_position--) % 5;
   displaygame(pDisplayData, pBulletGame);
 }
 void main(void) {
