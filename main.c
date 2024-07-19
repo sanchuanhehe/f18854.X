@@ -133,10 +133,7 @@ void __interrupt() ISR() {
   }
 }
 void onButtonPress4() {
-  // 按钮按下的行为
-  // static uint8_t i = 0;
-  // i++;
-  // displayformatted(pDisplayData, "%d", 4);
+
 }
 
 void onButtonRelease4() {
@@ -144,7 +141,7 @@ void onButtonRelease4() {
   // move_bullet(pBulletGame, 1);
   pBulletGame->bullet_position = (pBulletGame->bullet_position++) % 5;
   // pBulletGame->man_position = (pBulletGame->man_position++) % 5;
-  // displaygame(pDisplayData, pBulletGame);
+  displaygame(pDisplayData, pBulletGame);
   // eusart_tx_func(&(display.digit1));
   // eusart_tx_func(&(display.digit2));
   // eusart_tx_func(&(display.digit3));
