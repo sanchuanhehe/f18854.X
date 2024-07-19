@@ -68,6 +68,7 @@
 // Use project enums instead of #define for ON and OFF.
 
 #include "display.h"
+#include "eusart.h"
 #include "game.h"
 #include "touch.h"
 #include <stdint.h>
@@ -82,6 +83,7 @@ PDisplayBuffer pDisplayBuffer = &displayBuffer;
 BulletGame bulletGame = {0, 0, 0, 0};
 BulletGamePtr pBulletGame = &bulletGame;
 uint8_t COUNT16 = 0;
+uint8_t carriage_return = '\r';
 void __interrupt() ISR() {
   if (TMR0IF) {
     TMR0IF = 0;
@@ -112,6 +114,24 @@ void __interrupt() ISR() {
       PORTC = 0;
       PORTC = display.digit1;
     }
+  } else if (PIR3bits.RCIF) {
+    // PIR3bits.RCIF = 0;
+    eusart_rx_func();
+    // // TODO:这里添加串口接收中断处理,操作
+    if (eusart_receive_buffer == '1') {
+      pBulletGame->man_position = (pBulletGame->man_position++) % 5;
+      eusart_receive_buffer = 0;
+    } else if (eusart_receive_buffer == '2') {
+      pBulletGame->man_position = (pBulletGame->man_position--) % 5;
+      eusart_receive_buffer = 0;
+    }
+    eusart_receive_buffer = 0;
+    displaygame(pDisplayData, pBulletGame);
+    eusart_tx_func(&(display.digit1));
+    eusart_tx_func(&(display.digit2));
+    eusart_tx_func(&(display.digit3));
+    eusart_tx_func(&(display.digit4));
+    eusart_tx_func(&carriage_return);
   }
 }
 
@@ -179,14 +199,12 @@ void main(void) {
   INTCONbits.PEIE = 1;
   // TODO:这里添加开机动画
 
-  // 启用INTCON寄存器中的GIE位
-  INTCONbits.GIE = 1;
-
   // displaychar(pDisplayData, "0000");
   init_game(pBulletGame);
 
   init_ADC();
 
+  init_eusart_func();
   Button button4;
   Button button5;
   Button button6;
@@ -196,6 +214,8 @@ void main(void) {
              onButtonRelease5);
   initButton(&button6, ANA6, 340, readADC_with_Port, onButtonPress6,
              onButtonRelease6);
+  // 启用INTCON寄存器中的GIE位
+  INTCONbits.GIE = 1;
   while (1) {
     updateButtonState(&button4);
     updateButtonState(&button5);
