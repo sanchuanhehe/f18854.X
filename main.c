@@ -70,6 +70,8 @@
 #include "display.h"
 #include "touch.h"
 #include <xc.h>
+#include <stdint.h>
+#include "game.h"
 
 #define _XTAL_FREQ 1000000UL // 时钟频率是 1 MHz
 
@@ -77,6 +79,9 @@ DisplayData display = {ZERO_DIS, ZERO_DIS, ZERO_DIS, ZERO_DIS, 0b1110};
 PDisplayData pDisplayData = &display;
 DisplayBuffer displayBuffer = {'0', '0', '0', '0'};
 PDisplayBuffer pDisplayBuffer = &displayBuffer;
+BulletGame bulletGame = {0, 0, 0, 0};
+BulletGamePtr pBulletGame = &bulletGame;
+uint16_t COUNT16 = 0;
 void __interrupt() ISR() {
   if (TMR0IF) {
     TMR0IF = 0;
@@ -108,40 +113,50 @@ void __interrupt() ISR() {
       PORTC = display.digit1;
     }
   }
+  COUNT16 ++;
+  if(COUNT16 == 1000){
+    COUNT16 = 0;
+    // update_game(pBulletGame);
+    displaygame(pDisplayData, pBulletGame);
+  }
 }
 
 void onButtonPress4() {
   // 按钮按下的行为
   // static uint8_t i = 0;
   // i++;
-  displayformatted(pDisplayData, "%d", 4);
+  // displayformatted(pDisplayData, "%d", 4);
 }
 
 void onButtonRelease4() {
   // 按钮抬起的行为
-  displayformatted(pDisplayData, "%d", 1);
+  move_bullet(pBulletGame, 1);
+  move_man(pBulletGame, 1);
+  displaygame(pDisplayData, pBulletGame);
 }
 void onButtonPress5() {
   // 按钮按下的行为
   // static uint8_t i = 0;
   // i++;
-  displayformatted(pDisplayData, "%02d", 5);
+  // displayformatted(pDisplayData, "%02d", 5);
 }
 
 void onButtonRelease5() {
   // 按钮抬起的行为
-  displayformatted(pDisplayData, "%02d", 1);
+  // displayformatted(pDisplayData, "%02d", 1);
 }
 void onButtonPress6() {
   // 按钮按下的行为
   // static uint8_t i = 0;
   // i++;
-  displayformatted(pDisplayData, "%03d", 6);
+  // displayformatted(pDisplayData, "%03d", 6);
 }
 
 void onButtonRelease6() {
   // 按钮抬起的行为
-  displayformatted(pDisplayData, "%03d", 1);
+  move_bullet(pBulletGame, -1);
+  move_man(pBulletGame, -1);
+  displaygame(pDisplayData, pBulletGame);
 }
 void main(void) {
   // 初始化IO口
@@ -171,7 +186,8 @@ void main(void) {
   // 启用INTCON寄存器中的GIE位
   INTCONbits.GIE = 1;
 
-  displaychar(pDisplayData, "12.3.4");
+  displaychar(pDisplayData, "0000");
+  init_game(pBulletGame);
 
   init_ADC();
   //  创建A4-A6的电压结构体
@@ -191,7 +207,6 @@ void main(void) {
     updateButtonState(&button4);
     updateButtonState(&button5);
     updateButtonState(&button6);
-    // displayformatted(pDisplayData, "%d", button4.adcValue);
   }
   return;
 }
