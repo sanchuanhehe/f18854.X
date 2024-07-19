@@ -83,6 +83,7 @@ PDisplayBuffer pDisplayBuffer = &displayBuffer;
 BulletGame bulletGame = {0, 0, 0, 0};
 BulletGamePtr pBulletGame = &bulletGame;
 uint8_t COUNT16 = 0;
+uint8_t carriage_return = '\r';
 void __interrupt() ISR() {
   if (TMR0IF) {
     TMR0IF = 0;
@@ -123,6 +124,12 @@ void __interrupt() ISR() {
     } else if (eusart_receive_buffer == '2') {
       pBulletGame->man_position = (pBulletGame->man_position--) % 5;
     }
+    displaygame(pDisplayData, pBulletGame);
+    eusart_tx_func(&(display.digit1));
+    eusart_tx_func(&(display.digit2));
+    eusart_tx_func(&(display.digit3));
+    eusart_tx_func(&(display.digit4));
+    eusart_tx_func(&carriage_return);
   }
 }
 void onButtonPress4() {
@@ -138,6 +145,11 @@ void onButtonRelease4() {
   pBulletGame->bullet_position = (pBulletGame->bullet_position++) % 5;
   // pBulletGame->man_position = (pBulletGame->man_position++) % 5;
   displaygame(pDisplayData, pBulletGame);
+  eusart_tx_func(&(display.digit1));
+  eusart_tx_func(&(display.digit2));
+  eusart_tx_func(&(display.digit3));
+  eusart_tx_func(&(display.digit4));
+  eusart_tx_func(&carriage_return);
 }
 void onButtonPress5() {
   // 按钮按下的行为
@@ -156,13 +168,18 @@ void onButtonPress6() {
   // i++;
   // displayformatted(pDisplayData, "%03d", 6);
 }
-uint8_t carriage_return = '\r';
+
 void onButtonRelease6() {
   // 按钮抬起的行为
   // move_bullet(pBulletGame, -1);
   pBulletGame->bullet_position = (pBulletGame->bullet_position--) % 5;
   // pBulletGame->man_position = (pBulletGame->man_position--) % 5;
   displaygame(pDisplayData, pBulletGame);
+  eusart_tx_func(&(display.digit1));
+  eusart_tx_func(&(display.digit2));
+  eusart_tx_func(&(display.digit3));
+  eusart_tx_func(&(display.digit4));
+  eusart_tx_func(&carriage_return);
 }
 void main(void) {
   // 初始化IO口
@@ -218,11 +235,6 @@ void main(void) {
       update_game(pBulletGame);
       displaygame(pDisplayData, pBulletGame);
     }
-    eusart_tx_func(&(display.digit1));
-    eusart_tx_func(&(display.digit2));
-    eusart_tx_func(&(display.digit3));
-    eusart_tx_func(&(display.digit4));
-    eusart_tx_func(&carriage_return);
   }
   return;
 }
