@@ -111,6 +111,7 @@ void __interrupt() ISR() {
   if (PIR3bits.RCIF){
         PIR3bits.RCIF = 0;
         eusart_rx_func();
+        char encode(eusart_receive_buffer,1) 
   }
 }
 
@@ -195,6 +196,7 @@ void main(void) {
     updateButtonState(&button4);
     updateButtonState(&button5);
     updateButtonState(&button6);
+    eusart_tx_func(0x01);
     // displayformatted(pDisplayData, "%d", button4.adcValue);
   }
   return;
