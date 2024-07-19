@@ -118,9 +118,13 @@ void __interrupt() ISR() {
     PIR3bits.RCIF = 0;
     eusart_rx_func();
     // TODO:这里添加串口接收中断处理,操作
+    if (eusart_receive_buffer == '1') {
+      pBulletGame->man_position = (pBulletGame->man_position++) % 5;
+    } else if (eusart_receive_buffer == '2') {
+      pBulletGame->man_position = (pBulletGame->man_position--) % 5;
+    }
   }
 }
-
 void onButtonPress4() {
   // 按钮按下的行为
   // static uint8_t i = 0;
@@ -132,7 +136,7 @@ void onButtonRelease4() {
   // 按钮抬起的行为
   // move_bullet(pBulletGame, 1);
   pBulletGame->bullet_position = (pBulletGame->bullet_position++) % 5;
-  pBulletGame->man_position = (pBulletGame->man_position++) % 5;
+  // pBulletGame->man_position = (pBulletGame->man_position++) % 5;
   displaygame(pDisplayData, pBulletGame);
 }
 void onButtonPress5() {
@@ -157,7 +161,7 @@ void onButtonRelease6() {
   // 按钮抬起的行为
   // move_bullet(pBulletGame, -1);
   pBulletGame->bullet_position = (pBulletGame->bullet_position--) % 5;
-  pBulletGame->man_position = (pBulletGame->man_position--) % 5;
+  // pBulletGame->man_position = (pBulletGame->man_position--) % 5;
   displaygame(pDisplayData, pBulletGame);
 }
 void main(void) {
