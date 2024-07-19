@@ -72,7 +72,7 @@
 #include <xc.h>
 
 #define _XTAL_FREQ 1000000UL // 时钟频率是 1 MHz
-
+extern char eusart_receive_buffer;
 DisplayData display = {ZERO_DIS, ZERO_DIS, ZERO_DIS, ZERO_DIS, 0b1110};
 PDisplayData pDisplayData = &display;
 DisplayBuffer displayBuffer = {'0', '0', '0', '0'};
@@ -111,7 +111,7 @@ void __interrupt() ISR() {
   if (PIR3bits.RCIF){
         PIR3bits.RCIF = 0;
         eusart_rx_func();
-        char encode(eusart_receive_buffer,1) 
+        displaychar(display,&eusart_receive_buffer);
   }
 }
 
@@ -193,10 +193,13 @@ void main(void) {
   initButton(&button6, ANA6, 340, readADC_with_Port, onButtonPress6,
              onButtonRelease6);
   while (1) {
-    updateButtonState(&button4);
-    updateButtonState(&button5);
-    updateButtonState(&button6);
+    //updateButtonState(&button4);
+    //updateButtonState(&button5);
+    //updateButtonState(&button6);
     eusart_tx_func(0x01);
+    eusart_tx_func(0x02);
+    eusart_tx_func(0x03);
+    eusart_tx_func('\r');
     // displayformatted(pDisplayData, "%d", button4.adcValue);
   }
   return;
