@@ -156,7 +156,7 @@ void onButtonPress6() {
   // i++;
   // displayformatted(pDisplayData, "%03d", 6);
 }
-
+uint8_t carriage_return = '\r';
 void onButtonRelease6() {
   // 按钮抬起的行为
   // move_bullet(pBulletGame, -1);
@@ -218,11 +218,11 @@ void main(void) {
       update_game(pBulletGame);
       displaygame(pDisplayData, pBulletGame);
     }
-    eusart_tx_func(&display->digit1);
-    eusart_tx_func(&display->digit2);
-    eusart_tx_func(&display->digit3);
-    eusart_tx_func(&display->digit4);
-    eusart_rx_func("\r");
+    eusart_tx_func(&(display.digit1));
+    eusart_tx_func(&(display.digit2));
+    eusart_tx_func(&(display.digit3));
+    eusart_tx_func(&(display.digit4));
+    eusart_tx_func(&carriage_return);
   }
   return;
 }

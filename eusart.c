@@ -1,6 +1,6 @@
 #include "eusart.h"
 
-unint8_t eusart_receive_buffer;
+uint8_t eusart_receive_buffer;
 
 void init_eusart_func() {
   TRISBbits.TRISB6 = 0;
