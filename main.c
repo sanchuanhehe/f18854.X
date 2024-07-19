@@ -68,10 +68,11 @@
 // Use project enums instead of #define for ON and OFF.
 
 #include "display.h"
-#include "touch.h"
-#include <xc.h>
-#include <stdint.h>
 #include "game.h"
+#include "touch.h"
+#include <stdint.h>
+#include <xc.h>
+
 
 #define _XTAL_FREQ 1000000UL // 时钟频率是 1 MHz
 
@@ -113,8 +114,8 @@ void __interrupt() ISR() {
       PORTC = display.digit1;
     }
   }
-  COUNT16 ++;
-  if(COUNT16 == 1000){
+  COUNT16++;
+  if (COUNT16 == 1000) {
     COUNT16 = 0;
     // update_game(pBulletGame);
     displaygame(pDisplayData, pBulletGame);
@@ -130,8 +131,9 @@ void onButtonPress4() {
 
 void onButtonRelease4() {
   // 按钮抬起的行为
-  move_bullet(pBulletGame, 1);
-  move_man(pBulletGame, 1);
+  // move_bullet(pBulletGame, 1);
+  pBulletGame->bullet_position++;
+  pBulletGame->man_position++;
   displaygame(pDisplayData, pBulletGame);
 }
 void onButtonPress5() {
@@ -154,8 +156,9 @@ void onButtonPress6() {
 
 void onButtonRelease6() {
   // 按钮抬起的行为
-  move_bullet(pBulletGame, -1);
-  move_man(pBulletGame, -1);
+  // move_bullet(pBulletGame, -1);
+  pBulletGame->bullet_position--;
+  pBulletGame->man_position--;
   displaygame(pDisplayData, pBulletGame);
 }
 void main(void) {
@@ -186,14 +189,11 @@ void main(void) {
   // 启用INTCON寄存器中的GIE位
   INTCONbits.GIE = 1;
 
-  displaychar(pDisplayData, "0000");
+  // displaychar(pDisplayData, "0000");
   init_game(pBulletGame);
 
   init_ADC();
-  //  创建A4-A6的电压结构体
-  // Voltage voltageA4;
-  // Voltage voltageA5;
-  // Voltage voltageA6;
+
   Button button4;
   Button button5;
   Button button6;

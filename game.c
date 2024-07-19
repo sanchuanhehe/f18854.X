@@ -29,7 +29,7 @@ void update_game(BulletGamePtr game) {
  * @brief bullet_position++,--操作
  *
  */
-void move_bullet(BulletGamePtr game, int8_t direction) {
+void move_bullet(BulletGamePtr game, uint8_t direction) {
   game->bullet_position = (game->bullet_position + direction) % 5;
 }
 
@@ -37,7 +37,7 @@ void move_bullet(BulletGamePtr game, int8_t direction) {
  * @brief man_position++,--操作
  *
  */
-void move_man(BulletGamePtr game, int8_t direction) {
+void move_man(BulletGamePtr game, uint8_t direction) {
   game->man_position = (game->man_position + direction) % 5;
 }
 

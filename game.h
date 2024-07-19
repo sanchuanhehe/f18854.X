@@ -39,13 +39,13 @@ void update_game(BulletGamePtr game);
  * @brief bullet_position++,--操作
  *
  */
-void move_bullet(BulletGamePtr game, int8_t direction);
+void move_bullet(BulletGamePtr game, uint8_t direction);
 
 /**
  * @brief man_position++,--操作
  *
  */
-void move_man(BulletGamePtr game, int8_t direction);
+void move_man(BulletGamePtr game, uint8_t direction);
 
 /**
  * @brief 将game译码为数码管显示,并写入显存
