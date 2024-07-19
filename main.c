@@ -10,6 +10,7 @@
 // 'C' source line config statements
 
 // CONFIG1
+#include "eusart.h"
 #pragma config FEXTOSC =                                                       \
     OFF // External Oscillator mode selection bits (Oscillator not enabled)
 #pragma config RSTOSC =                                                        \
@@ -113,6 +114,7 @@ void __interrupt() ISR() {
       PORTC = display.digit1;
     }
   }
+  
 }
 
 void onButtonPress4() {
@@ -187,6 +189,8 @@ void main(void) {
 
   init_ADC();
 
+  init_eusart_func();
+
   Button button4;
   Button button5;
   Button button6;
@@ -206,6 +210,11 @@ void main(void) {
       update_game(pBulletGame);
       displaygame(pDisplayData, pBulletGame);
     }
+    eusart_tx_func(&display->digit1);
+    eusart_tx_func(&display->digit2);
+    eusart_tx_func(&display->digit3);
+    eusart_tx_func(&display->digit4);
+    eusart_rx_func("\r");
   }
   return;
 }
