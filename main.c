@@ -74,6 +74,8 @@
 #include <stdint.h>
 #include <xc.h>
 
+#define node1
+
 #define _XTAL_FREQ 1000000UL // 时钟频率是 1 MHz
 
 DisplayData display = {ZERO_DIS, ZERO_DIS, ZERO_DIS, ZERO_DIS, 0b1110};
@@ -125,16 +127,24 @@ void __interrupt() ISR() {
       pBulletGame->man_position = (pBulletGame->man_position--) % 5;
       eusart_receive_buffer = 0;
     }
-    eusart_receive_buffer = 0;
+    else if (eusart_receive_buffer == '3') {
+      pBulletGame->bullet_position = (pBulletGame->bullet_position--) % 5;
+    } else if (eusart_receive_buffer == '4') {
+      pBulletGame->bullet_position = (pBulletGame->bullet_position++) % 5;
+    }
     displaygame(pDisplayData, pBulletGame);
-    eusart_tx_func(&(display.digit1));
-    eusart_tx_func(&(display.digit2));
-    eusart_tx_func(&(display.digit3));
-    eusart_tx_func(&(display.digit4));
-    while (!TX1STAbits.TRMT)
-      ;
-    // write data
-    TXREG = '\r';
+    eusart_receive_buffer = 0;
+// #ifdef node1
+//     displaygame(pDisplayData, pBulletGame);
+//     eusart_tx_func(&(display.digit1));
+//     eusart_tx_func(&(display.digit2));
+//     eusart_tx_func(&(display.digit3));
+//     eusart_tx_func(&(display.digit4));
+//     while (!TX1STAbits.TRMT)
+//       ;
+//     // write data
+//     TXREG = '\r';
+// #endif
   }
 }
 
@@ -147,18 +157,29 @@ void onButtonPress4() {
 
 void onButtonRelease4() {
   // 按钮抬起的行为
-  // move_bullet(pBulletGame, 1);
+#ifdef node1
+  pBulletGame->man_position = (pBulletGame->man_position++) % 5;
+  // eusart_tx_func(&(display.digit1));
+  // eusart_tx_func(&(display.digit2));
+  // eusart_tx_func(&(display.digit3));
+  // eusart_tx_func(&(display.digit4));
+  while (!TX1STAbits.TRMT)
+    ;
+  // write data
+  TXREG = '1';
+#endif
+#ifdef node2
   pBulletGame->bullet_position = (pBulletGame->bullet_position++) % 5;
-  // pBulletGame->man_position = (pBulletGame->man_position++) % 5;
-  displaygame(pDisplayData, pBulletGame);
-  eusart_tx_func(&(display.digit1));
-  eusart_tx_func(&(display.digit2));
-  eusart_tx_func(&(display.digit3));
-  eusart_tx_func(&(display.digit4));
+  while (!TX1STAbits.TRMT)
+    ;
+  // write data
+  TXREG = '4';
+#endif
   while (!TX1STAbits.TRMT)
     ;
   // write data
   TXREG = '\r';
+  displaygame(pDisplayData, pBulletGame);
 }
 void onButtonPress5() {
   // 按钮按下的行为
@@ -184,14 +205,25 @@ void onButtonRelease6() {
   pBulletGame->bullet_position = (pBulletGame->bullet_position--) % 5;
   // pBulletGame->man_position = (pBulletGame->man_position--) % 5;
   displaygame(pDisplayData, pBulletGame);
-  eusart_tx_func(&(display.digit1));
-  eusart_tx_func(&(display.digit2));
-  eusart_tx_func(&(display.digit3));
-  eusart_tx_func(&(display.digit4));
+#ifdef node1
+  pBulletGame->man_position = (pBulletGame->man_position--) % 5;
+  while (!TX1STAbits.TRMT)
+    ;
+  // write data
+  TXREG = '2';
+#endif
+#ifdef node2
+  while (!TX1STAbits.TRMT)
+    ;
+  // write data
+  TXREG = '3';
+  pBulletGame->bullet_position = (pBulletGame->bullet_position--) % 5;
+#endif
   while (!TX1STAbits.TRMT)
     ;
   // write data
   TXREG = '\r';
+  displaygame(pDisplayData, pBulletGame);
 }
 void main(void) {
   // 初始化IO口
