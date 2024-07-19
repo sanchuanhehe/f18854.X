@@ -67,6 +67,7 @@
 // #pragma config statements should precede project file includes.
 // Use project enums instead of #define for ON and OFF.
 
+#include "eusart.h"
 #include "display.h"
 #include "touch.h"
 #include <xc.h>
@@ -111,7 +112,7 @@ void __interrupt() ISR() {
   if (PIR3bits.RCIF){
         PIR3bits.RCIF = 0;
         eusart_rx_func();
-        displaychar(display,&eusart_receive_buffer);
+        displaychar(&display,&eusart_receive_buffer);
   }
 }
 
@@ -192,6 +193,8 @@ void main(void) {
              onButtonRelease5);
   initButton(&button6, ANA6, 340, readADC_with_Port, onButtonPress6,
              onButtonRelease6);
+
+  init_eusart_func();
   while (1) {
     //updateButtonState(&button4);
     //updateButtonState(&button5);
@@ -199,9 +202,9 @@ void main(void) {
     //updateButtonState(&button4);
     //updateButtonState(&button5);
     //updateButtonState(&button6);
-    eusart_tx_func(0x01);
-    eusart_tx_func(0x02);
-    eusart_tx_func(0x03);
+    eusart_tx_func('1');
+    eusart_tx_func('2');
+    eusart_tx_func('3');
     eusart_tx_func('\r');
     // displayformatted(pDisplayData, "%d", button4.adcValue);
   }
