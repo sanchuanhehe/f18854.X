@@ -196,6 +196,9 @@ void main(void) {
     //updateButtonState(&button4);
     //updateButtonState(&button5);
     //updateButtonState(&button6);
+    //updateButtonState(&button4);
+    //updateButtonState(&button5);
+    //updateButtonState(&button6);
     eusart_tx_func(0x01);
     eusart_tx_func(0x02);
     eusart_tx_func(0x03);
