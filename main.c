@@ -108,6 +108,10 @@ void __interrupt() ISR() {
       PORTC = display.digit1;
     }
   }
+  if (PIR3bits.RCIF){
+        PIR3bits.RCIF = 0;
+        eusart_rx_func();
+  }
 }
 
 void onButtonPress4() {
