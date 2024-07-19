@@ -70,6 +70,7 @@ void displaygame(PDisplayData Display, BulletGamePtr game) {
     Display->digit1 = game_position_4;
     break;
   default:
+    game->man_position = 0;
     Display->digit1 = 0;
     break;
   }
@@ -88,6 +89,7 @@ void displaygame(PDisplayData Display, BulletGamePtr game) {
     digits = &(Display->digit4);
     break;
   default:
+    game->bullet_location = 0;
     digits = &(Display->digit4);
     break;
   }
@@ -108,7 +110,7 @@ void displaygame(PDisplayData Display, BulletGamePtr game) {
     *digits = game_position_4;
     break;
   default:
-    *digits = 0;
+    *digits = 1;
     game->bullet_position = 0;
     break;
   }
