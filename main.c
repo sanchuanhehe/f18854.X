@@ -126,25 +126,24 @@ void __interrupt() ISR() {
     } else if (eusart_receive_buffer == '2') {
       pBulletGame->man_position = (pBulletGame->man_position--) % 5;
       eusart_receive_buffer = 0;
-    }
-    else if (eusart_receive_buffer == '3') {
+    } else if (eusart_receive_buffer == '3') {
       pBulletGame->bullet_position = (pBulletGame->bullet_position--) % 5;
     } else if (eusart_receive_buffer == '4') {
       pBulletGame->bullet_position = (pBulletGame->bullet_position++) % 5;
     }
     displaygame(pDisplayData, pBulletGame);
     eusart_receive_buffer = 0;
-// #ifdef node1
-//     displaygame(pDisplayData, pBulletGame);
-//     eusart_tx_func(&(display.digit1));
-//     eusart_tx_func(&(display.digit2));
-//     eusart_tx_func(&(display.digit3));
-//     eusart_tx_func(&(display.digit4));
-//     while (!TX1STAbits.TRMT)
-//       ;
-//     // write data
-//     TXREG = '\r';
-// #endif
+    // #ifdef node1
+    //     displaygame(pDisplayData, pBulletGame);
+    //     eusart_tx_func(&(display.digit1));
+    //     eusart_tx_func(&(display.digit2));
+    //     eusart_tx_func(&(display.digit3));
+    //     eusart_tx_func(&(display.digit4));
+    //     while (!TX1STAbits.TRMT)
+    //       ;
+    //     // write data
+    //     TXREG = '\r';
+    // #endif
   }
 }
 
@@ -213,11 +212,11 @@ void onButtonRelease6() {
   TXREG = '2';
 #endif
 #ifdef node2
+  pBulletGame->bullet_position = (pBulletGame->bullet_position--) % 5;
   while (!TX1STAbits.TRMT)
     ;
   // write data
   TXREG = '3';
-  pBulletGame->bullet_position = (pBulletGame->bullet_position--) % 5;
 #endif
   while (!TX1STAbits.TRMT)
     ;
