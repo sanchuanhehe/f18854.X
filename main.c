@@ -73,7 +73,6 @@
 #include <stdint.h>
 #include <xc.h>
 
-
 #define _XTAL_FREQ 1000000UL // 时钟频率是 1 MHz
 
 DisplayData display = {ZERO_DIS, ZERO_DIS, ZERO_DIS, ZERO_DIS, 0b1110};
@@ -82,7 +81,7 @@ DisplayBuffer displayBuffer = {'0', '0', '0', '0'};
 PDisplayBuffer pDisplayBuffer = &displayBuffer;
 BulletGame bulletGame = {0, 0, 0, 0};
 BulletGamePtr pBulletGame = &bulletGame;
-uint16_t COUNT16 = 0;
+uint8_t COUNT16 = 0;
 void __interrupt() ISR() {
   if (TMR0IF) {
     TMR0IF = 0;
@@ -114,12 +113,6 @@ void __interrupt() ISR() {
       PORTC = display.digit1;
     }
   }
-  COUNT16++;
-  if (COUNT16 == 1000) {
-    COUNT16 = 0;
-    // update_game(pBulletGame);
-    displaygame(pDisplayData, pBulletGame);
-  }
 }
 
 void onButtonPress4() {
@@ -132,8 +125,8 @@ void onButtonPress4() {
 void onButtonRelease4() {
   // 按钮抬起的行为
   // move_bullet(pBulletGame, 1);
-  pBulletGame->bullet_position++;
-  pBulletGame->man_position++;
+  pBulletGame->bullet_position = (pBulletGame->bullet_position++) % 5;
+  pBulletGame->man_position = (pBulletGame->man_position++) % 5;
   displaygame(pDisplayData, pBulletGame);
 }
 void onButtonPress5() {
@@ -157,8 +150,8 @@ void onButtonPress6() {
 void onButtonRelease6() {
   // 按钮抬起的行为
   // move_bullet(pBulletGame, -1);
-  pBulletGame->bullet_position--;
-  pBulletGame->man_position--;
+  pBulletGame->bullet_position = (pBulletGame->bullet_position--) % 5;
+  pBulletGame->man_position = (pBulletGame->man_position--) % 5;
   displaygame(pDisplayData, pBulletGame);
 }
 void main(void) {
@@ -207,6 +200,12 @@ void main(void) {
     updateButtonState(&button4);
     updateButtonState(&button5);
     updateButtonState(&button6);
+    COUNT16++;
+    if (COUNT16 == 200) {
+      COUNT16 = 0;
+      update_game(pBulletGame);
+      displaygame(pDisplayData, pBulletGame);
+    }
   }
   return;
 }
