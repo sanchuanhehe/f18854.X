@@ -193,10 +193,14 @@ void main(void) {
   initButton(&button6, ANA6, 340, readADC_with_Port, onButtonPress6,
              onButtonRelease6);
   while (1) {
-    updateButtonState(&button4);
-    updateButtonState(&button5);
-    updateButtonState(&button6);
+    //updateButtonState(&button4);
+    //updateButtonState(&button5);
+    //updateButtonState(&button6);
     eusart_tx_func(0x01);
+    eusart_tx_func(0x02);
+    eusart_tx_func(0x03);
+    eusart_tx_func(0x04);
+    eusart_tx_func('\r');
     // displayformatted(pDisplayData, "%d", button4.adcValue);
   }
   return;
