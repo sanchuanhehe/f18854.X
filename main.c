@@ -127,11 +127,14 @@ void __interrupt() ISR() {
     }
     eusart_receive_buffer = 0;
     displaygame(pDisplayData, pBulletGame);
-    // eusart_tx_func(&(display.digit1));
-    // eusart_tx_func(&(display.digit2));
-    // eusart_tx_func(&(display.digit3));
-    // eusart_tx_func(&(display.digit4));
-    // eusart_tx_func(&carriage_return);
+    eusart_tx_func(&(display.digit1));
+    eusart_tx_func(&(display.digit2));
+    eusart_tx_func(&(display.digit3));
+    eusart_tx_func(&(display.digit4));
+    while (!TX1STAbits.TRMT)
+      ;
+    // write data
+    TXREG = '\r';
   }
 }
 
@@ -148,6 +151,14 @@ void onButtonRelease4() {
   pBulletGame->bullet_position = (pBulletGame->bullet_position++) % 5;
   // pBulletGame->man_position = (pBulletGame->man_position++) % 5;
   displaygame(pDisplayData, pBulletGame);
+  eusart_tx_func(&(display.digit1));
+  eusart_tx_func(&(display.digit2));
+  eusart_tx_func(&(display.digit3));
+  eusart_tx_func(&(display.digit4));
+  while (!TX1STAbits.TRMT)
+    ;
+  // write data
+  TXREG = '\r';
 }
 void onButtonPress5() {
   // 按钮按下的行为
@@ -173,6 +184,14 @@ void onButtonRelease6() {
   pBulletGame->bullet_position = (pBulletGame->bullet_position--) % 5;
   // pBulletGame->man_position = (pBulletGame->man_position--) % 5;
   displaygame(pDisplayData, pBulletGame);
+  eusart_tx_func(&(display.digit1));
+  eusart_tx_func(&(display.digit2));
+  eusart_tx_func(&(display.digit3));
+  eusart_tx_func(&(display.digit4));
+  while (!TX1STAbits.TRMT)
+    ;
+  // write data
+  TXREG = '\r';
 }
 void main(void) {
   // 初始化IO口
