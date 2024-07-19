@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <xc.h>
 
-extern char eusart_receive_buffer;
+extern uint8_t eusart_receive_buffer;
 /**
  * @brief   初始化串口
  *
