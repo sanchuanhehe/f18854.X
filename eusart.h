@@ -3,7 +3,7 @@
 
 # include <xc.h>
 
-char eusart_receive_buffer;
+extern char eusart_receive_buffer;
 
 void init_eusart_func(void);
 void eusart_tx_func(char data);

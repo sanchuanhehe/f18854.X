@@ -73,7 +73,7 @@
 #include <xc.h>
 
 #define _XTAL_FREQ 1000000UL // 时钟频率是 1 MHz
-extern char eusart_receive_buffer;
+
 DisplayData display = {ZERO_DIS, ZERO_DIS, ZERO_DIS, ZERO_DIS, 0b1110};
 PDisplayData pDisplayData = &display;
 DisplayBuffer displayBuffer = {'0', '0', '0', '0'};
@@ -112,7 +112,7 @@ void __interrupt() ISR() {
   if (PIR3bits.RCIF){
         PIR3bits.RCIF = 0;
         eusart_rx_func();
-        displaychar(&display,&eusart_receive_buffer);
+        //TODO:这里添加串口接收中断处理,操作
   }
 }
 

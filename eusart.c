@@ -1,5 +1,8 @@
 # include "eusart.h"
 
+char eusart_receive_buffer;
+
+
 void init_eusart_func()
 {
     TRISBbits.TRISB6 = 0;
